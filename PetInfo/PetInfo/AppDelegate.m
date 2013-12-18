@@ -8,7 +8,9 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
-
+#import "DDMenuController.h"
+#import "LeftViewController.h"
+#import "RightViewController.h"
 
 @implementation AppDelegate
 #pragma mark 内存管理
@@ -25,9 +27,18 @@
     self.window.backgroundColor = [UIColor whiteColor];
     
     //初始化MainViewController
-    MainViewController *main=[[MainViewController alloc]init];
-    self.window.rootViewController=main;
-    [main release];
+    _mainCtrl = [[MainViewController alloc] init];
+    LeftViewController *leftCtrl = [[LeftViewController alloc] init];
+    RightViewController *rightCtrl = [[RightViewController alloc] init];
+    
+    //初始化左右菜单
+    DDMenuController *menuCtrl = [[DDMenuController alloc] initWithRootViewController:_mainCtrl];
+    menuCtrl.leftViewController = leftCtrl;
+    menuCtrl.rightViewController = rightCtrl;
+    
+    
+    self.window.rootViewController=menuCtrl;
+    [menuCtrl release];
     [self.window makeKeyAndVisible];
 
     //设置百度推送代理

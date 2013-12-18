@@ -9,6 +9,7 @@
 #import "MainViewController.h"
 #import "Reachability.h"
 #import "UIImageView+WebCache.h"
+#define firstimage @"http://a.hiphotos.baidu.com/image/w%3D2048/sign=9f5289ba0b55b3199cf9857577918326/4d086e061d950a7b32998b7f0bd162d9f3d3c9d9.jpg"
 @interface MainViewController ()
 
 @end
@@ -31,16 +32,9 @@
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:isLocation];
 
 }
-
-#pragma mark UI
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    [self _initLocation];
-    
-    NSUserDefaults *userDefaults=[NSUserDefaults standardUserDefaults];
+//进入应用后大图
+-(void)_initBackgroundView {
     //隐藏状态栏
-    
     [self setStateBarHidden:YES];
     _backgroundView =[[UIView alloc]init];
     _backgroundView.backgroundColor = [UIColor whiteColor];
@@ -49,48 +43,68 @@
     view.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
     [_backgroundView addSubview:view];
     
-
     //load背景logo图图片
     UIImage *backImage= [[UIImage imageNamed:@"main_background_logo.png"] autorelease];    UIImageView *backImageView =[[UIImageView alloc]initWithImage:backImage];
     backImageView.frame = CGRectMake(0, ScreenHeight-88, ScreenWidth, 88);
     [_backgroundView addSubview:backImageView];
     [backImageView release];
-    
-    
-    
+    //广告图片
     UIImageView *topImageView = [[UIImageView alloc]init];
     topImageView.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight-88);
-    [topImageView setImageWithURL:[NSURL URLWithString:@"http://a.hiphotos.baidu.com/image/w%3D2048/sign=9f5289ba0b55b3199cf9857577918326/4d086e061d950a7b32998b7f0bd162d9f3d3c9d9.jpg"]];
+    NSString *url = [[NSString alloc]init];
+    if ([_userDefaults boolForKey:isNotFirstLogin]) {
+        url = firstimage;
+    }else{
+        url = [_userDefaults stringForKey:main_adImage_url];
+    }
+    [topImageView setImageWithURL:[NSURL URLWithString:url]];
     [_backgroundView addSubview:topImageView];
     [topImageView release];
+    [self.view  addSubview: _backgroundView];
+}
+#pragma mark UI
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    _userDefaults=[NSUserDefaults standardUserDefaults];
+
+    [self _initLocation];
     
+    //加载进入应用后大图
+    [self _initBackgroundView];
     
     //第一次登陆
-    if (![userDefaults boolForKey:isNotFirstLogin]) {
-
-        
+    if (![_userDefaults boolForKey:isNotFirstLogin]) {
+        //写入初始化文件
         NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
         NSString *plistPath1 = [paths objectAtIndex:0];
-        NSString *pathName = [plistPath1 stringByAppendingPathComponent:@"HomeCellData.plist"];
+        NSString *pathName = [plistPath1 stringByAppendingPathComponent:@""];
         NSDictionary *dica = [[NSDictionary alloc]init];
         [dica writeToFile:pathName atomically:YES];
 #warning 推送绑定
         [BPush bindChannel];
-        [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:1];
-        [userDefaults setBool:YES forKey:isNotFirstLogin];
-
+        [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:3];
+        [_userDefaults setBool:YES forKey:isNotFirstLogin];
     }else{
         //图片最多加载5秒
-        [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:1];
-        
+        [self performSelector:@selector(_removeBackground) withObject:nil afterDelay:5];
     }
-    [self.view  addSubview: _backgroundView];
     self.view.backgroundColor = [UIColor redColor];
-    
-
 }
-//引导图
--(void)viewDidEnd{
+//移除登陆广告大图
+-(void)_removeBackground{
+    [UIView animateWithDuration:0.5 animations:^{
+        _backgroundView.alpha = 0;
+        
+    } completion:^(BOOL finished) {
+        [_backgroundView removeFromSuperview];
+        RELEASE_SAFELY(_backgroundView);
+        //隐藏状态
+        [self setStateBarHidden:NO];
+    }];
+}
+//增加引导图
+-(void)_addGuidePageView{
     //引导页图片名
     NSArray *imageNameArray = @[@"main_guide_page_first.png",@"main_guide_page_second.png",@"main_guide_page_third.png",@"main_guide_page_fourth.png"];
     //引导页
@@ -101,6 +115,7 @@
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.bounces = NO;
+    //增加引导页图片
     for (int i = 0 ; i < imageNameArray.count  ; i++) {
         UIImageView *imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(i*320 , 0, ScreenWidth, ScreenHeight);
@@ -108,18 +123,29 @@
         [_scrollView addSubview:imageView];
         [imageView  release];
     }
+    //进入主界面按钮
     UIButton *button = [[UIButton alloc]init];
     button.titleLabel.numberOfLines = 2;
-    button.backgroundColor = NenNewsgroundColor;
-    button.titleLabel.backgroundColor = NenNewsgroundColor;
+    button.backgroundColor = CLEARCOLOR;
+    button.titleLabel.backgroundColor = CLEARCOLOR;
     [button setTitle:@"进入\n东北新闻网" forState:UIControlStateNormal];
     [button setTitleColor:NenNewsTextColor forState:UIControlStateNormal];
     [button addTarget:self action:@selector(enter) forControlEvents:UIControlEventTouchUpInside];
     button.frame = CGRectMake(320*imageNameArray.count -150, 300, 100, 50);
-    
     [_scrollView addSubview:button];
     [button release];
     [self.view addSubview:_scrollView];
+}
+//引导图
+-(void)viewDidEnd{
+    [UIView animateWithDuration:0.5 animations:^{
+        _backgroundView.alpha = 0;
+        
+    } completion:^(BOOL finished) {
+        [_backgroundView removeFromSuperview];
+        RELEASE_SAFELY(_backgroundView);
+    }];
+    [self _addGuidePageView];
 }
 //定位
 -(void)Location
@@ -147,7 +173,6 @@
         _scrollView.alpha = 0 ;
     } completion:^(BOOL finished) {
         //隐藏状态
-        
         [self setStateBarHidden:NO];
     }];
 }

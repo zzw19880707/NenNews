@@ -17,6 +17,8 @@
     float _latitude;
 //引导页scroll
     UIScrollView *_scrollView;
+    //配置文件信息
+    NSUserDefaults *_userDefaults;
 }
 
 @end
