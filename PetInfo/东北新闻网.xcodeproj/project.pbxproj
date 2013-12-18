@@ -69,6 +69,11 @@
 		FE02E42B1840426400E2B468 /* OpenUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = FE02E4241840426400E2B468 /* OpenUDID.m */; };
 		FE02E43018404FD800E2B468 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE02E42E18404FD700E2B468 /* MainViewController.m */; };
 		FE02E43118404FD800E2B468 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE02E42F18404FD700E2B468 /* MainViewController.xib */; };
+		FE2F76511861E2E7004153A9 /* DDMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE2F76501861E2E7004153A9 /* DDMenuController.m */; };
+		FE2F76551861E395004153A9 /* LeftViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE2F76531861E395004153A9 /* LeftViewController.m */; };
+		FE2F76561861E395004153A9 /* LeftViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE2F76541861E395004153A9 /* LeftViewController.xib */; };
+		FE2F765A1861E3A4004153A9 /* RightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE2F76581861E3A4004153A9 /* RightViewController.m */; };
+		FE2F765B1861E3A4004153A9 /* RightViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE2F76591861E3A4004153A9 /* RightViewController.xib */; };
 		FE8777E5185A10EB0070CF74 /* StringValue.h in Resources */ = {isa = PBXBuildFile; fileRef = FE8777E4185A10750070CF74 /* StringValue.h */; };
 		FE9F2216184970FA0008047F /* app_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FE9F2215184970FA0008047F /* app_icon@2x.png */; };
 		FE9F2218184970FE0008047F /* app_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FE9F2217184970FE0008047F /* app_icon.png */; };
@@ -195,6 +200,14 @@
 		FE02E42F18404FD700E2B468 /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		FE02E4321840530000E2B468 /* BaseURL+Implements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BaseURL+Implements.h"; sourceTree = "<group>"; };
 		FE02E4331840532E00E2B468 /* kPetInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kPetInfo.h; sourceTree = "<group>"; };
+		FE2F764F1861E2E7004153A9 /* DDMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMenuController.h; sourceTree = "<group>"; };
+		FE2F76501861E2E7004153A9 /* DDMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMenuController.m; sourceTree = "<group>"; };
+		FE2F76521861E395004153A9 /* LeftViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftViewController.h; sourceTree = "<group>"; };
+		FE2F76531861E395004153A9 /* LeftViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftViewController.m; sourceTree = "<group>"; };
+		FE2F76541861E395004153A9 /* LeftViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftViewController.xib; sourceTree = "<group>"; };
+		FE2F76571861E3A4004153A9 /* RightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightViewController.h; sourceTree = "<group>"; };
+		FE2F76581861E3A4004153A9 /* RightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightViewController.m; sourceTree = "<group>"; };
+		FE2F76591861E3A4004153A9 /* RightViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RightViewController.xib; sourceTree = "<group>"; };
 		FE8777E4185A10750070CF74 /* StringValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StringValue.h; sourceTree = "<group>"; };
 		FE9F2215184970FA0008047F /* app_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "app_icon@2x.png"; sourceTree = "<group>"; };
 		FE9F2217184970FE0008047F /* app_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_icon.png; sourceTree = "<group>"; };
@@ -482,6 +495,15 @@
 			name = Image;
 			sourceTree = "<group>";
 		};
+		FE2F764E1861E2E7004153A9 /* DDMenu */ = {
+			isa = PBXGroup;
+			children = (
+				FE2F764F1861E2E7004153A9 /* DDMenuController.h */,
+				FE2F76501861E2E7004153A9 /* DDMenuController.m */,
+			);
+			path = DDMenu;
+			sourceTree = "<group>";
+		};
 		FE4A849B185023D800A969D1 /* model */ = {
 			isa = PBXGroup;
 			children = (
@@ -562,6 +584,12 @@
 				FE02E42D18404FD700E2B468 /* MainViewController.h */,
 				FE02E42E18404FD700E2B468 /* MainViewController.m */,
 				FE02E42F18404FD700E2B468 /* MainViewController.xib */,
+				FE2F76521861E395004153A9 /* LeftViewController.h */,
+				FE2F76531861E395004153A9 /* LeftViewController.m */,
+				FE2F76541861E395004153A9 /* LeftViewController.xib */,
+				FE2F76571861E3A4004153A9 /* RightViewController.h */,
+				FE2F76581861E3A4004153A9 /* RightViewController.m */,
+				FE2F76591861E3A4004153A9 /* RightViewController.xib */,
 				FEFFC70B18375336001605C5 /* Supporting Files */,
 			);
 			name = nennews;
@@ -571,6 +599,7 @@
 		FEFFC70B18375336001605C5 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FE2F764E1861E2E7004153A9 /* DDMenu */,
 				FE4A849B185023D800A969D1 /* model */,
 				FEC333D1184319CA0014209C /* AOImageView */,
 				FE02E45C1840911800E2B468 /* Image */,
@@ -650,6 +679,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				EBEE854E186177A300EC96EB /* main_guide_page_second@2x.png in Resources */,
+				FE2F765B1861E3A4004153A9 /* RightViewController.xib in Resources */,
+				FE2F76561861E395004153A9 /* LeftViewController.xib in Resources */,
 				EBEE8548186177A300EC96EB /* Main_Background_write.png in Resources */,
 				EBEE8549186177A300EC96EB /* main_guide_page_first.png in Resources */,
 				FE8777E5185A10EB0070CF74 /* StringValue.h in Resources */,
@@ -686,6 +717,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FEFFC71118375336001605C5 /* main.m in Sources */,
+				FE2F765A1861E3A4004153A9 /* RightViewController.m in Sources */,
 				FEFFC71518375336001605C5 /* AppDelegate.m in Sources */,
 				FE02E3451840363100E2B468 /* EGORefreshTableHeaderView_old.m in Sources */,
 				FE02E3601840364000E2B468 /* ASIAuthenticationDialog.m in Sources */,
@@ -717,12 +749,14 @@
 				EB3A31B018618E8400FF2A69 /* BaseViewController+StatusBarStyle.m in Sources */,
 				FE02E4291840426400E2B468 /* GzipCompressor.m in Sources */,
 				FE02E42B1840426400E2B468 /* OpenUDID.m in Sources */,
+				FE2F76511861E2E7004153A9 /* DDMenuController.m in Sources */,
 				FE02E43018404FD800E2B468 /* MainViewController.m in Sources */,
 				EB3A31AA18618C0000FF2A69 /* BaseNavViewController+NavigationBar.m in Sources */,
 				FEE623DB1842F01C002ABDAB /* JSONKit.m in Sources */,
 				FEC333E8184319CA0014209C /* AOImageView.m in Sources */,
 				FEC333E9184319CA0014209C /* AOScrollerView.m in Sources */,
 				FEC333EA184319CA0014209C /* NSURLAdditions.m in Sources */,
+				FE2F76551861E395004153A9 /* LeftViewController.m in Sources */,
 				FEC333EE184319CA0014209C /* UrlImageButton.m in Sources */,
 				FEC333EF184319CA0014209C /* UrlImageView.m in Sources */,
 			);
