@@ -32,7 +32,8 @@
 -(void)alertLoginView;
 //定位方法
 -(void)Location;
-
+//判断当前网络情况
+-(NSString *) getConnectionAvailable;
 //经纬度
 @property (nonatomic,assign) float longitude;
 @property (nonatomic,assign) float latitude;
