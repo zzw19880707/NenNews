@@ -28,7 +28,8 @@
 #define isLocation @"isLocation"
 //用户登陆后返回的id
 #define user_id @"user_id"
-
+//首页加载广告的大图
+#define main_adImage_url @"main_adImage_url"
 #pragma mark Nen_News_Color
 #define NenNewsTextColor COLOR(88, 195, 241)
 #define NenNewsgroundColor COLOR(247, 247, 247)
