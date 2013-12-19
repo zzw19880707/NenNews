@@ -91,11 +91,14 @@
     _pan = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {    MARK;
+
     return [_root shouldAutorotateToInterfaceOrientation:toInterfaceOrientation];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    MARK;
+
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 
     if (_root) {
@@ -123,6 +126,8 @@
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    MARK;
+
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
     if (_root) {
@@ -145,6 +150,8 @@
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    MARK;
+
 	[super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 
     if (_root) {
@@ -342,14 +349,14 @@
 #pragma mark - UIGestureRecognizerDelegate
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-
     // Check for horizontal pan gesture
     if (gestureRecognizer == _pan) {
 
         UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer*)gestureRecognizer;
         CGPoint translation = [panGesture translationInView:self.view];
-
         if ([panGesture velocityInView:self.view].x < 600 && sqrt(translation.x * translation.x) / sqrt(translation.y * translation.y) > 1) {
+            _pf([panGesture velocityInView:self.view].x );
+
             return YES;
         } 
         
@@ -371,6 +378,8 @@
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    MARK;
+
     if (gestureRecognizer==_tap) {
         return YES;
     }     
@@ -380,7 +389,8 @@
 
 #pragma Internal Nav Handling 
 
-- (void)resetNavButtons {
+- (void)resetNavButtons {    MARK;
+
     if (!_root) return;
     
     UIViewController *topController = nil;
@@ -419,6 +429,8 @@
 }
 
 - (void)showShadow:(BOOL)val {
+    MARK;
+
     if (!_root) return;
     
     _root.view.layer.shadowOpacity = val ? 0.8f : 0.0f;
@@ -432,7 +444,8 @@
 }
 
 - (void)showRootController:(BOOL)animated {
-    
+    MARK;
+
     [_tap setEnabled:NO];
     _root.view.userInteractionEnabled = YES;
 
@@ -472,6 +485,7 @@
 }
 
 - (void)showLeftController:(BOOL)animated {
+    MARK;
     if (!_menuFlags.canShowLeft) return;
     
     if (_right && _right.view.superview) {
@@ -513,6 +527,8 @@
 }
 
 - (void)showRightController:(BOOL)animated {
+    MARK;
+
     if (!_menuFlags.canShowRight) return;
     
     if (_left && _left.view.superview) {
@@ -557,23 +573,31 @@
 #pragma mark Setters
 
 - (void)setDelegate:(id<DDMenuControllerDelegate>)val {
+    MARK;
+
     delegate = val;
     _menuFlags.respondsToWillShowViewController = [(id)self.delegate respondsToSelector:@selector(menuController:willShowViewController:)];    
 }
 
 - (void)setRightViewController:(UIViewController *)rightController {
+    MARK;
+
     _right = rightController;
     _menuFlags.canShowRight = (_right!=nil);
     [self resetNavButtons];
 }
 
 - (void)setLeftViewController:(UIViewController *)leftController {
+    MARK;
+
     _left = leftController;
     _menuFlags.canShowLeft = (_left!=nil);
     [self resetNavButtons];
 }
 
 - (void)setRootViewController:(UIViewController *)rootViewController {
+    MARK;
+
     UIViewController *tempRoot = _root;
     _root = rootViewController;
     
@@ -606,7 +630,8 @@
 }
 
 - (void)setRootController:(UIViewController *)controller animated:(BOOL)animated {
-   
+    MARK;
+
     if (!controller) {
         [self setRootViewController:controller];
         return;
@@ -650,7 +675,8 @@
 #pragma mark - Root Controller Navigation
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    
+    MARK;
+
     NSAssert((_root!=nil), @"no root controller set");
     
     UINavigationController *navController = nil;
@@ -730,13 +756,15 @@
 #pragma mark - Actions 
 
 - (void)showLeft:(id)sender {
-    
+    MARK;
+
     [self showLeftController:YES];
     
 }
 
 - (void)showRight:(id)sender {
-    
+    MARK;
+
     [self showRightController:YES];
     
 }
