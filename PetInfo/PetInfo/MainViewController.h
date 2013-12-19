@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 #import <CoreLocation/CoreLocation.h>
-@interface MainViewController : BaseViewController <CLLocationManagerDelegate,ASIRequest>{
+@interface MainViewController : BaseViewController <CLLocationManagerDelegate,ASIRequest,UIScrollViewDelegate>{
     //  加载时大图
     UIView *_backgroundView;
     //定位的经纬度
