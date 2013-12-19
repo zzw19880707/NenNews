@@ -40,4 +40,8 @@
 #define NenNews_night_COlor COLOR(31，32，36)
 #define NenNews_night_text_COlor COLOR(136，145，152)
 
+#pragma mark 文件名
+#define column_file_name @"column.plist"
+#define data_file_name @"data.plist"
+
 #endif
