@@ -33,4 +33,11 @@
 #pragma mark Nen_News_Color
 #define NenNewsTextColor COLOR(88, 195, 241)
 #define NenNewsgroundColor COLOR(247, 247, 247)
+
+#define NenNews_day_Color COLOR(240,240,240)
+#define NenNews_day_text_Color COLOR(21,21,21)
+
+#define NenNews_night_COlor COLOR(31，32，36)
+#define NenNews_night_text_COlor COLOR(136，145，152)
+
 #endif
