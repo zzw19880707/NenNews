@@ -19,12 +19,14 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.title = @"东北新闻网";
     }
     return self;
 }
 //初始化tableview
 -(NSArray *)_initUIView {
+    
+    
     NSMutableArray *arrays = [[NSMutableArray alloc]init];
     arrays = [[NSMutableArray alloc]init];
     for (int i =0; i<10; i++) {
@@ -39,10 +41,27 @@
 }
 //初始化按钮
 -(NSArray *)_initButton {
+    
+    //写入初始化文件
+    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
+    NSString *plistPath1 = [paths objectAtIndex:0];
+    NSString *pathName = [plistPath1 stringByAppendingPathComponent:column_file_name];
+    NSArray *columnName = [[NSArray alloc]initWithContentsOfFile:pathName];
+    NSMutableArray *nameArrays = [[NSMutableArray alloc]init];
+    for (int i = 0 ; i < columnName.count ; i++) {
+        NSDictionary *dic = columnName[i];
+        if ([[dic objectForKey:@"isShow"] boolValue]) {
+            [nameArrays addObject:[dic objectForKey:@"name"]];
+        }
+        [dic release];
+    }
+    
+    
+    
     NSMutableArray *arrays = [[NSMutableArray alloc]init];
-    for (int i =0; i<10; i++) {
+    for (int i =0; i<nameArrays.count; i++) {
         UIButton *button =[[UIButton alloc]init];
-        [button setTitle:[NSString stringWithFormat:@"title%d",i] forState:UIControlStateNormal];
+        [button setTitle:nameArrays[i] forState:UIControlStateNormal];
         [button setTitleColor:NenNewsTextColor forState:UIControlStateNormal];
         button.backgroundColor = NenNewsgroundColor;
         button.frame = CGRectMake(10 + 70*i, 0, 60, 30);
