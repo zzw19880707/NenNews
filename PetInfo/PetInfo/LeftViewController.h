@@ -8,6 +8,15 @@
 
 #import "BaseViewController.h"
 
-@interface LeftViewController : BaseViewController
+@interface LeftViewController : BaseViewController <UITableViewDelegate,UITableViewDataSource>
+{
+    NSArray *_imageArray ;
+    NSArray *_nameArray ;
+    UITableView *_tableView;
+}
+@property (nonatomic,retain) NSArray *imageArray ;
+@property (nonatomic,retain) NSArray *nameArray ;
+
+
 
 @end

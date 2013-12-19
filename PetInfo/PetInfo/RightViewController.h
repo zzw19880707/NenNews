@@ -10,4 +10,5 @@
 
 @interface RightViewController : BaseViewController
 
+- (IBAction)selectAction:(UIButton *)sender;
 @end
