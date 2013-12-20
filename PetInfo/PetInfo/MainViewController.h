@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 #import <CoreLocation/CoreLocation.h>
+#import "RootViewController.h"
 @interface MainViewController : BaseViewController <CLLocationManagerDelegate,ASIRequest,UIScrollViewDelegate>{
     //  加载时大图
     UIView *_backgroundView;
@@ -19,6 +20,9 @@
     UIScrollView *_scrollView;
     //配置文件信息
     NSUserDefaults *_userDefaults;
+    
+    
+    RootViewController *_root;
 }
 
 @end

@@ -10,7 +10,6 @@
 #import "Reachability.h"
 #import "UIImageView+WebCache.h"
 #import "BaseNavViewController.h"
-#import "RootViewController.h"
 #import "DDMenuController.h"
 #import "LeftViewController.h"
 #import "RightViewController.h"
@@ -40,19 +39,20 @@
 }
 //添加rootview
 -(void)_initViewController{
-    RootViewController *root = [[RootViewController alloc]init];
+    _root = [[RootViewController alloc]init];
     
     LeftViewController *leftCtrl = [[LeftViewController alloc] init];
     RightViewController *rightCtrl = [[RightViewController alloc] init];
     
     
-    BaseNavViewController *navViewController = [[BaseNavViewController alloc]initWithRootViewController:root];
+    BaseNavViewController *navViewController = [[BaseNavViewController alloc]initWithRootViewController:_root];
     
     //初始化左右菜单
     DDMenuController *menuCtrl = [[DDMenuController alloc] initWithRootViewController:navViewController];
     menuCtrl.leftViewController = leftCtrl;
     menuCtrl.rightViewController = rightCtrl;
     self.appDelegate.window.rootViewController = menuCtrl;
+    self.appDelegate.menuCtrl = menuCtrl;
 //    [navViewController release];
 }
 //进入应用后大图
@@ -100,7 +100,7 @@
     NSMutableArray *array = [[NSMutableArray alloc]init];
     for(int i= 0 ; i<columnsName.count ;i ++){
         
-        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsName[i],(i>5)? @NO:@YES,[NSNumber numberWithInt:i]] forKeys:@[@"name",@"isShow",@"id"]];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsName[i],(i>5)? @NO:@YES,[NSNumber numberWithInt:i]] forKeys:@[@"name",@"isShow",@"cloumID"]];
         [array addObject:dic];
         [dic release];
     }
