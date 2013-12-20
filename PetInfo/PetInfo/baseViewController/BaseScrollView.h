@@ -9,7 +9,10 @@
 #import <UIKit/UIKit.h>
 @protocol UIScrollViewEventDelegate <NSObject>
 @optional
-
+//add按钮事件
+-(void)addButtonAction;
+-(void)showLeftMenu;
+-(void)showRightMenu;
 @end
 @interface BaseScrollView : UIScrollView <UIScrollViewDelegate>{
     UIScrollView *_buttonBgView;

@@ -7,7 +7,6 @@
 //
 
 #import "BaseScrollView.h"
-
 @implementation BaseScrollView
 
 - (id)initWithFrame:(CGRect)frame
@@ -22,7 +21,8 @@
 -(id)initWithFrame:(CGRect)frame andButtons:(NSArray *) buttons andContents:(NSArray *) contents{
     self = [super initWithFrame:frame];
     if (self) {
-
+//        self.contentSize = CGSizeMake(ScreenWidth+2, ScreenHeight);
+//        self.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
         self.buttonsArray = buttons;
         self.contentsArray = contents;
         //用于分割线
@@ -34,7 +34,7 @@
         
         _sliderImageView.image = [UIImage imageNamed:@"slider_bg_baseScroll.png"];
         
-        _buttonBgView = [[ UIScrollView alloc]initWithFrame:CGRectMake(0, 0, frame.size.width, 39)];
+        _buttonBgView = [[ UIScrollView alloc]initWithFrame:CGRectMake(0, 0, frame.size.width- 40, 39)];
         [_buttonBgView addSubview:_sliderImageView];
 
         _buttonBgView.backgroundColor = NenNewsgroundColor;
@@ -51,10 +51,22 @@
             [_buttonBgView addSubview:button];
             [button release];
         }
+        
+        UIView *addButtonView = [[UIView alloc]initWithFrame:CGRectMake(ScreenWidth - 40, 0, 40, 39)];
+        addButtonView.backgroundColor = NenNewsgroundColor;
+        UIButton *addButton = [[UIButton alloc]init];
+        [addButton setImage:[UIImage imageNamed:@"title_button_add.png"] forState:UIControlStateNormal];
+        addButton.frame =CGRectMake(10, 5, 20, 20);
+        [addButton addTarget:self action:@selector(addcolumn) forControlEvents:UIControlEventTouchUpInside];
+        [addButtonView addSubview:addButton];
+        [bgView addSubview:addButtonView];
+        [addButton  release];
+        [addButtonView release];
     
         [bgView addSubview:_buttonBgView];
         [self addSubview:bgView];
         [bgView release];
+        
         _contentBgView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 40, frame.size.width+20, frame.size.height - 40)];
         _contentBgView.tag =10001;
         _contentBgView.pagingEnabled =YES;
@@ -75,7 +87,7 @@
             _tx +=340;
         }
         [self addSubview:_contentBgView];
-
+        
     }
     return self;
 }
@@ -94,17 +106,28 @@
     _contentBgView.contentOffset = point;
 }
 
+-(void)addcolumn{
+    [self.eventDelegate addButtonAction];
+}
 
 #pragma mark ScrollDelegate
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     int page = _contentBgView.contentOffset.x/340;
     
     CGPoint point = [_sliderImageView convertPoint:CGPointMake(0, 0) fromView:[UIApplication sharedApplication].keyWindow ];
+    
+    _pf(point.x);
     //向右平移
     if (page<self.buttonsArray.count-1) {
-        if (70+70-point.x>self.frame.size.width) {
+        if (70+70-point.x>self.frame.size.width-50) {
             CGPoint cpoint = _buttonBgView.contentOffset;
-            cpoint.x += 140 -(320+point.x)-25;
+            cpoint.x += 140 -(self.frame.size.width-50+point.x)-25;
+            [_buttonBgView setContentOffset:cpoint animated:YES];
+        }
+    }else if(page == self.buttonsArray.count -1){
+        if (70+70-point.x>self.frame.size.width-50) {
+            CGPoint cpoint = _buttonBgView.contentOffset;
+            cpoint.x += 140 -(self.frame.size.width-50+point.x)-25-70;
             [_buttonBgView setContentOffset:cpoint animated:YES];
         }
     }
@@ -115,8 +138,11 @@
             cpoint.x -=70 +point.x+25;
             [_buttonBgView setContentOffset:cpoint animated:YES];
         }
+    }else if (page == 0){
+        if (-point.x-70<0) {
+            [_buttonBgView setContentOffset:CGPointMake(0, 0) animated:YES];
+        }
     }
-    
     
     
     switch (scrollView.tag) {
@@ -130,15 +156,24 @@
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    
     if (scrollView.tag ==10001) {
         CGPoint point = _sliderImageView.origin;
         point=CGPointMake(scrollView.contentOffset.x /340 *70 +25, point.y);
         _sliderImageView.origin = point;
     }
     
-    
 }
 
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    if (scrollView.contentOffset.x ==0) {
+        [self.eventDelegate showLeftMenu];
+    }
+    if (scrollView.contentOffset.x==scrollView.contentSize.width -340) {
+        [self.eventDelegate showRightMenu];
+    }
+
+}
 -(void)dealloc{
     RELEASE_SAFELY(_buttonsArray);
     RELEASE_SAFELY(_contentBgView);
