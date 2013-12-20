@@ -28,6 +28,13 @@
 		EB0102331862DF270021D998 /* right_setting_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB0102271862DF270021D998 /* right_setting_button@2x.png */; };
 		EB0102341862DF270021D998 /* right_weather_button.png in Resources */ = {isa = PBXBuildFile; fileRef = EB0102281862DF270021D998 /* right_weather_button.png */; };
 		EB0102351862DF270021D998 /* right_weather_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB0102291862DF270021D998 /* right_weather_button@2x.png */; };
+		EB15FFD11863CCB20045931E /* slider_bg_baseScroll@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB15FFD01863CCB20045931E /* slider_bg_baseScroll@2x.png */; };
+		EB15FFD41863CDFF0045931E /* left_item_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB15FFD21863CDFF0045931E /* left_item_button@2x.png */; };
+		EB15FFD51863CDFF0045931E /* right_item_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB15FFD31863CDFF0045931E /* right_item_button@2x.png */; };
+		EB15FFD91863D49B0045931E /* navigationbar_background.png in Resources */ = {isa = PBXBuildFile; fileRef = EB15FFD71863D49B0045931E /* navigationbar_background.png */; };
+		EB15FFDA1863D49B0045931E /* navigationbar_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB15FFD81863D49B0045931E /* navigationbar_background@2x.png */; };
+		EB15FFDF1863E3140045931E /* title_button_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB15FFDE1863E3140045931E /* title_button_add@2x.png */; };
+		EB15FFE31863EB5E0045931E /* ColumnViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB15FFE21863EB5E0045931E /* ColumnViewController.m */; };
 		EB3A31AA18618C0000FF2A69 /* BaseNavViewController+NavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = EB3A31A918618C0000FF2A69 /* BaseNavViewController+NavigationBar.m */; };
 		EB3A31B018618E8400FF2A69 /* BaseViewController+StatusBarStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = EB3A31AF18618E8400FF2A69 /* BaseViewController+StatusBarStyle.m */; };
 		EB3A31B4186197DD00FF2A69 /* Main_Background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EB3A31B1186197DD00FF2A69 /* Main_Background.jpg */; };
@@ -135,6 +142,14 @@
 		EB0102271862DF270021D998 /* right_setting_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right_setting_button@2x.png"; sourceTree = "<group>"; };
 		EB0102281862DF270021D998 /* right_weather_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right_weather_button.png; sourceTree = "<group>"; };
 		EB0102291862DF270021D998 /* right_weather_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right_weather_button@2x.png"; sourceTree = "<group>"; };
+		EB15FFD01863CCB20045931E /* slider_bg_baseScroll@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider_bg_baseScroll@2x.png"; sourceTree = "<group>"; };
+		EB15FFD21863CDFF0045931E /* left_item_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left_item_button@2x.png"; sourceTree = "<group>"; };
+		EB15FFD31863CDFF0045931E /* right_item_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right_item_button@2x.png"; sourceTree = "<group>"; };
+		EB15FFD71863D49B0045931E /* navigationbar_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navigationbar_background.png; sourceTree = "<group>"; };
+		EB15FFD81863D49B0045931E /* navigationbar_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigationbar_background@2x.png"; sourceTree = "<group>"; };
+		EB15FFDE1863E3140045931E /* title_button_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title_button_add@2x.png"; sourceTree = "<group>"; };
+		EB15FFE11863EB5E0045931E /* ColumnViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnViewController.h; sourceTree = "<group>"; };
+		EB15FFE21863EB5E0045931E /* ColumnViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnViewController.m; sourceTree = "<group>"; };
 		EB3A31A818618C0000FF2A69 /* BaseNavViewController+NavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BaseNavViewController+NavigationBar.h"; sourceTree = "<group>"; };
 		EB3A31A918618C0000FF2A69 /* BaseNavViewController+NavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BaseNavViewController+NavigationBar.m"; sourceTree = "<group>"; };
 		EB3A31AE18618E8400FF2A69 /* BaseViewController+StatusBarStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BaseViewController+StatusBarStyle.h"; sourceTree = "<group>"; };
@@ -304,6 +319,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EB15FFD61863CE060045931E /* rootViewController */ = {
+			isa = PBXGroup;
+			children = (
+				EB15FFD21863CDFF0045931E /* left_item_button@2x.png */,
+				EB15FFD31863CDFF0045931E /* right_item_button@2x.png */,
+				EB15FFD01863CCB20045931E /* slider_bg_baseScroll@2x.png */,
+			);
+			name = rootViewController;
+			sourceTree = "<group>";
+		};
+		EB15FFDD1863E3090045931E /* baseview */ = {
+			isa = PBXGroup;
+			children = (
+				EB15FFD71863D49B0045931E /* navigationbar_background.png */,
+				EB15FFD81863D49B0045931E /* navigationbar_background@2x.png */,
+				EB15FFDE1863E3140045931E /* title_button_add@2x.png */,
+			);
+			name = baseview;
+			sourceTree = "<group>";
+		};
+		EB15FFE01863EB2C0045931E /* ColumnViewControll */ = {
+			isa = PBXGroup;
+			children = (
+				EB15FFE11863EB5E0045931E /* ColumnViewController.h */,
+				EB15FFE21863EB5E0045931E /* ColumnViewController.m */,
+			);
+			name = ColumnViewControll;
+			sourceTree = "<group>";
+		};
 		EB3A31A718618BBE00FF2A69 /* ios7adapter */ = {
 			isa = PBXGroup;
 			children = (
@@ -316,7 +360,7 @@
 			path = baseModel;
 			sourceTree = "<group>";
 		};
-		EBEE853A18616CC200EC96EB /* mainViewControll */ = {
+		EBEE853A18616CC200EC96EB /* mainViewController */ = {
 			isa = PBXGroup;
 			children = (
 				EB01021E1862DF270021D998 /* right_login_button.png */,
@@ -352,7 +396,7 @@
 				EBEE8545186177A300EC96EB /* main_guide_page_third.png */,
 				EBEE8546186177A300EC96EB /* main_guide_page_third@2xpng.png */,
 			);
-			name = mainViewControll;
+			name = mainViewController;
 			sourceTree = "<group>";
 		};
 		FE02E336184034B400E2B468 /* Utile */ = {
@@ -547,7 +591,9 @@
 		FE02E45C1840911800E2B468 /* Image */ = {
 			isa = PBXGroup;
 			children = (
-				EBEE853A18616CC200EC96EB /* mainViewControll */,
+				EB15FFDD1863E3090045931E /* baseview */,
+				EB15FFD61863CE060045931E /* rootViewController */,
+				EBEE853A18616CC200EC96EB /* mainViewController */,
 			);
 			name = Image;
 			sourceTree = "<group>";
@@ -650,6 +696,7 @@
 				FE2F76591861E3A4004153A9 /* RightViewController.xib */,
 				EB0102071862A6E20021D998 /* RootViewController.h */,
 				EB0102081862A6E20021D998 /* RootViewController.m */,
+				EB15FFE01863EB2C0045931E /* ColumnViewControll */,
 				FEFFC70B18375336001605C5 /* Supporting Files */,
 			);
 			name = nennews;
@@ -745,6 +792,8 @@
 				EBEE8549186177A300EC96EB /* main_guide_page_first.png in Resources */,
 				FE8777E5185A10EB0070CF74 /* StringValue.h in Resources */,
 				FE02E3411840363100E2B468 /* blackArrow.png in Resources */,
+				EB15FFDA1863D49B0045931E /* navigationbar_background@2x.png in Resources */,
+				EB15FFDF1863E3140045931E /* title_button_add@2x.png in Resources */,
 				FE02E3421840363100E2B468 /* blackArrow@2x.png in Resources */,
 				EB01021D1862C95A0021D998 /* LeftCell.xib in Resources */,
 				EB3A31B4186197DD00FF2A69 /* Main_Background.jpg in Resources */,
@@ -754,6 +803,7 @@
 				EB0102351862DF270021D998 /* right_weather_button@2x.png in Resources */,
 				EBEE854C186177A300EC96EB /* main_guide_page_fourth@2x.png in Resources */,
 				FE02E3431840363100E2B468 /* blueArrow.png in Resources */,
+				EB15FFD91863D49B0045931E /* navigationbar_background.png in Resources */,
 				EB0102301862DF270021D998 /* right_search_button.png in Resources */,
 				EB01021A1862C5FA0021D998 /* left_push_news.png in Resources */,
 				EBEE854A186177A300EC96EB /* main_guide_page_first@2x.png in Resources */,
@@ -769,13 +819,16 @@
 				EB01022D1862DF270021D998 /* right_night_button@2x.png in Resources */,
 				EB0102161862C5FA0021D998 /* left_ collect_news.png in Resources */,
 				EB0102191862C5FA0021D998 /* left_news@2x.png in Resources */,
+				EB15FFD11863CCB20045931E /* slider_bg_baseScroll@2x.png in Resources */,
 				EB0102311862DF270021D998 /* right_search_button@2x.png in Resources */,
 				EBEE854F186177A300EC96EB /* main_guide_page_third.png in Resources */,
 				EB01021B1862C5FA0021D998 /* left_push_news@2x.png in Resources */,
 				EB3A31B818619A9E00FF2A69 /* main_background_logo@2x.png in Resources */,
 				EB3A31B5186197DD00FF2A69 /* Main_Background@2x.jpg in Resources */,
+				EB15FFD51863CDFF0045931E /* right_item_button@2x.png in Resources */,
 				EB0102321862DF270021D998 /* right_setting_button.png in Resources */,
 				FE02E3471840363100E2B468 /* grayArrow@2x.png in Resources */,
+				EB15FFD41863CDFF0045931E /* left_item_button@2x.png in Resources */,
 				EBEE854B186177A300EC96EB /* main_guide_page_fourth.png in Resources */,
 				EBEE854D186177A300EC96EB /* main_guide_page_second.png in Resources */,
 				FE02E43118404FD800E2B468 /* MainViewController.xib in Resources */,
@@ -818,6 +871,7 @@
 				FE02E3E0184037BD00E2B468 /* UIButton+WebCache.m in Sources */,
 				FE02E3E1184037BD00E2B468 /* UIImageView+WebCache.m in Sources */,
 				FE02E3E2184037BD00E2B468 /* UIViewExt.m in Sources */,
+				EB15FFE31863EB5E0045931E /* ColumnViewController.m in Sources */,
 				FE02E3E3184037BD00E2B468 /* WXHLGlobalUICommon.m in Sources */,
 				FE02E3E7184037E600E2B468 /* NSString+URLEncoding.m in Sources */,
 				FE02E3FD184039BE00E2B468 /* UIView+Additions.m in Sources */,
