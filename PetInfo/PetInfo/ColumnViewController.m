@@ -64,30 +64,72 @@
     _addBackgroundView.frame = CGRectMake(0, _showBackgroundView.height, ScreenWidth, ScreenHeight-_showBackgroundView.height);
     _addBackgroundView.backgroundColor = [UIColor grayColor];
     [self.view addSubview:_addBackgroundView];
+    [self _initbuttona];
 }
 -(void)_initbutton:(int)backgroundIndex{
     int count = _showNameArray.count;
-    float width = 0.0f;
+    float width = 20;
     float heigth = 50;
     for (int i = 0 ; i<count; i++) {
         NSDictionary *dic = _showNameArray[i];
         UIButton *button = [[UIButton alloc]init];
         [button setTitle:[dic objectForKey:@"name"] forState:UIControlStateNormal];
         button.tag = [[dic objectForKey:@"columid"] intValue];
-        button.frame = CGRectMake(0+width, heigth, width, 40);
+        button.frame = CGRectMake(0+width, heigth, 60, 40);
         button.backgroundColor = [UIColor blackColor];
-        
-        if (i%4 ==0) {
+        [button addTarget:self action:@selector(subcolumn:) forControlEvents:UIControlEventTouchUpInside];
+        if (i%4 ==3) {
             heigth +=50;
-            width = 0.0f;
+            width = 20;
             _showBackgroundView.height+=50;
         }else{
             width += 70.0f;
         }
-        DLogPoint(button.origin);
         [_showBackgroundView addSubview:button];
         [button release];
     }
+}
+-(void)_initbuttona{
+    int count = _addNameArray.count;
+    float width = 20;
+    float heigth = 50;
+    for (int i = 0 ; i<count; i++) {
+        NSDictionary *dic = _addNameArray[i];
+        UIButton *button = [[UIButton alloc]init];
+        [button setTitle:[dic objectForKey:@"name"] forState:UIControlStateNormal];
+        button.tag = [[dic objectForKey:@"columid"] intValue];
+        button.frame = CGRectMake(0+width, heigth, 60, 40);
+        button.backgroundColor = [UIColor redColor];
+        [button addTarget:self action:@selector(dragMoving:withEvent:) forControlEvents:UIControlEventTouchDragInside];
+        [button addTarget:self action:@selector(dragEnded:withEvent: ) forControlEvents: UIControlEventTouchUpInside |
+         UIControlEventTouchUpOutside];
+        if (i%4 ==3) {
+            heigth +=50;
+            width = 20;
+            _addBackgroundView.height+=50;
+        }else{
+            width += 70.0f;
+        }
+        [_addBackgroundView addSubview:button];
+        [button release];
+    }
+}
+
+
+
+- (void) dragMoving: (UIControl *) c withEvent:ev
+{
+//    NSLog(@"Button  is moving ..............");
+    UIButton *bt = (UIButton *)c;    DLogRect(bt.frame);
+
+    bt.center = [[[ev allTouches] anyObject] locationInView:_addBackgroundView];
+    
+}
+- (void) dragEnded: (UIControl *) c withEvent:ev
+{
+    NSLog(@"Button  moving end..............");
+    UIButton *bt = (UIButton *)c;
+    c.center = [[[ev allTouches] anyObject] locationInView:_addBackgroundView];
 }
 - (void)viewDidLoad
 {
@@ -96,6 +138,35 @@
     [self _initShowView];
     [self _initAddView];
 
+    
+}
+-(void)addcolumn :(UIButton *)  button  {
+    int columnid = button.tag;
+    
+    UIView *view =[[UIView alloc] initWithFrame:CGRectMake(20+70+70, 50+50, 50, 40)];
+    [_showBackgroundView addSubview:view];
+    CGPoint point = [button convertPoint:CGPointMake(0, 0) fromView:self.appDelegate.window];
+    point.x = -point.x;
+    point.y = -point.y;
+    for (int i = 0; i<_addNameArray.count; i++) {
+        if ([[_addNameArray[i] objectForKey:@"columnid"] intValue] ==columnid) {
+            [button removeFromSuperview];
+            button.origin =point;
+            [UIView animateWithDuration:0.2 animations:^{
+                button.origin = CGPointMake(160, 100);
+                [_showBackgroundView addSubview:button];
+                button.backgroundColor = [UIColor blackColor];
+                [button addTarget:self action:@selector(subcolumn:) forControlEvents:UIControlEventTouchUpInside];
+
+            } completion:^(BOOL finished) {
+                
+            }];
+            return;
+        }
+    }
+    
+}
+-(void)subcolumn :(UIButton *) button {
     
 }
 
