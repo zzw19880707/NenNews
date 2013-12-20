@@ -75,6 +75,7 @@
         _contentBgView.showsVerticalScrollIndicator=NO;
         _contentBgView.contentSize = CGSizeMake(340*buttons.count, frame.size.height-40);
         _contentBgView.backgroundColor = NenNewsgroundColor;
+        _contentBgView.bounces = NO;
         int _tx = 0 ;
         for (int i = 0;i<contents.count ; i++) {
             
