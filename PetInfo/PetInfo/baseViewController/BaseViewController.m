@@ -237,9 +237,9 @@
     [super setTitle:title];
     UILabel *titlelabel=[[UILabel alloc]initWithFrame:CGRectZero];
     titlelabel.font=[UIFont boldSystemFontOfSize:18.0f];
-    titlelabel.backgroundColor= NenNewsgroundColor;
+    titlelabel.backgroundColor= NenNewsTextColor;
     titlelabel.text=title;
-    titlelabel.textColor=NenNewsTextColor;
+    titlelabel.textColor=NenNewsgroundColor;
     [titlelabel sizeToFit];
     self.navigationItem.titleView = [titlelabel autorelease];
 }
