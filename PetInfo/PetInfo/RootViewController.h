@@ -7,7 +7,7 @@
 //
 
 #import "BaseViewController.h"
-
-@interface RootViewController : BaseViewController
+#import "BaseScrollView.h"
+@interface RootViewController : BaseViewController <UIScrollViewEventDelegate,UIScrollViewDelegate>
 
 @end
