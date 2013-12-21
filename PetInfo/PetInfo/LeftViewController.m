@@ -99,7 +99,8 @@
 //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     if (indexPath.row >0) {
-        [self presentModalViewController:[[LeftViewController alloc]init] animated:YES];
+//        [self presentModalViewController:[[LeftViewController alloc]init] animated:YES];
+        [self.appDelegate.menuCtrl presentModalViewController:[[LeftViewController alloc]init] animated:YES];
     }
 }
 
