@@ -34,13 +34,14 @@
 		EB15FFD91863D49B0045931E /* navigationbar_background.png in Resources */ = {isa = PBXBuildFile; fileRef = EB15FFD71863D49B0045931E /* navigationbar_background.png */; };
 		EB15FFDA1863D49B0045931E /* navigationbar_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB15FFD81863D49B0045931E /* navigationbar_background@2x.png */; };
 		EB15FFDF1863E3140045931E /* title_button_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB15FFDE1863E3140045931E /* title_button_add@2x.png */; };
-		EB15FFE31863EB5E0045931E /* ColumnViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB15FFE21863EB5E0045931E /* ColumnViewController.m */; };
 		EB3A31AA18618C0000FF2A69 /* BaseNavViewController+NavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = EB3A31A918618C0000FF2A69 /* BaseNavViewController+NavigationBar.m */; };
 		EB3A31B018618E8400FF2A69 /* BaseViewController+StatusBarStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = EB3A31AF18618E8400FF2A69 /* BaseViewController+StatusBarStyle.m */; };
 		EB3A31B4186197DD00FF2A69 /* Main_Background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EB3A31B1186197DD00FF2A69 /* Main_Background.jpg */; };
 		EB3A31B5186197DD00FF2A69 /* Main_Background@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EB3A31B2186197DD00FF2A69 /* Main_Background@2x.jpg */; };
 		EB3A31B6186197DD00FF2A69 /* Main_Background640x1136@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EB3A31B3186197DD00FF2A69 /* Main_Background640x1136@2x.jpg */; };
 		EB3A31B818619A9E00FF2A69 /* main_background_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB3A31B718619A9E00FF2A69 /* main_background_logo@2x.png */; };
+		EBD8AA601865227F002A5497 /* LocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EBD8AA5F1865227F002A5497 /* LocationViewController.m */; };
+		EBD8AA63186526E1002A5497 /* ColumnViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EBD8AA62186526E1002A5497 /* ColumnViewController.m */; };
 		EBEE8548186177A300EC96EB /* Main_Background_write.png in Resources */ = {isa = PBXBuildFile; fileRef = EBEE853E186177A300EC96EB /* Main_Background_write.png */; };
 		EBEE8549186177A300EC96EB /* main_guide_page_first.png in Resources */ = {isa = PBXBuildFile; fileRef = EBEE853F186177A300EC96EB /* main_guide_page_first.png */; };
 		EBEE854A186177A300EC96EB /* main_guide_page_first@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EBEE8540186177A300EC96EB /* main_guide_page_first@2x.png */; };
@@ -148,8 +149,6 @@
 		EB15FFD71863D49B0045931E /* navigationbar_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navigationbar_background.png; sourceTree = "<group>"; };
 		EB15FFD81863D49B0045931E /* navigationbar_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigationbar_background@2x.png"; sourceTree = "<group>"; };
 		EB15FFDE1863E3140045931E /* title_button_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title_button_add@2x.png"; sourceTree = "<group>"; };
-		EB15FFE11863EB5E0045931E /* ColumnViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnViewController.h; sourceTree = "<group>"; };
-		EB15FFE21863EB5E0045931E /* ColumnViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnViewController.m; sourceTree = "<group>"; };
 		EB3A31A818618C0000FF2A69 /* BaseNavViewController+NavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BaseNavViewController+NavigationBar.h"; sourceTree = "<group>"; };
 		EB3A31A918618C0000FF2A69 /* BaseNavViewController+NavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BaseNavViewController+NavigationBar.m"; sourceTree = "<group>"; };
 		EB3A31AE18618E8400FF2A69 /* BaseViewController+StatusBarStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BaseViewController+StatusBarStyle.h"; sourceTree = "<group>"; };
@@ -158,6 +157,10 @@
 		EB3A31B2186197DD00FF2A69 /* Main_Background@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Main_Background@2x.jpg"; sourceTree = "<group>"; };
 		EB3A31B3186197DD00FF2A69 /* Main_Background640x1136@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Main_Background640x1136@2x.jpg"; sourceTree = "<group>"; };
 		EB3A31B718619A9E00FF2A69 /* main_background_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "main_background_logo@2x.png"; sourceTree = "<group>"; };
+		EBD8AA5E1865227F002A5497 /* LocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationViewController.h; sourceTree = "<group>"; };
+		EBD8AA5F1865227F002A5497 /* LocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationViewController.m; sourceTree = "<group>"; };
+		EBD8AA61186526E1002A5497 /* ColumnViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnViewController.h; sourceTree = "<group>"; };
+		EBD8AA62186526E1002A5497 /* ColumnViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnViewController.m; sourceTree = "<group>"; };
 		EBEE853E186177A300EC96EB /* Main_Background_write.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Main_Background_write.png; sourceTree = "<group>"; };
 		EBEE853F186177A300EC96EB /* main_guide_page_first.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_guide_page_first.png; sourceTree = "<group>"; };
 		EBEE8540186177A300EC96EB /* main_guide_page_first@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "main_guide_page_first@2x.png"; sourceTree = "<group>"; };
@@ -342,8 +345,8 @@
 		EB15FFE01863EB2C0045931E /* ColumnViewControll */ = {
 			isa = PBXGroup;
 			children = (
-				EB15FFE11863EB5E0045931E /* ColumnViewController.h */,
-				EB15FFE21863EB5E0045931E /* ColumnViewController.m */,
+				EBD8AA61186526E1002A5497 /* ColumnViewController.h */,
+				EBD8AA62186526E1002A5497 /* ColumnViewController.m */,
 			);
 			name = ColumnViewControll;
 			sourceTree = "<group>";
@@ -481,6 +484,8 @@
 				FE02E3BD184036F500E2B468 /* BaseTableView.m */,
 				FE02E3BE184036F500E2B468 /* BaseViewController.h */,
 				FE02E3BF184036F500E2B468 /* BaseViewController.m */,
+				EBD8AA5E1865227F002A5497 /* LocationViewController.h */,
+				EBD8AA5F1865227F002A5497 /* LocationViewController.m */,
 				FEBAB6D0185DE63B008AAECD /* BaseScrollView.h */,
 				FEBAB6D1185DE63B008AAECD /* BaseScrollView.m */,
 			);
@@ -871,12 +876,12 @@
 				FE02E3E0184037BD00E2B468 /* UIButton+WebCache.m in Sources */,
 				FE02E3E1184037BD00E2B468 /* UIImageView+WebCache.m in Sources */,
 				FE02E3E2184037BD00E2B468 /* UIViewExt.m in Sources */,
-				EB15FFE31863EB5E0045931E /* ColumnViewController.m in Sources */,
 				FE02E3E3184037BD00E2B468 /* WXHLGlobalUICommon.m in Sources */,
 				FE02E3E7184037E600E2B468 /* NSString+URLEncoding.m in Sources */,
 				FE02E3FD184039BE00E2B468 /* UIView+Additions.m in Sources */,
 				FE02E40B18403D4C00E2B468 /* DataService.m in Sources */,
 				FE02E41318403DF400E2B468 /* MBProgressHUD.m in Sources */,
+				EBD8AA63186526E1002A5497 /* ColumnViewController.m in Sources */,
 				FE02E4281840426400E2B468 /* Base64.m in Sources */,
 				EB3A31B018618E8400FF2A69 /* BaseViewController+StatusBarStyle.m in Sources */,
 				FE02E4291840426400E2B468 /* GzipCompressor.m in Sources */,
@@ -885,6 +890,7 @@
 				FE02E43018404FD800E2B468 /* MainViewController.m in Sources */,
 				EB3A31AA18618C0000FF2A69 /* BaseNavViewController+NavigationBar.m in Sources */,
 				FEE623DB1842F01C002ABDAB /* JSONKit.m in Sources */,
+				EBD8AA601865227F002A5497 /* LocationViewController.m in Sources */,
 				FEC333E8184319CA0014209C /* AOImageView.m in Sources */,
 				FEC333E9184319CA0014209C /* AOScrollerView.m in Sources */,
 				FEC333EA184319CA0014209C /* NSURLAdditions.m in Sources */,
