@@ -7,7 +7,7 @@
 //
 
 #import "BaseNavViewController.h"
-
+#import "LocationViewController.h"
 @interface BaseNavViewController ()
 
 @end
@@ -76,8 +76,11 @@
 //返回手势
 -(void)swipeGestureAction:(UISwipeGestureRecognizer *)gesture{
     if ([self.viewControllers count]>1) {
-        if(gesture.direction==UISwipeGestureRecognizerDirectionRight){
-            [self popViewControllerAnimated:YES];
+        if ([[self.viewControllers lastObject] isKindOfClass:[LocationViewController class]]) {
+        }else{
+            if(gesture.direction==UISwipeGestureRecognizerDirectionRight){
+                [self popViewControllerAnimated:YES];
+            }
         }
     }
 }
