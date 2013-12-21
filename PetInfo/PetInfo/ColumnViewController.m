@@ -2,24 +2,34 @@
 //  ColumnViewController.m
 //  东北新闻网
 //
-//  Created by tenyea on 13-12-20.
+//  Created by tenyea on 13-12-21.
 //  Copyright (c) 2013年 佐筱猪. All rights reserved.
 //
 
 #import "ColumnViewController.h"
+#define columnwidth 60
+#define columnheight 40
 
+#define column_off_y 50
 @interface ColumnViewController ()
 
 @end
 
 @implementation ColumnViewController
-
+@synthesize showNameArray =_showNameArray;
+@synthesize addNameArray =_addNameArray;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.title = @"编辑栏目";
     }
     return self;
+}
+//取上整数
+-(int)division:(int) i count:(int)b{
+    return  (i%b ==0 )?(i/b) : (i/b + 1);
+    
 }
 -(void)_initcolumnname {
     //写入初始化文件
@@ -29,7 +39,7 @@
     _columnNameArray = [[NSArray alloc]initWithContentsOfFile:pathName];
     _showNameArray = [[NSMutableArray alloc]init];
     _addNameArray = [[NSMutableArray alloc]init];
-
+    
     for (int i = 0 ; i < _columnNameArray.count ; i++) {
         NSDictionary *dic = _columnNameArray[i];
         if ([[dic objectForKey:@"isShow"] boolValue]) {
@@ -40,136 +50,201 @@
         }
         [dic release];
     }
-}
--(int)division:(int) i count:(int)b{
-    return  (i%b ==0 )?(i/b) : (i/b + 1);
-    
+
 }
 
--(void)_initShowView{
-    _showBackgroundView = [[UIView alloc]init];
-    _showBackgroundView.frame = CGRectMake(0, 0, ScreenWidth, 100);
-    _showBackgroundView.backgroundColor = [UIColor redColor];
-    [self.view addSubview:_showBackgroundView];
-    int i = [self division:_showNameArray.count count:4];
-    _showBackgroundView.height += i*40;
-    
-    
-    [self _initbutton:0];
-    
-}
-
--(void)_initAddView{
-    _addBackgroundView = [[UIView alloc]init];
-    _addBackgroundView.frame = CGRectMake(0, _showBackgroundView.height, ScreenWidth, ScreenHeight-_showBackgroundView.height);
-    _addBackgroundView.backgroundColor = [UIColor grayColor];
-    [self.view addSubview:_addBackgroundView];
-    [self _initbuttona];
-}
--(void)_initbutton:(int)backgroundIndex{
-    int count = _showNameArray.count;
-    float width = 20;
-    float heigth = 50;
+//初始化位置数组
+-(void)_initLocationArray {
+    _LocationArray = [[NSMutableArray alloc]init];
+    int width = 25;
+    int height = column_off_y;
+    int count = _columnNameArray.count;
     for (int i = 0 ; i<count; i++) {
+        CGRect frame = CGRectMake(0+width, height, columnwidth, columnheight);
+        [_LocationArray addObject:[NSValue valueWithCGRect:frame]];
+        if (i%4 == 3) {
+            height +=column_off_y ;
+            width = 25;
+        }else{
+            width += columnwidth+10;
+        }
+    }
+}
+//初始化button
+-(void)_initButton {
+    _po([_addNameArray[0] objectForKey:@"name"]);
+
+    //初始化显示的按钮
+    for (int i = 0 ; i< _showNameArray.count ; i++) {
         NSDictionary *dic = _showNameArray[i];
         UIButton *button = [[UIButton alloc]init];
         [button setTitle:[dic objectForKey:@"name"] forState:UIControlStateNormal];
-        button.tag = [[dic objectForKey:@"columid"] intValue];
-        button.frame = CGRectMake(0+width, heigth, 60, 40);
-        button.backgroundColor = [UIColor blackColor];
-        [button addTarget:self action:@selector(subcolumn:) forControlEvents:UIControlEventTouchUpInside];
-        if (i%4 ==3) {
-            heigth +=50;
-            width = 20;
-            _showBackgroundView.height+=50;
-        }else{
-            width += 70.0f;
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        button.tag = i*100 +[[dic objectForKey:@"columid"] intValue];
+        button.frame = [_LocationArray[i] CGRectValue];
+        button.backgroundColor = [UIColor grayColor];
+        if(i==0){
+//            button.userInteractionEnabled=YES;
+            button.enabled = NO;
         }
-        [_showBackgroundView addSubview:button];
+        //单击，增加到不显示的最后一位
+        [button addTarget:self action:@selector(subbutton:) forControlEvents:UIControlEventTouchUpInside];
+        //移动
+        [button addTarget:self action:@selector(dragMoving:withEvent:) forControlEvents:UIControlEventTouchDragInside];
+//        [button addTarget:self action:@selector(dragEnded:withEvent: ) forControlEvents: UIControlEventTouchDragOutside];
+        [self.view  addSubview:button];
         [button release];
     }
-}
--(void)_initbuttona{
-    int count = _addNameArray.count;
-    float width = 20;
-    float heigth = 50;
-    for (int i = 0 ; i<count; i++) {
+    int addHeight = [self division:_showNameArray.count count:4] * column_off_y + column_off_y +10;//栏数 *栏高 +初始化高度 +10
+    //初始化不显示的view
+    _addBackgroundView = [[UIView alloc]init];
+    _addBackgroundView.frame = CGRectMake(0, addHeight , ScreenWidth, ScreenHeight - addHeight);
+    _addBackgroundView.backgroundColor = [UIColor grayColor];
+    [self.view addSubview:_addBackgroundView];
+    //初始化显示的按钮
+    for (int i = 0 ; i< _addNameArray.count ; i++) {
         NSDictionary *dic = _addNameArray[i];
         UIButton *button = [[UIButton alloc]init];
         [button setTitle:[dic objectForKey:@"name"] forState:UIControlStateNormal];
-        button.tag = [[dic objectForKey:@"columid"] intValue];
-        button.frame = CGRectMake(0+width, heigth, 60, 40);
-        button.backgroundColor = [UIColor redColor];
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        button.tag = i*100 +[[dic objectForKey:@"columid"] intValue];
+        button.frame = [_LocationArray[i] CGRectValue];
+        button.backgroundColor = [UIColor whiteColor];
+        //单击，增加到不显示的最后一位
+        [button addTarget:self action:@selector(subcolumn:) forControlEvents:UIControlEventTouchUpInside];
+        //移动
         [button addTarget:self action:@selector(dragMoving:withEvent:) forControlEvents:UIControlEventTouchDragInside];
-        [button addTarget:self action:@selector(dragEnded:withEvent: ) forControlEvents: UIControlEventTouchUpInside |
-         UIControlEventTouchUpOutside];
-        if (i%4 ==3) {
-            heigth +=50;
-            width = 20;
-            _addBackgroundView.height+=50;
-        }else{
-            width += 70.0f;
-        }
+//        [button addTarget:self action:@selector(dragEnded:withEvent: ) forControlEvents: UIControlEventTouchDragExit];
         [_addBackgroundView addSubview:button];
         [button release];
     }
+
 }
 
-
-
-- (void) dragMoving: (UIControl *) c withEvent:ev
-{
-//    NSLog(@"Button  is moving ..............");
-    UIButton *bt = (UIButton *)c;    DLogRect(bt.frame);
-
-    bt.center = [[[ev allTouches] anyObject] locationInView:_addBackgroundView];
-    
-}
-- (void) dragEnded: (UIControl *) c withEvent:ev
-{
-    NSLog(@"Button  moving end..............");
-    UIButton *bt = (UIButton *)c;
-    c.center = [[[ev allTouches] anyObject] locationInView:_addBackgroundView];
-}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self _initcolumnname];
-    [self _initShowView];
-    [self _initAddView];
+    [self _initLocationArray];
+    [self _initButton];
+//    _po([_addNameArray[0] objectForKey:@"name"]);
 
-    
 }
--(void)addcolumn :(UIButton *)  button  {
-    int columnid = button.tag;
-    
-    UIView *view =[[UIView alloc] initWithFrame:CGRectMake(20+70+70, 50+50, 50, 40)];
-    [_showBackgroundView addSubview:view];
-    CGPoint point = [button convertPoint:CGPointMake(0, 0) fromView:self.appDelegate.window];
-    point.x = -point.x;
-    point.y = -point.y;
-    for (int i = 0; i<_addNameArray.count; i++) {
-        if ([[_addNameArray[i] objectForKey:@"columnid"] intValue] ==columnid) {
-            [button removeFromSuperview];
-            button.origin =point;
-            [UIView animateWithDuration:0.2 animations:^{
-                button.origin = CGPointMake(160, 100);
-                [_showBackgroundView addSubview:button];
-                button.backgroundColor = [UIColor blackColor];
-                [button addTarget:self action:@selector(subcolumn:) forControlEvents:UIControlEventTouchUpInside];
 
-            } completion:^(BOOL finished) {
-                
-            }];
-            return;
-        }
+#pragma mark 按钮事件
+//显示的栏目--->不显示
+-(void)subbutton:(UIButton *)subbutton{
+    _po(@"touchupinside")
+    int seatid = _addNameArray.count +1;
+    UIButton *button = [[UIButton alloc]init];
+    [button setTitle:subbutton.titleLabel.text forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    button.tag = seatid *100 + subbutton.tag%100;
+    button.frame = [_LocationArray[seatid-1] CGRectValue];
+    button.backgroundColor = [UIColor whiteColor];
+    //单击，增加到不显示的最后一位
+    [button addTarget:self action:@selector(subcolumn:) forControlEvents:UIControlEventTouchUpInside];
+    //移动
+    [button addTarget:self action:@selector(dragMoving:withEvent:) forControlEvents:UIControlEventTouchDragInside];
+//    [button addTarget:self action:@selector(dragEnded:withEvent: ) forControlEvents:
+//     UIControlEventTouchDragExit];
+    button.alpha = 0;
+    [_addBackgroundView addSubview:button];
+//    CGRect toFrame = [button convertRect:button.frame toView:self.view];
+//    DLogRect(toFrame);
+    CGRect frame = button.frame;
+    if (_isviewchange) {
+        frame = _toFrame;
+
+    }else{
+        frame.origin.y +=_addBackgroundView.top;
+
     }
     
+    
+    int removeid = subbutton.tag / 100 ;
+    DLogRect(subbutton.frame);
+    [UIView animateWithDuration:.5 animations:^{
+        subbutton.frame = frame;
+        DLogRect(subbutton.frame);
+
+        button.alpha = 1;
+        
+    } completion:^(BOOL finished) {
+        [subbutton removeFromSuperview];
+    }];
+    
+    [self refreshButtonTag:removeid];
 }
--(void)subcolumn :(UIButton *) button {
+- (void) dragMoving: (UIButton *) c withEvent:ev
+{
+//    NSLog(@"Button  moving ..............");
+
+    _toFrame = [c convertRect:CGRectMake(0,0, 50, 40) toView:_addBackgroundView];
+    DLogRect(_toFrame);
+    
+    if (_toFrame.origin.y<0) {
+        _isviewchange = NO;
+    }else{
+        _isviewchange = YES;
+    }
+    c.center = [[[ev allTouches] anyObject] locationInView:self.view];
     
 }
 
+
+
+-(void)subcolumn:(UIButton *)button {
+    
+}
+-(void) refreshButtonTag:(int) removeid{
+    [UIView animateWithDuration:0.2 animations:^{
+        for (int i = 0 ; i<_showNameArray.count ; i++) {
+            NSDictionary *dic =  _showNameArray[i];
+            if (i>removeid) {
+                UIButton *button =(UIButton *)[self.view viewWithTag:i*100 +[[dic objectForKey:@"columid"] intValue]];
+                
+                
+                
+                button.frame = [_LocationArray[button.tag/100-1] CGRectValue];
+                button.tag -=100;
+            }else if(i ==removeid ){
+                
+            }else{
+                
+            }
+        }
+        
+    } completion:^(BOOL finished) {
+        NSDictionary *dic =  _showNameArray[removeid];
+        [_addNameArray addObject:dic ];
+        [_showNameArray removeObject:dic];
+    }];
+    int count = _showNameArray.count-1;
+    if (count%4 ==0) {
+        int i=count/4;
+        [UIView animateWithDuration:0.3 animations:^{
+            _addBackgroundView.top -= (2-i)*column_off_y;
+            _addBackgroundView.height +=(2-i)*column_off_y;
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+    
+    
+    
+
+}
+
+//判断button的中心点是否在一个button上  如果在，则返回位置
+-(int)isBCenterOnOherView:(UIButton *)button {
+    int changeid = -1;
+    CGPoint centerPoint= button.center;
+    int tr = (centerPoint.x-15)/columnwidth ;
+    int td = (centerPoint.y -column_off_y )/columnheight;
+    changeid = tr*4+td;
+    return changeid;
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
