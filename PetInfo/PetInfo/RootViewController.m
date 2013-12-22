@@ -8,6 +8,7 @@
 
 #import "RootViewController.h"
 #import "ColumnViewController.h"
+#import "Uifactory.h"
 @interface RootViewController ()
 
 @end
@@ -29,9 +30,9 @@
     NSMutableArray *arrays = [[NSMutableArray alloc]init];
     arrays = [[NSMutableArray alloc]init];
     for (int i =0; i<6; i++) {
-        UILabel *view=[[UILabel alloc]init];
-        view.text =[NSString stringWithFormat: @"content%d",i];
-        view.textColor = NenNewsTextColor;
+        UILabel *view= [Uifactory createLabel:@"text" sizeName:@"middle"];
+        view.text =[NSString stringWithFormat: @"content%dasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdf",i];
+//        view.textColor = NenNewsTextColor;
         view.backgroundColor = NenNewsgroundColor;
         view.frame = CGRectMake(0, 0, 320, 40);
         [arrays addObject: view];
