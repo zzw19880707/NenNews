@@ -7,7 +7,7 @@
 //
 
 #import "RightViewController.h"
-
+#import "ThemeManager.h"
 @interface RightViewController ()
 
 @end
@@ -54,11 +54,19 @@
             
             break;
         case 1002://夜间模式
+            
             if ([label.text isEqualToString:@"夜  间"]) {
                 label.text = @"白  天";
+                [ThemeManager shareInstance].nigthModelName = @"day";
+                
+                [[NSNotificationCenter defaultCenter]postNotificationName:kNightModeChangeNofication object:nil];
             }else{
                 label.text = @"夜  间";
+                [ThemeManager shareInstance].nigthModelName = @"night";
+                
+                [[NSNotificationCenter defaultCenter]postNotificationName:kNightModeChangeNofication object:nil];
             }
+            [self.appDelegate.menuCtrl showRootController:YES];
             break;
         case 1003:
             
