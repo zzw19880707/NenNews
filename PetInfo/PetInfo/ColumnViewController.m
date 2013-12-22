@@ -7,10 +7,12 @@
 //
 
 #import "ColumnViewController.h"
-#define columnwidth 60
-#define columnheight 40
+#define columnwidth 70
+#define columnheight 30
 
-#define column_off_y 50
+
+#define column_off_y 40
+//tag值为 第几个*100 +columnid
 @interface ColumnViewController ()
 
 @end
@@ -56,7 +58,7 @@
 //初始化位置数组
 -(void)_initLocationArray {
     _LocationArray = [[NSMutableArray alloc]init];
-    int width = 25;
+    int width = 5;
     int height = column_off_y;
     int count = _columnNameArray.count;
     for (int i = 0 ; i<count; i++) {
@@ -64,7 +66,7 @@
         [_LocationArray addObject:[NSValue valueWithCGRect:frame]];
         if (i%4 == 3) {
             height +=column_off_y ;
-            width = 25;
+            width = 5;
         }else{
             width += columnwidth+10;
         }
@@ -134,7 +136,6 @@
 #pragma mark 按钮事件
 //显示的栏目--->不显示
 -(void)subbutton:(UIButton *)subbutton{
-    _po(@"touchupinside")
     int seatid = _addNameArray.count +1;
     UIButton *button = [[UIButton alloc]init];
     [button setTitle:subbutton.titleLabel.text forState:UIControlStateNormal];
@@ -146,16 +147,15 @@
     [button addTarget:self action:@selector(subcolumn:) forControlEvents:UIControlEventTouchUpInside];
     //移动
     [button addTarget:self action:@selector(dragMoving:withEvent:) forControlEvents:UIControlEventTouchDragInside];
-//    [button addTarget:self action:@selector(dragEnded:withEvent: ) forControlEvents:
-//     UIControlEventTouchDragExit];
+
     button.alpha = 0;
     [_addBackgroundView addSubview:button];
-//    CGRect toFrame = [button convertRect:button.frame toView:self.view];
-//    DLogRect(toFrame);
     CGRect frame = button.frame;
     if (_isviewchange) {
-        frame = _toFrame;
-
+        button.frame = _toFrame;
+        int column = [self isBCenterOnOherView:button];
+        button.frame = [_LocationArray[column] CGRectValue];
+        [self refreshButtonTagadd:column];
     }else{
         frame.origin.y +=_addBackgroundView.top;
 
@@ -180,7 +180,7 @@
 {
 //    NSLog(@"Button  moving ..............");
 
-    _toFrame = [c convertRect:CGRectMake(0,0, 50, 40) toView:_addBackgroundView];
+    _toFrame = [c convertRect:CGRectMake(0,0, columnwidth, columnheight) toView:_addBackgroundView];
     DLogRect(_toFrame);
     
     if (_toFrame.origin.y<0) {
@@ -197,15 +197,32 @@
 -(void)subcolumn:(UIButton *)button {
     
 }
+-(void) refreshButtonTagadd:(int) addid{
+    [UIView animateWithDuration:0.2 animations:^{
+        for (int i = 0 ; i<_addNameArray.count ; i++) {
+            NSDictionary *dic =  _addNameArray[i];
+            if (i>addid) {
+                
+            }else if(i ==addid ){
+                UIButton *button =(UIButton *)[self.view viewWithTag:i*100 +[[dic objectForKey:@"columid"] intValue]];
+                button.frame = [_LocationArray[button.tag/100+1] CGRectValue];
+                button.tag +=100;
+            }else{
+                
+            }
+        }
+
+    } completion:^(BOOL finished) {
+        
+    }];
+}
 -(void) refreshButtonTag:(int) removeid{
+    //button 位移
     [UIView animateWithDuration:0.2 animations:^{
         for (int i = 0 ; i<_showNameArray.count ; i++) {
             NSDictionary *dic =  _showNameArray[i];
             if (i>removeid) {
                 UIButton *button =(UIButton *)[self.view viewWithTag:i*100 +[[dic objectForKey:@"columid"] intValue]];
-                
-                
-                
                 button.frame = [_LocationArray[button.tag/100-1] CGRectValue];
                 button.tag -=100;
             }else if(i ==removeid ){
@@ -220,6 +237,8 @@
         [_addNameArray addObject:dic ];
         [_showNameArray removeObject:dic];
     }];
+    
+    //灰色背景位移
     int count = _showNameArray.count-1;
     if (count%4 ==0) {
         int i=count/4;
@@ -240,9 +259,12 @@
 -(int)isBCenterOnOherView:(UIButton *)button {
     int changeid = -1;
     CGPoint centerPoint= button.center;
-    int tr = (centerPoint.x-15)/columnwidth ;
+    int tr = (centerPoint.x-5)/columnwidth ;
     int td = (centerPoint.y -column_off_y )/columnheight;
-    changeid = tr*4+td;
+    changeid = tr+td*4;
+    if (changeid >_addNameArray.count) {
+        changeid =_addNameArray.count +1;
+    }
     return changeid;
 }
 - (void)didReceiveMemoryWarning
