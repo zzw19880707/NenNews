@@ -106,6 +106,13 @@
 		FE9F2216184970FA0008047F /* app_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FE9F2215184970FA0008047F /* app_icon@2x.png */; };
 		FE9F2218184970FE0008047F /* app_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FE9F2217184970FE0008047F /* app_icon.png */; };
 		FEBAB6D2185DE63B008AAECD /* BaseScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBAB6D1185DE63B008AAECD /* BaseScrollView.m */; };
+		FEBAEE951867187300CBC711 /* ThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBAEE941867187300CBC711 /* ThemeManager.m */; };
+		FEBAEE9818671B8800CBC711 /* NightModelLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBAEE9718671B8800CBC711 /* NightModelLabel.m */; };
+		FEBAEE9A1867214E00CBC711 /* Night.plist in Resources */ = {isa = PBXBuildFile; fileRef = FEBAEE991867214E00CBC711 /* Night.plist */; };
+		FEBAEE9F1867227D00CBC711 /* NightMode in Resources */ = {isa = PBXBuildFile; fileRef = FEBAEE9E1867227D00CBC711 /* NightMode */; };
+		FEBAEEA21867260B00CBC711 /* NightModelUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBAEEA11867260B00CBC711 /* NightModelUIButton.m */; };
+		FEBAEEA51867262500CBC711 /* NightModelUIImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBAEEA41867262500CBC711 /* NightModelUIImage.m */; };
+		FEBAEEA818672D3A00CBC711 /* Uifactory.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBAEEA718672D3A00CBC711 /* Uifactory.m */; };
 		FEC333E8184319CA0014209C /* AOImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = FEC333D3184319CA0014209C /* AOImageView.m */; };
 		FEC333E9184319CA0014209C /* AOScrollerView.m in Sources */ = {isa = PBXBuildFile; fileRef = FEC333D5184319CA0014209C /* AOScrollerView.m */; };
 		FEC333EA184319CA0014209C /* NSURLAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = FEC333D9184319CA0014209C /* NSURLAdditions.m */; };
@@ -271,6 +278,18 @@
 		FE9F2217184970FE0008047F /* app_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_icon.png; sourceTree = "<group>"; };
 		FEBAB6D0185DE63B008AAECD /* BaseScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseScrollView.h; sourceTree = "<group>"; };
 		FEBAB6D1185DE63B008AAECD /* BaseScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseScrollView.m; sourceTree = "<group>"; };
+		FEBAEE931867187300CBC711 /* ThemeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThemeManager.h; sourceTree = "<group>"; };
+		FEBAEE941867187300CBC711 /* ThemeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThemeManager.m; sourceTree = "<group>"; };
+		FEBAEE9618671B8800CBC711 /* NightModelLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightModelLabel.h; sourceTree = "<group>"; };
+		FEBAEE9718671B8800CBC711 /* NightModelLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightModelLabel.m; sourceTree = "<group>"; };
+		FEBAEE991867214E00CBC711 /* Night.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Night.plist; sourceTree = "<group>"; };
+		FEBAEE9E1867227D00CBC711 /* NightMode */ = {isa = PBXFileReference; lastKnownFileType = folder; path = NightMode; sourceTree = "<group>"; };
+		FEBAEEA01867260B00CBC711 /* NightModelUIButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightModelUIButton.h; sourceTree = "<group>"; };
+		FEBAEEA11867260B00CBC711 /* NightModelUIButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightModelUIButton.m; sourceTree = "<group>"; };
+		FEBAEEA31867262500CBC711 /* NightModelUIImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightModelUIImage.h; sourceTree = "<group>"; };
+		FEBAEEA41867262500CBC711 /* NightModelUIImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightModelUIImage.m; sourceTree = "<group>"; };
+		FEBAEEA618672D3A00CBC711 /* Uifactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Uifactory.h; sourceTree = "<group>"; };
+		FEBAEEA718672D3A00CBC711 /* Uifactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Uifactory.m; sourceTree = "<group>"; };
 		FEC333D2184319CA0014209C /* AOImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOImageView.h; sourceTree = "<group>"; };
 		FEC333D3184319CA0014209C /* AOImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOImageView.m; sourceTree = "<group>"; };
 		FEC333D4184319CA0014209C /* AOScrollerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOScrollerView.h; sourceTree = "<group>"; };
@@ -619,6 +638,25 @@
 			path = model;
 			sourceTree = "<group>";
 		};
+		FEBAEE921867183500CBC711 /* ThemeManager */ = {
+			isa = PBXGroup;
+			children = (
+				FEBAEE931867187300CBC711 /* ThemeManager.h */,
+				FEBAEE941867187300CBC711 /* ThemeManager.m */,
+				FEBAEEA618672D3A00CBC711 /* Uifactory.h */,
+				FEBAEEA718672D3A00CBC711 /* Uifactory.m */,
+				FEBAEE9618671B8800CBC711 /* NightModelLabel.h */,
+				FEBAEE9718671B8800CBC711 /* NightModelLabel.m */,
+				FEBAEEA01867260B00CBC711 /* NightModelUIButton.h */,
+				FEBAEEA11867260B00CBC711 /* NightModelUIButton.m */,
+				FEBAEEA31867262500CBC711 /* NightModelUIImage.h */,
+				FEBAEEA41867262500CBC711 /* NightModelUIImage.m */,
+				FEBAEE991867214E00CBC711 /* Night.plist */,
+				FEBAEE9E1867227D00CBC711 /* NightMode */,
+			);
+			name = ThemeManager;
+			sourceTree = "<group>";
+		};
 		FEC333D1184319CA0014209C /* AOImageView */ = {
 			isa = PBXGroup;
 			children = (
@@ -701,6 +739,7 @@
 				FE2F76591861E3A4004153A9 /* RightViewController.xib */,
 				EB0102071862A6E20021D998 /* RootViewController.h */,
 				EB0102081862A6E20021D998 /* RootViewController.m */,
+				FEBAEE921867183500CBC711 /* ThemeManager */,
 				EB15FFE01863EB2C0045931E /* ColumnViewControll */,
 				FEFFC70B18375336001605C5 /* Supporting Files */,
 			);
@@ -834,10 +873,12 @@
 				EB0102321862DF270021D998 /* right_setting_button.png in Resources */,
 				FE02E3471840363100E2B468 /* grayArrow@2x.png in Resources */,
 				EB15FFD41863CDFF0045931E /* left_item_button@2x.png in Resources */,
+				FEBAEE9A1867214E00CBC711 /* Night.plist in Resources */,
 				EBEE854B186177A300EC96EB /* main_guide_page_fourth.png in Resources */,
 				EBEE854D186177A300EC96EB /* main_guide_page_second.png in Resources */,
 				FE02E43118404FD800E2B468 /* MainViewController.xib in Resources */,
 				EB01022E1862DF270021D998 /* right_off_line_button.png in Resources */,
+				FEBAEE9F1867227D00CBC711 /* NightMode in Resources */,
 				FEE623D81842E173002ABDAB /* BPushConfig.plist in Resources */,
 				FE9F2216184970FA0008047F /* app_icon@2x.png in Resources */,
 				FE9F2218184970FE0008047F /* app_icon.png in Resources */,
@@ -863,6 +904,7 @@
 				FEBAB6D2185DE63B008AAECD /* BaseScrollView.m in Sources */,
 				FE02E3651840364000E2B468 /* ASIHTTPRequest.m in Sources */,
 				FE02E3661840364000E2B468 /* ASIInputStream.m in Sources */,
+				FEBAEEA51867262500CBC711 /* NightModelUIImage.m in Sources */,
 				FE02E3671840364000E2B468 /* ASINetworkQueue.m in Sources */,
 				FE02E3681840364000E2B468 /* Reachability.m in Sources */,
 				FE02E3C0184036F500E2B468 /* BaseModel.m in Sources */,
@@ -870,6 +912,7 @@
 				FE02E3C2184036F500E2B468 /* BaseTableView.m in Sources */,
 				FE02E3C3184036F500E2B468 /* BaseViewController.m in Sources */,
 				EB0102091862A6E20021D998 /* RootViewController.m in Sources */,
+				FEBAEEA818672D3A00CBC711 /* Uifactory.m in Sources */,
 				FE02E3DD184037BD00E2B468 /* SDImageCache.m in Sources */,
 				FE02E3DE184037BD00E2B468 /* SDWebImageDownloader.m in Sources */,
 				FE02E3DF184037BD00E2B468 /* SDWebImageManager.m in Sources */,
@@ -887,8 +930,11 @@
 				FE02E4291840426400E2B468 /* GzipCompressor.m in Sources */,
 				FE02E42B1840426400E2B468 /* OpenUDID.m in Sources */,
 				FE2F76511861E2E7004153A9 /* DDMenuController.m in Sources */,
+				FEBAEEA21867260B00CBC711 /* NightModelUIButton.m in Sources */,
+				FEBAEE951867187300CBC711 /* ThemeManager.m in Sources */,
 				FE02E43018404FD800E2B468 /* MainViewController.m in Sources */,
 				EB3A31AA18618C0000FF2A69 /* BaseNavViewController+NavigationBar.m in Sources */,
+				FEBAEE9818671B8800CBC711 /* NightModelLabel.m in Sources */,
 				FEE623DB1842F01C002ABDAB /* JSONKit.m in Sources */,
 				EBD8AA601865227F002A5497 /* LocationViewController.m in Sources */,
 				FEC333E8184319CA0014209C /* AOImageView.m in Sources */,
