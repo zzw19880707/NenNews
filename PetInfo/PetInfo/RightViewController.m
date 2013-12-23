@@ -8,6 +8,11 @@
 
 #import "RightViewController.h"
 #import "ThemeManager.h"
+#import "SettingViewController.h"
+#import "BaseNavViewController.h"
+#import "SearchViewController.h"
+#import "WeatherViewController.h"
+#import "LoginViewController.h"
 @interface RightViewController ()
 
 @end
@@ -18,7 +23,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        
     }
     return self;
 }
@@ -28,6 +33,18 @@
     self.view.frame =frame;
     [self.view viewWithTag:400].frame = frame;
     [self.view viewWithTag:500].frame = frame;
+    //夜间 白天模式
+    UILabel *label =(UILabel *)VIEWWITHTAG(self.view, 1022);
+    bool  nightModel=[[NSUserDefaults standardUserDefaults] boolForKey:kisNightModel];
+    if (nightModel) {
+        label.text = @"夜  间";
+    }else{
+        label.text = @"白  天";
+    }
+    
+    
+    //当日天气
+    UILabel *weather =(UILabel *)VIEWWITHTAG(self.view, 1021);
 }
 
 - (void)viewDidLoad
@@ -45,37 +62,53 @@
 
 - (IBAction)selectAction:(UIButton *)sender {
     UILabel *label =(UILabel *)VIEWWITHTAG(self.view, 1022);
-
+    SettingViewController *set = [[[SettingViewController alloc]init]autorelease ];
+    set.isCancelButton = YES;
+    SearchViewController *search = [[[SearchViewController alloc]init]autorelease];
+    search.isCancelButton = YES;
+    WeatherViewController *weather =[[[WeatherViewController alloc]init]autorelease];
+    weather.isCancelButton = YES;
+    LoginViewController *login = [[[LoginViewController alloc]init]autorelease];
+    login.isCancelButton = YES;
+    
+    NSUserDefaults *userdefaults = [NSUserDefaults standardUserDefaults];
     switch (sender.tag) {
-        case 1000:
+        case 1000://登陆
+            [self.appDelegate.menuCtrl presentModalViewController:[[[BaseNavViewController alloc]initWithRootViewController: login]autorelease] animated:YES];
             
             break;
         case 1001:
+            [self.appDelegate.menuCtrl presentModalViewController:[[[BaseNavViewController alloc]initWithRootViewController: weather]autorelease] animated:YES];
             
             break;
         case 1002://夜间模式
             
             if ([label.text isEqualToString:@"夜  间"]) {
                 label.text = @"白  天";
-                [ThemeManager shareInstance].nigthModelName = @"day";
-                
+                [ThemeManager shareInstance].nigthModelName = @"night";
+                [userdefaults setBool:NO forKey:kisNightModel];
+                [userdefaults synchronize];
                 [[NSNotificationCenter defaultCenter]postNotificationName:kNightModeChangeNofication object:nil];
             }else{
                 label.text = @"夜  间";
-                [ThemeManager shareInstance].nigthModelName = @"night";
-                
+                [ThemeManager shareInstance].nigthModelName = @"day";
+                [userdefaults setBool:YES forKey:kisNightModel];
+                [userdefaults synchronize];
                 [[NSNotificationCenter defaultCenter]postNotificationName:kNightModeChangeNofication object:nil];
             }
             [self.appDelegate.menuCtrl showRootController:YES];
             break;
         case 1003:
-            
+            [self.appDelegate.menuCtrl presentModalViewController:[[[BaseNavViewController alloc]initWithRootViewController: search]autorelease] animated:YES];
             break;
         case 1004:
+            [self.appDelegate.menuCtrl showRootController:YES];
+            //首页开始下载
+//            self.appDelegate
             
             break;
         case 1005:
-            
+            [self.appDelegate.menuCtrl presentModalViewController:[[[BaseNavViewController alloc]initWithRootViewController: set]autorelease] animated:YES];
             break;
 
         default:

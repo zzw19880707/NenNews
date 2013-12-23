@@ -51,7 +51,7 @@
                         <action selector="selectAction:" destination="-1" eventType="touchUpInside" id="MEr-BK-piG"/>
                     </connections>
                 </button>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="天  气" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9uy-ZU-3Ry">
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1021" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="天  气" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9uy-ZU-3Ry">
                     <rect key="frame" x="265" y="148" width="30" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
