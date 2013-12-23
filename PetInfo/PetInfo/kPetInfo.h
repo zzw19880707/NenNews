@@ -18,20 +18,35 @@
 #define kSizeMiddleNofication @"20"
 #define kSizeSmallNofication @"20"
 
+#pragma mark DIC_KEY
+#define kFont_Size @"kFontSize"
+#define KNews_Push @"KNewsPUSH"
+
+#define kBrownModelChangeNofication @"kBrownModelChangeNofication"
+
+
 #pragma mark UserDefaults
+//判断是否是夜间模式
+#define kisNightModel @"isNightModel"
 //判断是否是第一次登陆
-#define isNotFirstLogin @"isFirstLogin"
+#define kisNotFirstLogin @"isFirstLogin"
 //百度推送绑定信息
 #define BPushchannelid @"BPushchannelid"
 #define BPushappid @"BPushappid"
 #define BPushuserid @"BPushuserid"
 //经纬度
-#define user_longitude @"longitude"
-#define user_latitude @"latitude"
+#define kuser_longitude @"longitude"
+#define kuser_latitude @"latitude"
 //判断进入程序后是否定位
-#define isLocation @"isLocation"
+#define kisLocation @"isLocation"
 //用户登陆后返回的id
-#define user_id @"user_id"
+#define kuser_id @"user_id"
+#define kbroseMode @"BroseMode"
+#define kpageCount @"pageCount"
+
+
+
+
 //首页加载广告的大图
 #define main_adImage_url @"main_adImage_url"
 #pragma mark Nen_News_Color
@@ -44,4 +59,5 @@
 #define data_file_name @"data.plist"
 #define Night_file_name @"Night.plist"
 #define NightModel_file_name @"NightModel.plist"
+#define kSetting_file_name @"kSetting.plist"
 #endif
