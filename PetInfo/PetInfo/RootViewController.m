@@ -30,7 +30,7 @@
     NSMutableArray *arrays = [[NSMutableArray alloc]init];
     arrays = [[NSMutableArray alloc]init];
     for (int i =0; i<6; i++) {
-        UILabel *view= [Uifactory createLabel:@"text" sizeName:@"middle"];
+        UILabel *view= [Uifactory createLabel:@"text" sizeFont:20];
         view.text =[NSString stringWithFormat: @"content%dasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdf",i];
 //        view.textColor = NenNewsTextColor;
         view.backgroundColor = NenNewsgroundColor;
