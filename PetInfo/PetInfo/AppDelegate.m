@@ -37,7 +37,7 @@
     [BPush setDelegate:self];
     //设置角标为0
     [application setApplicationIconBadgeNumber:0];
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:kisNotFirstLogin]) {
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:kisNotFirstLogin]) {
     // 注册通知（声音、标记、弹出窗口）
     [application registerForRemoteNotificationTypes:
      UIRemoteNotificationTypeAlert

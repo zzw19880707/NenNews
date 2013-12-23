@@ -133,15 +133,15 @@
     }
     [[ThemeManager shareInstance] setPush];
     //第一次登陆
-    if ([_userDefaults boolForKey:kisNotFirstLogin]) {
+    if (![_userDefaults boolForKey:kisNotFirstLogin]) {
         [self _initplist];
         #warning 推送绑定
         [BPush bindChannel];
         [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:3];
     }else{
         //图片最多加载5秒
-//        [self performSelector:@selector(_removeBackground) withObject:nil afterDelay:5];
-        [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:1];
+        [self performSelector:@selector(_removeBackground) withObject:nil afterDelay:5];
+//        [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:1];
 
     }
     self.view.backgroundColor = [UIColor redColor];
@@ -214,7 +214,6 @@
     } completion:^(BOOL finished) {
         [_backgroundView removeFromSuperview];
         RELEASE_SAFELY(_backgroundView);
-        [self _initViewController];
     }];
     [self _addGuidePageView];
 }
@@ -257,6 +256,8 @@
         [self setStateBarHidden:NO];
         [_userDefaults setBool:YES forKey:kisNotFirstLogin];
         [pageControl removeFromSuperview];
+        [self _initViewController];
+
     }];
 }
 //pagecontrol 事件
