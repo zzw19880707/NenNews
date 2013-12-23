@@ -12,11 +12,12 @@
 #pragma mark NSNotificationCenter
 //夜间模式开启/关闭
 #define kNightModeChangeNofication @"kNightModeChangeNofication"
+#define kbackground @"background"
+#define kselectText @"selectText"
+#define ktext @"text"
+
 //字体大小改变
 #define kFontSizeChangeNofication @"kFontSizeChangeNofication"
-#define kSizeBigNofication @"20"
-#define kSizeMiddleNofication @"20"
-#define kSizeSmallNofication @"20"
 
 #pragma mark DIC_KEY
 #define kFont_Size @"kFontSize"
