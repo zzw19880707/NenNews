@@ -10,9 +10,10 @@
 #import "ThemeManager.h"
 @implementation NightModelLabel
 - (void)dealloc {
-    [super dealloc];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_colorName release];
+    [super dealloc];
+    
 }
 
 - (id)initWithColorName:(NSString *)colorName {
@@ -20,11 +21,6 @@
     if (self != nil) {
         self.colorName = colorName;
         self.isSelect = NO;
-//        self.isTitle =  isTitle;
-//        //如果不是title，则设置字体颜色为选中的颜色
-//        if (!_isTitle) {
-//            self.colorName = @"selectText";
-//        }
     }
     return self;
 }
@@ -51,7 +47,7 @@
         _isSelect = isSelect;
     }
     //选中时，更改调用的字体颜色
-    _colorName = @"selectText";
+    _colorName = kselectText;
     [self setColor];
 }
 
@@ -59,6 +55,7 @@
 - (void)setColor {
     UIColor *textColor = [[ThemeManager shareInstance] getColorWithName:_colorName];
     self.textColor = textColor;
+    self.backgroundColor = [[ThemeManager shareInstance] getBackgroundColor];
 }
 
 #pragma mark - NSNotification actions

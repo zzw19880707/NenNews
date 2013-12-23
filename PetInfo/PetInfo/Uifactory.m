@@ -26,4 +26,17 @@
     FontLabel *fontLabel = [[FontLabel alloc] initWithColorName:colorName sizeFont:sizeFont];
     return [fontLabel autorelease];
 }
+
+//创建button，改变字体和背景颜色
++ (NightModelUIButton *)createButton:(NSString *)titleName{
+    NightModelUIButton *nightButton =[[NightModelUIButton alloc]initWithTitleName:titleName];
+    return [nightButton autorelease];
+}
+
+//创建scrollview，改变背景颜色
++ (NightModelScrollView *)createScrollView {
+    NightModelScrollView *scrollView =[[NightModelScrollView alloc]init];
+    return [scrollView autorelease];
+}
+
 @end

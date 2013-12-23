@@ -26,10 +26,11 @@
 
 
 
-//返回当前主题下，字体的颜色
+//返回当前模式下，字体的颜色
 - (UIColor *)getColorWithName:(NSString *)name;
-
-//返回当前主题下，字体的大小
+//返回当前模式下，背景的颜色
+-(UIColor *)getBackgroundColor;
+//返回当前模式下，字体的大小
 - (int)getSizeFont;
 
 //设置推送开启关闭

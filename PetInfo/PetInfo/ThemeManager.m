@@ -63,10 +63,26 @@ static ThemeManager *sigleton = nil;
     
     //切换主题，重新加载当前主题下的字体配置文件
     NSString *themeDir = [self getThemePath];
-    NSString *filePath = [themeDir stringByAppendingPathComponent:@"NightModel.plist"];
+    NSString *filePath = [themeDir stringByAppendingPathComponent:NightModel_file_name];
     self.fontColorPlist = [NSDictionary dictionaryWithContentsOfFile:filePath];
 
 }
+//返回当前模式下，背景的颜色
+
+-(UIColor *)getBackgroundColor{
+    //返回三色值，如：24,35,60
+    NSString *rgb = [_fontColorPlist objectForKey:kbackground];
+    NSArray *rgbs = [rgb componentsSeparatedByString:@","];
+    if (rgbs.count == 3) {
+        float r = [rgbs[0] floatValue];
+        float g = [rgbs[1] floatValue];
+        float b = [rgbs[2] floatValue];
+        UIColor *color = COLOR(r, g, b);
+        return color;
+    }
+    return nil;
+}
+//返回当前模式下，字体的颜色
 
 - (UIColor *)getColorWithName:(NSString *)name {
     if (name.length == 0) {
@@ -96,6 +112,7 @@ static ThemeManager *sigleton = nil;
     [self getSettingPath];
     return [[_settingPlist objectForKey:kFont_Size]intValue] ;
 }
+//设置推送信息
 -(void)setPush {
     [self getSettingPath];
     if ([[_settingPlist objectForKey:KNews_Push]boolValue]) {
