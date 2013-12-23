@@ -7,6 +7,7 @@
 //
 
 #import "BaseScrollView.h"
+#import "Uifactory.h"
 @implementation BaseScrollView
 
 - (id)initWithFrame:(CGRect)frame
@@ -34,10 +35,11 @@
         
         _sliderImageView.image = [UIImage imageNamed:@"slider_bg_baseScroll.png"];
         
-        _buttonBgView = [[ UIScrollView alloc]initWithFrame:CGRectMake(0, 0, frame.size.width- 40, 39)];
+        _buttonBgView = [Uifactory createScrollView];
+        _buttonBgView.frame =CGRectMake(0, 0, frame.size.width- 40, 39);
         [_buttonBgView addSubview:_sliderImageView];
 
-        _buttonBgView.backgroundColor = NenNewsgroundColor;
+//        _buttonBgView.backgroundColor = NenNewsgroundColor;
         _buttonBgView.contentSize =CGSizeMake( 70*buttons.count, 38);
         _buttonBgView.showsHorizontalScrollIndicator = NO;
         _buttonBgView.showsVerticalScrollIndicator = NO;
@@ -67,14 +69,15 @@
         [self addSubview:bgView];
         [bgView release];
         
-        _contentBgView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 40, frame.size.width+20, frame.size.height - 40)];
+        _contentBgView = [Uifactory createScrollView];
+        _contentBgView.frame =CGRectMake(0, 40, frame.size.width+20, frame.size.height - 40);
         _contentBgView.tag =10001;
         _contentBgView.pagingEnabled =YES;
         _contentBgView.delegate = self;
         _contentBgView.showsHorizontalScrollIndicator=NO;
         _contentBgView.showsVerticalScrollIndicator=NO;
         _contentBgView.contentSize = CGSizeMake(340*buttons.count, frame.size.height-40);
-        _contentBgView.backgroundColor = NenNewsgroundColor;
+//        _contentBgView.backgroundColor = NenNewsgroundColor;
         _contentBgView.bounces = NO;
         int _tx = 0 ;
         for (int i = 0;i<contents.count ; i++) {
