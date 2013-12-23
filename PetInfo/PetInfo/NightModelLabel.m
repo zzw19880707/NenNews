@@ -12,15 +12,13 @@
 - (void)dealloc {
     [super dealloc];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [_sizeName release];
     [_colorName release];
 }
 
-- (id)initWithColorName:(NSString *)colorName sizeName:(NSString *)sizeName {
+- (id)initWithColorName:(NSString *)colorName {
     self = [self init];
     if (self != nil) {
         self.colorName = colorName;
-        self.sizeName = sizeName;
         self.isSelect = NO;
 //        self.isTitle =  isTitle;
 //        //如果不是title，则设置字体颜色为选中的颜色
@@ -35,7 +33,6 @@
     self = [super init];
     if (self!=nil) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(NightModeChangeNotification:) name:kNightModeChangeNofication object:nil];
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(FontSizeChangeNotification:) name:kFontSizeChangeNofication object:nil];
     }
     return self;
 }
@@ -48,14 +45,7 @@
     
     [self setColor];
 }
-- (void)setSizeName:(NSString *)sizeName{
-    if (_sizeName != sizeName) {
-        [sizeName release];
-        _sizeName = [sizeName copy];
-    }
-    
-    [self setFont];
-}
+
 -(void)setIsSelect:(BOOL)isSelect{
     if (_isSelect !=isSelect) {
         _isSelect = isSelect;
@@ -66,9 +56,6 @@
 }
 
 
-- (void)setFont{
-    
-}
 - (void)setColor {
     UIColor *textColor = [[ThemeManager shareInstance] getColorWithName:_colorName];
     self.textColor = textColor;
@@ -81,7 +68,5 @@
     
     
 }
-- (void)FontSizeChangeNotification:(NSNotification *)notification {
-    
-}
+
 @end

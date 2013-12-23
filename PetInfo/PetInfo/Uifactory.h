@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "NightModelLabel.h"
+#import "FontLabel.h"
+@interface Uifactory : NSObject
 
-@interface Uifactory : UIImage
-
-//创建Label
-+ (NightModelLabel *)createLabel:(NSString *)colorName  sizeName:(NSString *)sizeName;
+//创建Label 不改变字体大小的label
++ (NightModelLabel *)createLabel:(NSString *)colorName ;
+//创建Label 改变字体大小的label 即正文label
++ (FontLabel *)createLabel:(NSString *)colorName sizeFont :(int)sizeFont;
 @end

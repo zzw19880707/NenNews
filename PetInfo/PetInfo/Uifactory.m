@@ -11,10 +11,19 @@
 @implementation Uifactory
 
 
-//创建Label
-+ (NightModelLabel *)createLabel:(NSString *)colorName  sizeName:(NSString *)sizeName{
-    NightModelLabel *nightModelLabel = [[NightModelLabel alloc] initWithColorName:colorName sizeName:sizeName];
+//创建Label 不改变字体大小的label
++(NightModelLabel *)createLabel:(NSString *)colorName
+{
+    NightModelLabel *nightModelLabel = [[NightModelLabel alloc] initWithColorName:colorName ];
     
     return [nightModelLabel autorelease];
+}
+
+
+//创建Label 改变字体大小的label 即正文label
++(FontLabel *)createLabel:(NSString *)colorName sizeFont:(int)sizeFont
+{
+    FontLabel *fontLabel = [[FontLabel alloc] initWithColorName:colorName sizeFont:sizeFont];
+    return [fontLabel autorelease];
 }
 @end

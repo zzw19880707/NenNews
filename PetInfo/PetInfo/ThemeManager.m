@@ -34,6 +34,7 @@ static ThemeManager *sigleton = nil;
     return self;
 }
 
+
 //获取主题目录
 - (NSString *)getThemePath {
     if (self.nigthModelName == nil) {
@@ -67,9 +68,6 @@ static ThemeManager *sigleton = nil;
 
 }
 
-
-
-
 - (UIColor *)getColorWithName:(NSString *)name {
     if (name.length == 0) {
         return nil;
@@ -85,6 +83,31 @@ static ThemeManager *sigleton = nil;
         return color;
     }
     return nil;
+}
+
+//获取setting文件路径
+-(NSString *)getSettingPath {
+    NSString *settingPath = [NSHomeDirectory() stringByAppendingPathComponent: kSetting_file_name];
+    _settingPlist =[[NSMutableDictionary alloc] initWithContentsOfFile: settingPath];
+    return settingPath;
+}
+//设置字体大小
+- (int)getSizeFont{
+    [self getSettingPath];
+    return [[_settingPlist objectForKey:kFont_Size]intValue] ;
+}
+-(void)setPush {
+    [self getSettingPath];
+    if ([[_settingPlist objectForKey:KNews_Push]boolValue]) {
+        //注册
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert
+         | UIRemoteNotificationTypeBadge
+         | UIRemoteNotificationTypeSound];
+    }else{
+        //反注册
+        [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+    }
+
 }
 
 

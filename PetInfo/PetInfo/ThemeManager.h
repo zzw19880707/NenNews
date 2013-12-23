@@ -19,6 +19,9 @@
 
 //当前使用的模式    日间|夜间
 @property(nonatomic,retain)NSString *nigthModelName;
+
+//当前使用的字体大小、推送设置 setting配置文件
+@property (nonatomic,retain)NSDictionary *settingPlist;
 + (ThemeManager *)shareInstance;
 
 
@@ -26,4 +29,9 @@
 //返回当前主题下，字体的颜色
 - (UIColor *)getColorWithName:(NSString *)name;
 
+//返回当前主题下，字体的大小
+- (int)getSizeFont;
+
+//设置推送开启关闭
+- (void)setPush;
 @end

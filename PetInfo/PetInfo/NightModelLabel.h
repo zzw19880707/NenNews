@@ -10,13 +10,12 @@
 
 @interface NightModelLabel : UILabel
 
-@property (nonatomic,copy) NSString *sizeName;
 
 @property (nonatomic,copy) NSString *colorName;
 
 @property (nonatomic,assign) BOOL isSelect;
 @property (nonatomic,assign) BOOL isTitle;
 
-- (id)initWithColorName:(NSString *)colorName sizeName:(NSString *)sizeName ;
+- (id)initWithColorName:(NSString *)colorName ;
 
 @end
