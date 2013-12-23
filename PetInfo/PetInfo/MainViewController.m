@@ -13,7 +13,7 @@
 #import "DDMenuController.h"
 #import "LeftViewController.h"
 #import "RightViewController.h"
-
+#import "ThemeManager.h"
 #define firstimage @"http://a.hiphotos.baidu.com/image/w%3D2048/sign=9f5289ba0b55b3199cf9857577918326/4d086e061d950a7b32998b7f0bd162d9f3d3c9d9.jpg"
 @interface MainViewController ()
 
@@ -34,7 +34,7 @@
 -(void)_initLocation{
     _longitude = 0;
     _latitude = 0;
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:isLocation];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kisLocation];
 
 }
 //添加rootview
@@ -75,7 +75,7 @@
     UIImageView *topImageView = [[UIImageView alloc]init];
     topImageView.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight-88);
     NSString *url = [[NSString alloc]init];
-    if (![_userDefaults boolForKey:isNotFirstLogin]) {
+    if (![_userDefaults boolForKey:kisNotFirstLogin]) {
         url = firstimage;
     }else{
         url = [_userDefaults stringForKey:main_adImage_url];
@@ -93,6 +93,13 @@
     NSString *pathName = [plistPath1 stringByAppendingPathComponent:data_file_name];
     NSDictionary *dica = [[NSDictionary alloc]init];
     [dica writeToFile:pathName atomically:YES];
+    
+    //设置文件初始化
+    NSString *settingPath = [NSHomeDirectory() stringByAppendingPathComponent: kSetting_file_name];
+    [[NSFileManager defaultManager] createFileAtPath: settingPath contents: nil attributes: nil];
+    _settingDic = [[NSMutableDictionary alloc] initWithObjectsAndKeys: [NSNumber numberWithInt: 1], kFont_Size, [NSNumber numberWithBool: YES], KNews_Push, nil];
+    [_settingDic writeToFile: settingPath atomically: YES];
+    
     
     //初始化菜单
     NSString *columnName = [plistPath1 stringByAppendingPathComponent:column_file_name];
@@ -117,15 +124,25 @@
     //加载进入应用后大图
     [self _initBackgroundView];
     
+    //设置夜间模式
+    bool  nightModel=[_userDefaults boolForKey:kisNightModel];
+    if (nightModel) {
+        [ThemeManager shareInstance].nigthModelName =@"day";
+    }else{
+        [ThemeManager shareInstance].nigthModelName =@"night";
+    }
+    [[ThemeManager shareInstance] setPush];
     //第一次登陆
-    if (![_userDefaults boolForKey:isNotFirstLogin]) {
+    if ([_userDefaults boolForKey:kisNotFirstLogin]) {
         [self _initplist];
         #warning 推送绑定
         [BPush bindChannel];
         [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:3];
     }else{
         //图片最多加载5秒
-        [self performSelector:@selector(_removeBackground) withObject:nil afterDelay:5];
+//        [self performSelector:@selector(_removeBackground) withObject:nil afterDelay:5];
+        [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:1];
+
     }
     self.view.backgroundColor = [UIColor redColor];
 }
@@ -217,9 +234,9 @@
         [locationManager startUpdatingLocation];
     }else{//未开启定位服务
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setFloat:_longitude forKey:user_longitude];
-        [userDefaults setFloat:_latitude forKey:user_latitude];
-        [userDefaults setBool:NO forKey:isLocation];
+        [userDefaults setFloat:_longitude forKey:kuser_longitude];
+        [userDefaults setFloat:_latitude forKey:kuser_latitude];
+        [userDefaults setBool:NO forKey:kisLocation];
     }
 }
 #pragma mark scrolldelegate 
@@ -238,7 +255,7 @@
     } completion:^(BOOL finished) {
         //隐藏状态
         [self setStateBarHidden:NO];
-        [_userDefaults setBool:YES forKey:isNotFirstLogin];
+        [_userDefaults setBool:YES forKey:kisNotFirstLogin];
         [pageControl removeFromSuperview];
     }];
 }
@@ -257,9 +274,9 @@
     _longitude = newLocation.coordinate.longitude;
     _latitude = newLocation.coordinate.latitude;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setFloat:_longitude forKey:user_longitude];
-    [userDefaults setFloat:_latitude forKey:user_latitude];
-    [userDefaults setBool:YES forKey:isLocation];
+    [userDefaults setFloat:_longitude forKey:kuser_longitude];
+    [userDefaults setFloat:_latitude forKey:kuser_latitude];
+    [userDefaults setBool:YES forKey:kisLocation];
     
 }
 
@@ -269,7 +286,7 @@
     _po([error localizedDescription]);
     [manager stopUpdatingLocation];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setBool:NO forKey:isLocation];
+    [userDefaults setBool:NO forKey:kisLocation];
 }
 
 #pragma mark asirequest delegate
@@ -290,7 +307,7 @@
 {
     _po([[asirequest error] localizedDescription]);
     NSUserDefaults *userDefaults=[NSUserDefaults standardUserDefaults];
-    if (![userDefaults boolForKey:isNotFirstLogin]) {
+    if (![userDefaults boolForKey:kisNotFirstLogin]) {
 //        [self RemoveandInit];
     }
 }
