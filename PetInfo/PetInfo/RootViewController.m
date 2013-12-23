@@ -30,11 +30,13 @@
     NSMutableArray *arrays = [[NSMutableArray alloc]init];
     arrays = [[NSMutableArray alloc]init];
     for (int i =0; i<6; i++) {
-        UILabel *view= [Uifactory createLabel:@"text" sizeFont:20];
-        view.text =[NSString stringWithFormat: @"content%dasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdf",i];
-//        view.textColor = NenNewsTextColor;
-        view.backgroundColor = NenNewsgroundColor;
+        UILabel *view= [Uifactory createLabel:ktext sizeFont:20];
+        NSString *content = [NSString stringWithFormat: @"content%dasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdf",i];
+        view.text =content;
+        view.numberOfLines = 0;
+        CGSize size = [content sizeWithFont:view.font constrainedToSize:CGSizeMake(320, 1000)];
         view.frame = CGRectMake(0, 0, 320, 40);
+        view.size =size;
         [arrays addObject: view];
     }
     return arrays;
@@ -60,10 +62,11 @@
     
     NSMutableArray *arrays = [[NSMutableArray alloc]init];
     for (int i =0; i<nameArrays.count; i++) {
-        UIButton *button =[[UIButton alloc]init];
-        [button setTitle:nameArrays[i] forState:UIControlStateNormal];
-        [button setTitleColor:NenNewsTextColor forState:UIControlStateNormal];
-        button.backgroundColor = NenNewsgroundColor;
+//        UIButton *button =[[UIButton alloc]init];
+//        [button setTitle:nameArrays[i] forState:UIControlStateNormal];
+//        [button setTitleColor:NenNewsTextColor forState:UIControlStateNormal];
+//        button.backgroundColor = NenNewsgroundColor;
+        UIButton *button = [Uifactory createButton:nameArrays[i]];
         button.frame = CGRectMake(10 + 70*i, 0, 60, 30);
         [arrays addObject:button];
         [button release];
