@@ -117,6 +117,7 @@
 		FE2F76561861E395004153A9 /* LeftViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE2F76541861E395004153A9 /* LeftViewController.xib */; };
 		FE2F765A1861E3A4004153A9 /* RightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE2F76581861E3A4004153A9 /* RightViewController.m */; };
 		FE2F765B1861E3A4004153A9 /* RightViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE2F76591861E3A4004153A9 /* RightViewController.xib */; };
+		FE82536B18687C530070AAB0 /* NightModelScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = FE82536A18687C530070AAB0 /* NightModelScrollView.m */; };
 		FE8777E5185A10EB0070CF74 /* StringValue.h in Resources */ = {isa = PBXBuildFile; fileRef = FE8777E4185A10750070CF74 /* StringValue.h */; };
 		FE9F2216184970FA0008047F /* app_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FE9F2215184970FA0008047F /* app_icon@2x.png */; };
 		FE9F2218184970FE0008047F /* app_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FE9F2217184970FE0008047F /* app_icon.png */; };
@@ -312,6 +313,8 @@
 		FE2F76571861E3A4004153A9 /* RightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightViewController.h; sourceTree = "<group>"; };
 		FE2F76581861E3A4004153A9 /* RightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightViewController.m; sourceTree = "<group>"; };
 		FE2F76591861E3A4004153A9 /* RightViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RightViewController.xib; sourceTree = "<group>"; };
+		FE82536918687C530070AAB0 /* NightModelScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightModelScrollView.h; sourceTree = "<group>"; };
+		FE82536A18687C530070AAB0 /* NightModelScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightModelScrollView.m; sourceTree = "<group>"; };
 		FE8777E4185A10750070CF74 /* StringValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StringValue.h; sourceTree = "<group>"; };
 		FE9F2215184970FA0008047F /* app_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "app_icon@2x.png"; sourceTree = "<group>"; };
 		FE9F2217184970FE0008047F /* app_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_icon.png; sourceTree = "<group>"; };
@@ -728,6 +731,8 @@
 				FEBAEEA11867260B00CBC711 /* NightModelUIButton.m */,
 				FEBAEEA31867262500CBC711 /* NightModelUIImage.h */,
 				FEBAEEA41867262500CBC711 /* NightModelUIImage.m */,
+				FE82536918687C530070AAB0 /* NightModelScrollView.h */,
+				FE82536A18687C530070AAB0 /* NightModelScrollView.m */,
 				FEBAEE991867214E00CBC711 /* Night.plist */,
 				FEBAEE9E1867227D00CBC711 /* NightMode */,
 			);
@@ -998,6 +1003,7 @@
 				EB264262186826110004D1D9 /* LoginViewController.m in Sources */,
 				FE02E3C0184036F500E2B468 /* BaseModel.m in Sources */,
 				FE02E3C1184036F500E2B468 /* BaseNavViewController.m in Sources */,
+				FE82536B18687C530070AAB0 /* NightModelScrollView.m in Sources */,
 				FE02E3C2184036F500E2B468 /* BaseTableView.m in Sources */,
 				FE02E3C3184036F500E2B468 /* BaseViewController.m in Sources */,
 				EB0102091862A6E20021D998 /* RootViewController.m in Sources */,
