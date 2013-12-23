@@ -257,7 +257,7 @@
 -(void)Location {
     if([CLLocationManager locationServicesEnabled]){
         //已经定位
-        if ([[NSUserDefaults standardUserDefaults]boolForKey:isLocation]) {
+        if ([[NSUserDefaults standardUserDefaults]boolForKey:kisLocation]) {
 //            [];
         }
         //重新定位

@@ -34,6 +34,21 @@
 		EB15FFD91863D49B0045931E /* navigationbar_background.png in Resources */ = {isa = PBXBuildFile; fileRef = EB15FFD71863D49B0045931E /* navigationbar_background.png */; };
 		EB15FFDA1863D49B0045931E /* navigationbar_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB15FFD81863D49B0045931E /* navigationbar_background@2x.png */; };
 		EB15FFDF1863E3140045931E /* title_button_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB15FFDE1863E3140045931E /* title_button_add@2x.png */; };
+		EB2642351867C51A0004D1D9 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB2642331867C51A0004D1D9 /* SettingViewController.m */; };
+		EB2642361867C51A0004D1D9 /* SettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB2642341867C51A0004D1D9 /* SettingViewController.xib */; };
+		EB26423C1867C9780004D1D9 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB26423A1867C9780004D1D9 /* AboutViewController.m */; };
+		EB26423D1867C9780004D1D9 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB26423B1867C9780004D1D9 /* AboutViewController.xib */; };
+		EB26423F1867C9810004D1D9 /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = EB26423E1867C9810004D1D9 /* about.html */; };
+		EB2642461867FCB10004D1D9 /* DataCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = EB2642451867FCB10004D1D9 /* DataCenter.m */; };
+		EB2642491867FF590004D1D9 /* FontLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = EB2642481867FF590004D1D9 /* FontLabel.m */; };
+		EB26424F18681F830004D1D9 /* BroseModeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB26424E18681F830004D1D9 /* BroseModeViewController.m */; };
+		EB264253186823AB0004D1D9 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB264251186823AB0004D1D9 /* SearchViewController.m */; };
+		EB264254186823AB0004D1D9 /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB264252186823AB0004D1D9 /* SearchViewController.xib */; };
+		EB26425D1868257D0004D1D9 /* WeatherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB26425B1868257D0004D1D9 /* WeatherViewController.m */; };
+		EB26425E1868257D0004D1D9 /* WeatherViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB26425C1868257D0004D1D9 /* WeatherViewController.xib */; };
+		EB264262186826110004D1D9 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB264260186826110004D1D9 /* LoginViewController.m */; };
+		EB264263186826110004D1D9 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB264261186826110004D1D9 /* LoginViewController.xib */; };
+		EB264266186829630004D1D9 /* PageCountsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB264265186829630004D1D9 /* PageCountsViewController.m */; };
 		EB3A31AA18618C0000FF2A69 /* BaseNavViewController+NavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = EB3A31A918618C0000FF2A69 /* BaseNavViewController+NavigationBar.m */; };
 		EB3A31B018618E8400FF2A69 /* BaseViewController+StatusBarStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = EB3A31AF18618E8400FF2A69 /* BaseViewController+StatusBarStyle.m */; };
 		EB3A31B4186197DD00FF2A69 /* Main_Background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EB3A31B1186197DD00FF2A69 /* Main_Background.jpg */; };
@@ -156,6 +171,30 @@
 		EB15FFD71863D49B0045931E /* navigationbar_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navigationbar_background.png; sourceTree = "<group>"; };
 		EB15FFD81863D49B0045931E /* navigationbar_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigationbar_background@2x.png"; sourceTree = "<group>"; };
 		EB15FFDE1863E3140045931E /* title_button_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title_button_add@2x.png"; sourceTree = "<group>"; };
+		EB2642321867C51A0004D1D9 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
+		EB2642331867C51A0004D1D9 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
+		EB2642341867C51A0004D1D9 /* SettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingViewController.xib; sourceTree = "<group>"; };
+		EB2642391867C9780004D1D9 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
+		EB26423A1867C9780004D1D9 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
+		EB26423B1867C9780004D1D9 /* AboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutViewController.xib; sourceTree = "<group>"; };
+		EB26423E1867C9810004D1D9 /* about.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = about.html; sourceTree = "<group>"; };
+		EB2642441867FCB10004D1D9 /* DataCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataCenter.h; sourceTree = "<group>"; };
+		EB2642451867FCB10004D1D9 /* DataCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataCenter.m; sourceTree = "<group>"; };
+		EB2642471867FF590004D1D9 /* FontLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontLabel.h; sourceTree = "<group>"; };
+		EB2642481867FF590004D1D9 /* FontLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontLabel.m; sourceTree = "<group>"; };
+		EB26424D18681F830004D1D9 /* BroseModeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BroseModeViewController.h; sourceTree = "<group>"; };
+		EB26424E18681F830004D1D9 /* BroseModeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BroseModeViewController.m; sourceTree = "<group>"; };
+		EB264250186823AB0004D1D9 /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		EB264251186823AB0004D1D9 /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
+		EB264252186823AB0004D1D9 /* SearchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchViewController.xib; sourceTree = "<group>"; };
+		EB26425A1868257D0004D1D9 /* WeatherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherViewController.h; sourceTree = "<group>"; };
+		EB26425B1868257D0004D1D9 /* WeatherViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherViewController.m; sourceTree = "<group>"; };
+		EB26425C1868257D0004D1D9 /* WeatherViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WeatherViewController.xib; sourceTree = "<group>"; };
+		EB26425F186826110004D1D9 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		EB264260186826110004D1D9 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		EB264261186826110004D1D9 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		EB264264186829630004D1D9 /* PageCountsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageCountsViewController.h; sourceTree = "<group>"; };
+		EB264265186829630004D1D9 /* PageCountsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageCountsViewController.m; sourceTree = "<group>"; };
 		EB3A31A818618C0000FF2A69 /* BaseNavViewController+NavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BaseNavViewController+NavigationBar.h"; sourceTree = "<group>"; };
 		EB3A31A918618C0000FF2A69 /* BaseNavViewController+NavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BaseNavViewController+NavigationBar.m"; sourceTree = "<group>"; };
 		EB3A31AE18618E8400FF2A69 /* BaseViewController+StatusBarStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BaseViewController+StatusBarStyle.h"; sourceTree = "<group>"; };
@@ -368,6 +407,42 @@
 				EBD8AA62186526E1002A5497 /* ColumnViewController.m */,
 			);
 			name = ColumnViewControll;
+			sourceTree = "<group>";
+		};
+		EB2642381867C9550004D1D9 /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				EB2642321867C51A0004D1D9 /* SettingViewController.h */,
+				EB2642331867C51A0004D1D9 /* SettingViewController.m */,
+				EB2642341867C51A0004D1D9 /* SettingViewController.xib */,
+				EB2642391867C9780004D1D9 /* AboutViewController.h */,
+				EB26423A1867C9780004D1D9 /* AboutViewController.m */,
+				EB26423B1867C9780004D1D9 /* AboutViewController.xib */,
+				EB26423E1867C9810004D1D9 /* about.html */,
+				EB26424D18681F830004D1D9 /* BroseModeViewController.h */,
+				EB26424E18681F830004D1D9 /* BroseModeViewController.m */,
+				EB264264186829630004D1D9 /* PageCountsViewController.h */,
+				EB264265186829630004D1D9 /* PageCountsViewController.m */,
+				EB264250186823AB0004D1D9 /* SearchViewController.h */,
+				EB264251186823AB0004D1D9 /* SearchViewController.m */,
+				EB264252186823AB0004D1D9 /* SearchViewController.xib */,
+				EB26425A1868257D0004D1D9 /* WeatherViewController.h */,
+				EB26425B1868257D0004D1D9 /* WeatherViewController.m */,
+				EB26425C1868257D0004D1D9 /* WeatherViewController.xib */,
+				EB26425F186826110004D1D9 /* LoginViewController.h */,
+				EB264260186826110004D1D9 /* LoginViewController.m */,
+				EB264261186826110004D1D9 /* LoginViewController.xib */,
+			);
+			name = Setting;
+			sourceTree = "<group>";
+		};
+		EB2642431867FC970004D1D9 /* DataCenter */ = {
+			isa = PBXGroup;
+			children = (
+				EB2642441867FCB10004D1D9 /* DataCenter.h */,
+				EB2642451867FCB10004D1D9 /* DataCenter.m */,
+			);
+			name = DataCenter;
 			sourceTree = "<group>";
 		};
 		EB3A31A718618BBE00FF2A69 /* ios7adapter */ = {
@@ -647,6 +722,8 @@
 				FEBAEEA718672D3A00CBC711 /* Uifactory.m */,
 				FEBAEE9618671B8800CBC711 /* NightModelLabel.h */,
 				FEBAEE9718671B8800CBC711 /* NightModelLabel.m */,
+				EB2642471867FF590004D1D9 /* FontLabel.h */,
+				EB2642481867FF590004D1D9 /* FontLabel.m */,
 				FEBAEEA01867260B00CBC711 /* NightModelUIButton.h */,
 				FEBAEEA11867260B00CBC711 /* NightModelUIButton.m */,
 				FEBAEEA31867262500CBC711 /* NightModelUIImage.h */,
@@ -739,6 +816,8 @@
 				FE2F76591861E3A4004153A9 /* RightViewController.xib */,
 				EB0102071862A6E20021D998 /* RootViewController.h */,
 				EB0102081862A6E20021D998 /* RootViewController.m */,
+				EB2642381867C9550004D1D9 /* Setting */,
+				EB2642431867FC970004D1D9 /* DataCenter */,
 				FEBAEE921867183500CBC711 /* ThemeManager */,
 				EB15FFE01863EB2C0045931E /* ColumnViewControll */,
 				FEFFC70B18375336001605C5 /* Supporting Files */,
@@ -840,6 +919,7 @@
 				EB15FFDF1863E3140045931E /* title_button_add@2x.png in Resources */,
 				FE02E3421840363100E2B468 /* blackArrow@2x.png in Resources */,
 				EB01021D1862C95A0021D998 /* LeftCell.xib in Resources */,
+				EB26423F1867C9810004D1D9 /* about.html in Resources */,
 				EB3A31B4186197DD00FF2A69 /* Main_Background.jpg in Resources */,
 				EB01022F1862DF270021D998 /* right_off_line_button@2x.png in Resources */,
 				EB01022B1862DF270021D998 /* right_login_button@2x.png in Resources */,
@@ -847,10 +927,12 @@
 				EB0102351862DF270021D998 /* right_weather_button@2x.png in Resources */,
 				EBEE854C186177A300EC96EB /* main_guide_page_fourth@2x.png in Resources */,
 				FE02E3431840363100E2B468 /* blueArrow.png in Resources */,
+				EB264263186826110004D1D9 /* LoginViewController.xib in Resources */,
 				EB15FFD91863D49B0045931E /* navigationbar_background.png in Resources */,
 				EB0102301862DF270021D998 /* right_search_button.png in Resources */,
 				EB01021A1862C5FA0021D998 /* left_push_news.png in Resources */,
 				EBEE854A186177A300EC96EB /* main_guide_page_first@2x.png in Resources */,
+				EB26425E1868257D0004D1D9 /* WeatherViewController.xib in Resources */,
 				EBEE8550186177A300EC96EB /* main_guide_page_third@2xpng.png in Resources */,
 				EB01022C1862DF270021D998 /* right_night_button.png in Resources */,
 				EB0102181862C5FA0021D998 /* left_news.png in Resources */,
@@ -873,12 +955,15 @@
 				EB0102321862DF270021D998 /* right_setting_button.png in Resources */,
 				FE02E3471840363100E2B468 /* grayArrow@2x.png in Resources */,
 				EB15FFD41863CDFF0045931E /* left_item_button@2x.png in Resources */,
+				EB264254186823AB0004D1D9 /* SearchViewController.xib in Resources */,
 				FEBAEE9A1867214E00CBC711 /* Night.plist in Resources */,
 				EBEE854B186177A300EC96EB /* main_guide_page_fourth.png in Resources */,
 				EBEE854D186177A300EC96EB /* main_guide_page_second.png in Resources */,
 				FE02E43118404FD800E2B468 /* MainViewController.xib in Resources */,
 				EB01022E1862DF270021D998 /* right_off_line_button.png in Resources */,
+				EB26423D1867C9780004D1D9 /* AboutViewController.xib in Resources */,
 				FEBAEE9F1867227D00CBC711 /* NightMode in Resources */,
+				EB2642361867C51A0004D1D9 /* SettingViewController.xib in Resources */,
 				FEE623D81842E173002ABDAB /* BPushConfig.plist in Resources */,
 				FE9F2216184970FA0008047F /* app_icon@2x.png in Resources */,
 				FE9F2218184970FE0008047F /* app_icon.png in Resources */,
@@ -903,10 +988,14 @@
 				FE02E3641840364000E2B468 /* ASIFormDataRequest.m in Sources */,
 				FEBAB6D2185DE63B008AAECD /* BaseScrollView.m in Sources */,
 				FE02E3651840364000E2B468 /* ASIHTTPRequest.m in Sources */,
+				EB26424F18681F830004D1D9 /* BroseModeViewController.m in Sources */,
 				FE02E3661840364000E2B468 /* ASIInputStream.m in Sources */,
 				FEBAEEA51867262500CBC711 /* NightModelUIImage.m in Sources */,
 				FE02E3671840364000E2B468 /* ASINetworkQueue.m in Sources */,
 				FE02E3681840364000E2B468 /* Reachability.m in Sources */,
+				EB2642351867C51A0004D1D9 /* SettingViewController.m in Sources */,
+				EB264266186829630004D1D9 /* PageCountsViewController.m in Sources */,
+				EB264262186826110004D1D9 /* LoginViewController.m in Sources */,
 				FE02E3C0184036F500E2B468 /* BaseModel.m in Sources */,
 				FE02E3C1184036F500E2B468 /* BaseNavViewController.m in Sources */,
 				FE02E3C2184036F500E2B468 /* BaseTableView.m in Sources */,
@@ -914,6 +1003,8 @@
 				EB0102091862A6E20021D998 /* RootViewController.m in Sources */,
 				FEBAEEA818672D3A00CBC711 /* Uifactory.m in Sources */,
 				FE02E3DD184037BD00E2B468 /* SDImageCache.m in Sources */,
+				EB26423C1867C9780004D1D9 /* AboutViewController.m in Sources */,
+				EB264253186823AB0004D1D9 /* SearchViewController.m in Sources */,
 				FE02E3DE184037BD00E2B468 /* SDWebImageDownloader.m in Sources */,
 				FE02E3DF184037BD00E2B468 /* SDWebImageManager.m in Sources */,
 				FE02E3E0184037BD00E2B468 /* UIButton+WebCache.m in Sources */,
@@ -929,6 +1020,7 @@
 				EB3A31B018618E8400FF2A69 /* BaseViewController+StatusBarStyle.m in Sources */,
 				FE02E4291840426400E2B468 /* GzipCompressor.m in Sources */,
 				FE02E42B1840426400E2B468 /* OpenUDID.m in Sources */,
+				EB2642491867FF590004D1D9 /* FontLabel.m in Sources */,
 				FE2F76511861E2E7004153A9 /* DDMenuController.m in Sources */,
 				FEBAEEA21867260B00CBC711 /* NightModelUIButton.m in Sources */,
 				FEBAEE951867187300CBC711 /* ThemeManager.m in Sources */,
@@ -942,7 +1034,9 @@
 				FEC333EA184319CA0014209C /* NSURLAdditions.m in Sources */,
 				FE2F76551861E395004153A9 /* LeftViewController.m in Sources */,
 				FEC333EE184319CA0014209C /* UrlImageButton.m in Sources */,
+				EB2642461867FCB10004D1D9 /* DataCenter.m in Sources */,
 				FEC333EF184319CA0014209C /* UrlImageView.m in Sources */,
+				EB26425D1868257D0004D1D9 /* WeatherViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
