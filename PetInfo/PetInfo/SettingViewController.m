@@ -11,6 +11,7 @@
 #import "ThemeManager.h"
 #import "BroseModeViewController.h"
 #import "PageCountsViewController.h"
+#import "DataCenter.h"
 @interface SettingViewController ()
 
 @end
@@ -40,8 +41,8 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-//    [self viewWillAppear:animated];
     [_tableView reloadData];
+//    [self viewWillAppear:animated];
 }
 #pragma mark UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -100,7 +101,7 @@
                 NSArray *segments = [NSArray arrayWithObjects:@"小", @"中", @"大", nil];
                 UISegmentedControl *segmented = [[UISegmentedControl alloc] initWithItems: segments];
                 [segmented addTarget: self action: @selector(fontSizeValueChanged:) forControlEvents: UIControlEventValueChanged];
-                segmented.frame = CGRectMake(cell.frame.size.width - segmented.frame.size.width-19, 0, segmented.frame.size.width, segmented.frame.size.height+1);
+                segmented.frame = CGRectMake(cell.frame.size.width - segmented.frame.size.width-19, 2, segmented.frame.size.width, segmented.frame.size.height+1);
                 [cell.contentView addSubview: segmented];
 
                 [segmented setSelectedSegmentIndex: [[_settingDic objectForKey: kFont_Size] intValue]];
@@ -161,28 +162,29 @@
                 cell.textLabel.text = @"清除缓存";
 
                 UILabel *cacheSizeLabel = [[UILabel alloc] init];
-//                NSUInteger cacheSize = [[XDDataCenter sharedCenter] cacheSize];
-//                if (cacheSize < 1024)
-//                {
-//                    cacheSizeLabel.text = [NSString stringWithFormat: @"%u B", cacheSize];
-//                }
-//                else if (cacheSize < 1024 * 1024)
-//                {
-//                    cacheSizeLabel.text = [NSString stringWithFormat: @"%.2f KB", (cacheSize * 1.0f) / 1024];
-//                }
-//                else if (cacheSize < 1024 * 1024 * 1024)
-//                {
-//                    cacheSizeLabel.text = [NSString stringWithFormat: @"%.2f MB", (cacheSize * 1.0f) / (1024 * 1024)];
-//                }
-//                else
-//                {
-//                    cacheSizeLabel.text = [NSString stringWithFormat: @"%.2f GB", (cacheSize * 1.0f) / (1024 * 1024 * 1024)];
-//                }
-//                cacheSizeLabel.frame = CGRectMake(230, 0, 50, 40);
-//                cacheSizeLabel.backgroundColor = [UIColor clearColor];
-//                [cell.contentView addSubview: cacheSizeLabel];
-//                
-//                [cacheSizeLabel release];
+                
+                NSUInteger cacheSize = [[DataCenter sharedCenter] cacheSize];
+                if (cacheSize < 1024)
+                {
+                    cacheSizeLabel.text = [NSString stringWithFormat: @"%u B", cacheSize];
+                }
+                else if (cacheSize < 1024 * 1024)
+                {
+                    cacheSizeLabel.text = [NSString stringWithFormat: @"%.2f KB", (cacheSize * 1.0f) / 1024];
+                }
+                else if (cacheSize < 1024 * 1024 * 1024)
+                {
+                    cacheSizeLabel.text = [NSString stringWithFormat: @"%.2f MB", (cacheSize * 1.0f) / (1024 * 1024)];
+                }
+                else
+                {
+                    cacheSizeLabel.text = [NSString stringWithFormat: @"%.2f GB", (cacheSize * 1.0f) / (1024 * 1024 * 1024)];
+                }
+                cacheSizeLabel.frame = CGRectMake(ScreenWidth - 120, 0, 100, 40);
+                cacheSizeLabel.backgroundColor = [UIColor clearColor];
+                [cell.contentView addSubview: cacheSizeLabel];
+                
+                [cacheSizeLabel release];
                 
                 break;
         }
@@ -236,7 +238,7 @@
     }
     if ([indexPath section] == 2)
     {
-//        [[XDDataCenter sharedCenter] cleanCache];
+        [[DataCenter sharedCenter] cleanCache];
         [tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: indexPath] withRowAnimation: UITableViewRowAnimationAutomatic];
     }
     if ([indexPath section] == 3)
