@@ -70,7 +70,7 @@
     weather.isCancelButton = YES;
     LoginViewController *login = [[[LoginViewController alloc]init]autorelease];
     login.isCancelButton = YES;
-    
+
     NSUserDefaults *userdefaults = [NSUserDefaults standardUserDefaults];
     switch (sender.tag) {
         case 1000://登陆
@@ -102,10 +102,9 @@
             [self.appDelegate.menuCtrl presentModalViewController:[[[BaseNavViewController alloc]initWithRootViewController: search]autorelease] animated:YES];
             break;
         case 1004:
-            [self.appDelegate.menuCtrl showRootController:YES];
             //首页开始下载
-//            self.appDelegate
-            
+            [[NSNotificationCenter defaultCenter] postNotificationName:kofflineBeginNofication object:nil];
+            [self.appDelegate.menuCtrl showRootController:YES];
             break;
         case 1005:
             [self.appDelegate.menuCtrl presentModalViewController:[[[BaseNavViewController alloc]initWithRootViewController: set]autorelease] animated:YES];
