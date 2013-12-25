@@ -14,6 +14,7 @@
 #import "LeftViewController.h"
 #import "RightViewController.h"
 #import "ThemeManager.h"
+#import "FileUrl.h"
 #define firstimage @"http://a.hiphotos.baidu.com/image/w%3D2048/sign=9f5289ba0b55b3199cf9857577918326/4d086e061d950a7b32998b7f0bd162d9f3d3c9d9.jpg"
 @interface MainViewController ()
 
@@ -88,8 +89,7 @@
 
 -(void)_initplist{
     //写入初始化文件
-    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
-    NSString *plistPath1 = [paths objectAtIndex:0];
+    NSString *plistPath1 = [FileUrl getDocumentsFile];
     NSString *pathName = [plistPath1 stringByAppendingPathComponent:data_file_name];
     NSDictionary *dica = [[NSDictionary alloc]init];
     [dica writeToFile:pathName atomically:YES];
@@ -100,14 +100,33 @@
     _settingDic = [[NSMutableDictionary alloc] initWithObjectsAndKeys: [NSNumber numberWithInt: 1], kFont_Size, [NSNumber numberWithBool: YES], KNews_Push, nil];
     [_settingDic writeToFile: settingPath atomically: YES];
     
+    //搜索历史文件
+    NSString *searchPath = [plistPath1 stringByAppendingPathComponent:kSearchHistory_file_name];
+    NSArray *searchArray = [[NSArray alloc]init];
+    [searchArray writeToFile:searchPath atomically:YES];
+    
+    //设置夜间模式
+    [_userDefaults setBool:YES forKey:kisNightModel];
+    [_userDefaults synchronize];
     
     //初始化菜单
-    NSString *columnName = [plistPath1 stringByAppendingPathComponent:column_file_name];
-    NSArray *columnsName = @[@"头条",@"体育",@"娱乐",@"科技",@"军事",@"中超",@"历史",@"本地",@"教育"];
+    NSString *columnshowName = [plistPath1 stringByAppendingPathComponent:column_show_file_name];
+    NSArray *columnsshowName = @[@"头条",@"体育",@"娱乐",@"科技",@"军事",@"中超",@"历史",@"本地",@"教育"];
+    NSMutableArray *showarray = [[NSMutableArray alloc]init];
+    for(int i= 0 ; i<columnsshowName.count ;i ++){
+        
+        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsshowName[i],[NSNumber numberWithInt:i]] forKeys:@[@"name",@"cloumID"]];
+        [showarray addObject:dic];
+        [dic release];
+    }
+    [showarray writeToFile:columnshowName atomically:YES];
+    
+    NSString *columnName = [plistPath1 stringByAppendingPathComponent:column_disshow_file_name];
+    NSArray *columnsName = @[@"CBA",@"NBA",@"财经",@"社会",@"手机",@"数码",@"情感",@"女人",@"房产"];
     NSMutableArray *array = [[NSMutableArray alloc]init];
     for(int i= 0 ; i<columnsName.count ;i ++){
         
-        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsName[i],(i>5)? @NO:@YES,[NSNumber numberWithInt:i]] forKeys:@[@"name",@"isShow",@"cloumID"]];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsName[i],[NSNumber numberWithInt:i]] forKeys:@[@"name",@"cloumID"]];
         [array addObject:dic];
         [dic release];
     }
@@ -124,16 +143,10 @@
     //加载进入应用后大图
     [self _initBackgroundView];
     
-    //设置夜间模式
-    bool  nightModel=[_userDefaults boolForKey:kisNightModel];
-    if (nightModel) {
-        [ThemeManager shareInstance].nigthModelName =@"day";
-    }else{
-        [ThemeManager shareInstance].nigthModelName =@"night";
-    }
-    [[ThemeManager shareInstance] setPush];
+    
     //第一次登陆
     if (![_userDefaults boolForKey:kisNotFirstLogin]) {
+        
         [self _initplist];
         #warning 推送绑定
         [BPush bindChannel];
@@ -144,6 +157,14 @@
 //        [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:1];
 
     }
+    //设置夜间模式
+    bool  nightModel=[_userDefaults boolForKey:kisNightModel];
+    if (nightModel) {
+        [ThemeManager shareInstance].nigthModelName =@"day";
+    }else{
+        [ThemeManager shareInstance].nigthModelName =@"night";
+    }
+    [[ThemeManager shareInstance] setPush];
     self.view.backgroundColor = [UIColor redColor];
 }
 //移除登陆广告大图
@@ -255,6 +276,7 @@
         //隐藏状态
         [self setStateBarHidden:NO];
         [_userDefaults setBool:YES forKey:kisNotFirstLogin];
+        [_userDefaults synchronize];
         [pageControl removeFromSuperview];
         [self _initViewController];
 
