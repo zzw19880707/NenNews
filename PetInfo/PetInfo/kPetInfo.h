@@ -16,6 +16,9 @@
 #define kselectText @"selectText"
 #define ktext @"text"
 
+//开始离线缓存
+#define kofflineBeginNofication @"kofflineBeginNofication"
+
 //字体大小改变
 #define kFontSizeChangeNofication @"kFontSizeChangeNofication"
 
@@ -44,7 +47,8 @@
 #define kuser_id @"user_id"
 #define kbroseMode @"BroseMode"
 #define kpageCount @"pageCount"
-
+//用户离线下载文件大小，用于断点续传
+#define kdownloadContentSize @"kdownloadContentSize"
 
 
 
@@ -56,9 +60,15 @@
 
 
 #pragma mark 文件名
-#define column_file_name @"column.plist"
+#define column_show_file_name @"column_show.plist"
+#define column_disshow_file_name @"column_disshow.plist"
 #define data_file_name @"data.plist"
 #define Night_file_name @"Night.plist"
 #define NightModel_file_name @"NightModel.plist"
 #define kSetting_file_name @"kSetting.plist"
+#define kDownloadOffline_file_name @"offline.plist"
+#define kDownloadCache_file_name @"cache.download"
+#define kSearchHistory_file_name @"search_history.plist"
+
+
 #endif
