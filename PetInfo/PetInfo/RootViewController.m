@@ -7,8 +7,9 @@
 //
 
 #import "RootViewController.h"
-#import "ColumnViewController.h"
+#import "ColumnTabelViewController.h"
 #import "Uifactory.h"
+#import "FileUrl.h"
 @interface RootViewController ()
 
 @end
@@ -29,7 +30,7 @@
     
     NSMutableArray *arrays = [[NSMutableArray alloc]init];
     arrays = [[NSMutableArray alloc]init];
-    for (int i =0; i<6; i++) {
+    for (int i =0; i<9; i++) {
         UILabel *view= [Uifactory createLabel:ktext sizeFont:20];
         NSString *content = [NSString stringWithFormat: @"content%dasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdfdasdfadfaasdf",i];
         view.text =content;
@@ -44,21 +45,10 @@
 //初始化按钮
 -(NSArray *)_initButton {
     
-    //写入初始化文件
-    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
-    NSString *plistPath1 = [paths objectAtIndex:0];
-    NSString *pathName = [plistPath1 stringByAppendingPathComponent:column_file_name];
-    NSArray *columnName = [[NSArray alloc]initWithContentsOfFile:pathName];
-    NSMutableArray *nameArrays = [[NSMutableArray alloc]init];
-    for (int i = 0 ; i < columnName.count ; i++) {
-        NSDictionary *dic = columnName[i];
-        if ([[dic objectForKey:@"isShow"] boolValue]) {
-            [nameArrays addObject:[dic objectForKey:@"name"]];
-        }
-        [dic release];
-    }
-    
-    
+    //读取全部显示菜单
+
+    NSString *pathName = [[FileUrl getDocumentsFile] stringByAppendingPathComponent:column_show_file_name];
+    NSMutableArray *nameArrays = [[NSMutableArray alloc]initWithContentsOfFile:pathName];
     
     NSMutableArray *arrays = [[NSMutableArray alloc]init];
     for (int i =0; i<nameArrays.count; i++) {
@@ -66,10 +56,10 @@
 //        [button setTitle:nameArrays[i] forState:UIControlStateNormal];
 //        [button setTitleColor:NenNewsTextColor forState:UIControlStateNormal];
 //        button.backgroundColor = NenNewsgroundColor;
-        UIButton *button = [Uifactory createButton:nameArrays[i]];
+        UIButton *button = [Uifactory createButton:[nameArrays[i] objectForKey:@"name"]];
         button.frame = CGRectMake(10 + 70*i, 0, 60, 30);
         [arrays addObject:button];
-        [button release];
+//        [button release];
     }
     return arrays;
 }
@@ -98,7 +88,7 @@
 }
 #pragma mark UIScrollViewEventDelegate
 -(void)addButtonAction{
-    ColumnViewController *columnVC = [[ColumnViewController alloc]init];
+    ColumnTabelViewController *columnVC = [[ColumnTabelViewController alloc]init];
     [self.navigationController pushViewController:columnVC animated:YES];
 }
 -(void)showRightMenu{
@@ -115,8 +105,7 @@
 {
     [super viewDidLoad];
     [self _initNavagationbarButton];
-    
-    
+
     BaseScrollView *sc = [[BaseScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, ScreenHeight) andButtons:[self _initButton] andContents:[self _initUIView]];
     sc.eventDelegate = self;
     [self.view addSubview:sc];
