@@ -25,7 +25,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "ProgressView.h"
 typedef enum {
     DDMenuPanDirectionLeft = 0,
     DDMenuPanDirectionRight,
@@ -38,7 +38,7 @@ typedef enum {
 } DDMenuPanCompletion;
 
 @protocol DDMenuControllerDelegate;
-@interface DDMenuController : UIViewController <UIGestureRecognizerDelegate>{
+@interface DDMenuController : UIViewController <UIGestureRecognizerDelegate,ProgressDelegate>{
     
     id _tap;
     id _pan;

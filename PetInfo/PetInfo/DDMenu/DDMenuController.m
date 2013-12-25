@@ -25,7 +25,7 @@
 //
 
 #import "DDMenuController.h"
-
+#import "ProgressView.h"
 #define kMenuFullWidth 320.0f
 #define kMenuDisplayedWidth 80.0f  //左侧视图的宽度
 #define kMenuOverlayWidth (self.view.bounds.size.width - kMenuDisplayedWidth)
@@ -53,6 +53,7 @@
 - (id)initWithRootViewController:(UIViewController*)controller {
     if ((self = [super init])) {
         _root = controller;
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(showDownloadView) name:kofflineBeginNofication object:nil];
     }
     return self;
 }
@@ -60,6 +61,7 @@
 - (id)init {
     if ((self = [super init])) {
         
+
     }
     return self;
 }
@@ -70,6 +72,10 @@
 
 
 #pragma mark - View lifecycle
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [super dealloc];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -127,7 +133,6 @@
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     MARK;
-
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
     if (_root) {
@@ -778,6 +783,47 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self showRootController:YES];
+}
+
+#pragma mark ---------------自定义--------------------------------
+
+//显示下载页面
+-(void)showDownloadView{
+    if (WXHLOSVersion()>=7.0) {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
+        
+    }else{
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    }
+
+    ProgressView *progress = [[ProgressView alloc]initWithPath:@"http://free2.macx.cn:81/tools/system/CleanMyMac-v1-10-8.dmg"];
+    progress.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
+    progress.alpha=0.8;
+    progress.backgroundColor = [UIColor grayColor];
+    progress.tag = 10010;
+    progress.eventDelegate  = self;
+    [[UIApplication sharedApplication].keyWindow addSubview:progress];
+}
+-(void)finishDownloadVIew{
+    ProgressView *progress = (ProgressView *)[[UIApplication sharedApplication].keyWindow viewWithTag:10010];
+    [UIView animateWithDuration:0.5 animations:^{
+        progress.alpha = 0;
+    } completion:^(BOOL finished) {
+        [progress removeFromSuperview];
+        if (WXHLOSVersion()>=7.0) {
+            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+            [[UIApplication sharedApplication] setStatusBarHidden:NO];
+            
+        }else{
+            [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        }
+
+    }];
+}
+#pragma mark ProgressViewDelegate
+-(void)finishDownload{
+    [self finishDownloadVIew];
 }
 
 @end
