@@ -8,6 +8,12 @@
 
 #import "BaseViewController.h"
 
-@interface SearchViewController : BaseViewController
+@interface SearchViewController : BaseViewController<UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate>{
+    NSArray *_searchHistoryData;
+    NSArray *_searchData;
+}
+@property (retain, nonatomic) UITextField *searchBar;
+@property (retain, nonatomic) UITableView *tableView;
+@property (retain, nonatomic) NSArray *searchData;
 
 @end
