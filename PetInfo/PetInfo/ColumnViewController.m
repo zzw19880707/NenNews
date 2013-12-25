@@ -9,7 +9,7 @@
 #import "ColumnViewController.h"
 #define columnwidth 70
 #define columnheight 30
-
+#import "FileUrl.h"
 
 #define column_off_y 40
 //tag值为 第几个*100 +columnid
@@ -34,13 +34,13 @@
     
 }
 -(void)_initcolumnname {
-    //写入初始化文件
-    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
-    NSString *plistPath1 = [paths objectAtIndex:0];
-    NSString *pathName = [plistPath1 stringByAppendingPathComponent:column_file_name];
-    _columnNameArray = [[NSArray alloc]initWithContentsOfFile:pathName];
-    _showNameArray = [[NSMutableArray alloc]init];
-    _addNameArray = [[NSMutableArray alloc]init];
+//    //写入初始化文件
+//    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
+//    NSString *plistPath1 = [paths objectAtIndex:0];
+//    NSString *pathName = [plistPath1 stringByAppendingPathComponent:column_show_file_name];
+//    _columnNameArray = [[NSArray alloc]initWithContentsOfFile:pathName];
+//    _showNameArray = [[NSMutableArray alloc]init];
+//    _addNameArray = [[NSMutableArray alloc]init];
     
     for (int i = 0 ; i < _columnNameArray.count ; i++) {
         NSDictionary *dic = _columnNameArray[i];
