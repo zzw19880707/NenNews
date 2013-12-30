@@ -18,7 +18,7 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
+        
     }
     return self;
 }
@@ -34,7 +34,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"栏目编辑";
+    
+    
+    UILabel *titlelabel=[[UILabel alloc]initWithFrame:CGRectZero];
+    titlelabel.font=[UIFont boldSystemFontOfSize:18.0f];
+    titlelabel.backgroundColor= NenNewsgroundColor;
+    titlelabel.text=@"栏目编辑";
+    titlelabel.textColor=NenNewsTextColor;
+    [titlelabel sizeToFit];
+    self.navigationItem.titleView = [titlelabel autorelease];
+
     [self _initcolumnname];
     
     UIButton *button = [[UIButton alloc]init];
@@ -56,13 +65,12 @@
 //     self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 -(void)viewWillDisappear:(BOOL)animated{
-#warning 写文件
-    
     NSString *pathName = [[FileUrl getDocumentsFile] stringByAppendingPathComponent:column_show_file_name];
     [_showNameArray writeToFile:pathName atomically:YES];
     NSString *Name = [[FileUrl getDocumentsFile] stringByAppendingPathComponent:column_disshow_file_name];
     [_addNameArray writeToFile:Name atomically:YES];
-
+    
+    [self.eventDelegate columnChanged:_showNameArray];
     [super viewWillDisappear:animated];
 }
 
@@ -79,8 +87,6 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
     return 2;
 }
 
