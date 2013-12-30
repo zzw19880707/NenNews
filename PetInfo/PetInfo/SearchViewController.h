@@ -7,13 +7,16 @@
 //
 
 #import "BaseViewController.h"
-
-@interface SearchViewController : BaseViewController<UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate>{
-    NSArray *_searchHistoryData;
+#import "DataService.h"
+@interface SearchViewController : BaseViewController<UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate,ASIRequest>{
+    NSMutableArray *_searchHistoryData;
     NSArray *_searchData;
 }
 @property (retain, nonatomic) UITextField *searchBar;
 @property (retain, nonatomic) UITableView *tableView;
 @property (retain, nonatomic) NSArray *searchData;
 
+
+@property (retain, nonatomic) UITableView *resultTableView;
+@property (retain, nonatomic) NSArray *resultData;
 @end
