@@ -183,9 +183,13 @@
 //}
 
 
-- (ASIHTTPRequest *) requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params andhttpMethod: (NSString *)httpMethod{
-    //拼接url地址
-    urlstring = [BASE_URL stringByAppendingString:urlstring];
+- (ASIHTTPRequest *) requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params
+                            isJoint:(BOOL)isJoint    andhttpMethod: (NSString *)httpMethod {
+    if (isJoint) {
+        //拼接url地址
+        urlstring = [BASE_URL stringByAppendingString:urlstring];
+    }
+    
     
     
     NSComparisonResult compGET =[httpMethod caseInsensitiveCompare:@"GET"];//忽略大小写比较。返回值是枚举类型的升序、降序、相同

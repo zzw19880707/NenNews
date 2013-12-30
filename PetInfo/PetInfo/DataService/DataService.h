@@ -25,7 +25,8 @@ typedef void (^RequestErrorBlock)(NSError *error);
 
 + (ASIHTTPRequest *)requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params andhttpMethod: (NSString *)httpMethod completeBlock:(RequestFinishBlock) block andErrorBlock:(RequestErrorBlock) errorBlock;
 
-- (ASIHTTPRequest *) requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params andhttpMethod: (NSString *)httpMethod;
+- (ASIHTTPRequest *) requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params
+                            isJoint:(BOOL)isJoint    andhttpMethod: (NSString *)httpMethod ;
 
 
 //+ (ASIHTTPRequest *)sendImageWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params  completeBlock:(RequestFinishBlock) block andErrorBlock:(RequestErrorBlock) errorBlock;
