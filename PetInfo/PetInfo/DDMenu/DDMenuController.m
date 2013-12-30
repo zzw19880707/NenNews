@@ -790,8 +790,8 @@
 //显示下载页面
 -(void)showDownloadView{
     if (WXHLOSVersion()>=7.0) {
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-        [[UIApplication sharedApplication] setStatusBarHidden:YES];
+        [self setStatusBarStyle:UIStatusBarStyleLightContent];
+        [self setStatusBarHidden:YES];
         
     }else{
         [[UIApplication sharedApplication] setStatusBarHidden:YES];
