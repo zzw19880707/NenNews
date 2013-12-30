@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaseTableView.h"
 @protocol UIScrollViewEventDelegate <NSObject>
 @optional
 //add按钮事件
@@ -14,7 +15,7 @@
 -(void)showLeftMenu;
 -(void)showRightMenu;
 @end
-@interface BaseScrollView : UIScrollView <UIScrollViewDelegate>{
+@interface BaseScrollView : UIScrollView <UIScrollViewDelegate,UItableviewEventDelegate,ASIRequest>{
     UIScrollView *_buttonBgView;
     UIScrollView *_contentBgView;
     UIImageView *_sliderImageView;
@@ -22,10 +23,14 @@
 //button宽70 ，frame（10+70*i,0,60,30）
 //content
 -(id)initWithFrame:(CGRect)frame andButtons:(NSArray *) buttons andContents:(NSArray *) contents;
+//通过按钮名称初始化
 
+-(id)initwithButtons:(NSArray *)buttonsName WithFrame:(CGRect)frame;
 
+//刷新该title及内容数据
+-(void)reloadButtonsAndViews;
 @property (nonatomic,retain) NSArray *buttonsArray;
 @property (nonatomic,retain) NSArray *contentsArray;
-
+@property (nonatomic,retain) NSArray *buttonsNameArray;
 @property (nonatomic,assign) id<UIScrollViewEventDelegate> eventDelegate;
 @end

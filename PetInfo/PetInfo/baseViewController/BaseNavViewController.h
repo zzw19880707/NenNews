@@ -11,6 +11,9 @@
 @interface BaseNavViewController : UINavigationController
 
 - (void)customPushViewController:(UIViewController *)viewController;
+//从左到右
+- (void)customLeftToRightPushViewController:(UIViewController *)viewController;
+
 - (void)pushViewController: (UIViewController*)controller
         animatedWithTransition: (UIViewAnimationTransition)transition;
 - (UIViewController*)popViewControllerAnimatedWithTransition:(UIViewAnimationTransition)transition;

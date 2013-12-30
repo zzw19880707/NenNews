@@ -71,6 +71,16 @@
 -(void)backAction{
     [self.navigationController popViewControllerAnimated:YES];
 }
+-(void)setTitle:(NSString *)title{
+    [super setTitle:title];
+    UILabel *titlelabel=[[UILabel alloc]initWithFrame:CGRectZero];
+    titlelabel.font=[UIFont boldSystemFontOfSize:18.0f];
+    titlelabel.backgroundColor= NenNewsgroundColor;
+    titlelabel.text=title;
+    titlelabel.textColor=NenNewsTextColor;
+    [titlelabel sizeToFit];
+    self.navigationItem.titleView = [titlelabel autorelease];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

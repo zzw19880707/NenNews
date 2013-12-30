@@ -47,6 +47,17 @@
                          viewController.view.frame = (CGRect){0, 0, self.view.bounds.size};
                      }];
 }
+//从左到右
+- (void)customLeftToRightPushViewController:(UIViewController *)viewController
+{
+    viewController.view.frame = (CGRect){-viewController.view.frame.size.width, 0, viewController.view.frame.size};
+    [self pushViewController:viewController animated:NO];
+    [UIView animateWithDuration:1
+                     animations:^{
+                         viewController.view.frame = (CGRect){0, 0, self.view.bounds.size};
+                     }];
+}
+
 //系统动画
 - (void)pushViewController: (UIViewController*)controller
             animatedWithTransition: (UIViewAnimationTransition)transition {

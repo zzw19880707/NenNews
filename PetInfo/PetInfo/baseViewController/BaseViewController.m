@@ -183,7 +183,6 @@
 //        self.navigationItem.leftBarButtonItem=[cancelItem autorelease];
         UIButton *button = [[UIButton alloc]init];
         button.backgroundColor = NenNewsgroundColor;
-        //        [button setTitle:@"返回" forState:UIControlStateNormal];
         [button setImage:[UIImage imageNamed:@"navagiton_back.png"] forState:UIControlStateNormal];
         button.frame = CGRectMake(0, 0, 40, 30);
         //        button.showsTouchWhenHighlighted = YES;
@@ -237,9 +236,9 @@
     [super setTitle:title];
     UILabel *titlelabel=[[UILabel alloc]initWithFrame:CGRectZero];
     titlelabel.font=[UIFont boldSystemFontOfSize:18.0f];
-    titlelabel.backgroundColor= NenNewsTextColor;
+    titlelabel.backgroundColor= NenNewsgroundColor;
     titlelabel.text=title;
-    titlelabel.textColor=NenNewsgroundColor;
+    titlelabel.textColor=NenNewsTextColor;
     [titlelabel sizeToFit];
     self.navigationItem.titleView = [titlelabel autorelease];
 }

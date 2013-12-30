@@ -8,6 +8,9 @@
 
 #import "BaseScrollView.h"
 #import "Uifactory.h"
+#import "ColumnModel.h"
+#import "NewsNightModelTableView.h"
+#import "FileUrl.h"
 @implementation BaseScrollView
 
 - (id)initWithFrame:(CGRect)frame
@@ -33,7 +36,7 @@
     
         _sliderImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10+15, 30, 30, 10)];
         
-        _sliderImageView.image = [UIImage imageNamed:@"slider_bg_baseScroll.png"];
+        _sliderImageView.image = [UIImage imageNamed:@"navigationbar_background.png"];
         
         _buttonBgView = [Uifactory createScrollView];
         _buttonBgView.frame =CGRectMake(0, 0, frame.size.width- 40, 39);
@@ -55,10 +58,10 @@
         }
         
         UIView *addButtonView = [[UIView alloc]initWithFrame:CGRectMake(ScreenWidth - 40, 0, 40, 39)];
-        addButtonView.backgroundColor = NenNewsgroundColor;
+        addButtonView.backgroundColor = NenNewsTextColor;
         UIButton *addButton = [[UIButton alloc]init];
         [addButton setImage:[UIImage imageNamed:@"title_button_add.png"] forState:UIControlStateNormal];
-        addButton.frame =CGRectMake(10, 5, 20, 20);
+        addButton.frame =CGRectMake(0, 0, 40, 40);
         [addButton addTarget:self action:@selector(addcolumn) forControlEvents:UIControlEventTouchUpInside];
         [addButtonView addSubview:addButton];
         [bgView addSubview:addButtonView];
@@ -77,7 +80,6 @@
         _contentBgView.showsHorizontalScrollIndicator=NO;
         _contentBgView.showsVerticalScrollIndicator=NO;
         _contentBgView.contentSize = CGSizeMake(340*buttons.count, frame.size.height-40);
-//        _contentBgView.backgroundColor = NenNewsgroundColor;
         _contentBgView.bounces = NO;
         int _tx = 0 ;
         for (int i = 0;i<contents.count ; i++) {
@@ -96,7 +98,207 @@
     return self;
 }
 
+//通过按钮名称初始化
+-(id)initwithButtons:(NSArray *)buttonsName WithFrame:(CGRect)frame{
+    self = [super initWithFrame:frame];
+    if (self) {
+//        self.buttonsArray = @[@""];
+//        self.contentsArray = @[@""];
+        //用于分割线
+        UIView *bgView = [[UIView alloc]init];
+        bgView.backgroundColor =[UIColor grayColor];
+        bgView.frame = CGRectMake(0, 0, frame.size.width, 40);
 
+        
+//        滚动条
+        _sliderImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10+15, 30, 30, 10)];
+        _sliderImageView.image = [UIImage imageNamed:@"navigationbar_background.png"];
+        
+//        scrollerView
+        _buttonBgView = [Uifactory createScrollView];
+        _buttonBgView.frame =CGRectMake(0, 0, frame.size.width- 42, 39);
+        [_buttonBgView addSubview:_sliderImageView];
+        _buttonBgView.showsHorizontalScrollIndicator = NO;
+        _buttonBgView.showsVerticalScrollIndicator = NO;
+        _buttonBgView.bounces = NO;
+        _buttonBgView.tag =10000;
+
+        
+
+        //        add按钮
+        UIView *addButtonView =[Uifactory createScrollView];
+        addButtonView.frame =CGRectMake(ScreenWidth - 40, 0, 40, 39);
+//        addButtonView.backgroundColor = NenNewsTextColor;
+        UIButton *addButton = [[UIButton alloc]init];
+        [addButton setImage:[UIImage imageNamed:@"title_button_add.png"] forState:UIControlStateNormal];
+        addButton.frame =CGRectMake(0, 0, 40, 40);
+        [addButton addTarget:self action:@selector(addcolumn) forControlEvents:UIControlEventTouchUpInside];
+        [addButtonView addSubview:addButton];
+        [bgView addSubview:addButtonView];
+        [addButton  release];
+        [addButtonView release];
+//        添加阴影图片
+        UIImageView *shadowImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"baseScrollview_title_background.png"]];
+        shadowImageView.frame = CGRectMake(ScreenWidth-42, 0, 2, 39);
+        [bgView addSubview:shadowImageView];
+        [bgView addSubview:_buttonBgView];
+        [self addSubview:bgView];
+        [bgView release];
+//      初始化content内容图
+        _contentBgView = [Uifactory createScrollView];
+        _contentBgView.frame =CGRectMake(0, 40, frame.size.width+20, frame.size.height - 40);
+        _contentBgView.tag =10001;
+        _contentBgView.pagingEnabled =YES;
+        _contentBgView.delegate = self;
+        _contentBgView.showsHorizontalScrollIndicator=NO;
+        _contentBgView.showsVerticalScrollIndicator=NO;
+        _contentBgView.bounces = NO;
+
+        [self addSubview:_contentBgView];
+
+        self.buttonsNameArray =buttonsName;
+    }
+    return self;
+}
+
+//刷新该title及内容数据
+-(void)reloadButtonsAndViews{
+    _buttonBgView.contentSize =CGSizeMake( 70*_buttonsNameArray.count, 38);
+    _contentBgView.contentSize = CGSizeMake(340*_buttonsNameArray.count, self.frame.size.height-40);
+        for (UIView *view in [_buttonBgView subviews]) {
+            if ((UIImageView *)view ==_sliderImageView) {
+                continue;
+            }
+            [view removeFromSuperview];
+        }
+
+//初始化按钮
+    for (int i = 0; i<_buttonsNameArray.count ; i++) {
+        int columnId = [[_buttonsNameArray[i] objectForKey:@"cloumID"] intValue];
+        UIButton *button = [Uifactory createButton:[_buttonsNameArray[i] objectForKey:@"name"]];
+        button.frame =  CGRectMake(10 + 70*i, 0, 60, 30);
+        [button addTarget: self  action:@selector(selectAction:) forControlEvents:UIControlEventTouchUpInside];
+        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+        button.tag = 1000+ i;
+        [_buttonBgView addSubview:button];
+        
+        
+        
+        NewsNightModelTableView *newsTableView = [[NewsNightModelTableView alloc]initwithColumnID:columnId];
+        newsTableView.frame = CGRectMake(340 *i, 0, ScreenWidth, ScreenHeight -40);
+        newsTableView.eventDelegate = self;
+        
+        
+        
+        
+        NSMutableDictionary *d = [[NSMutableDictionary alloc]initWithContentsOfFile:[[FileUrl getDocumentsFile]stringByAppendingPathComponent:data_file_name]];
+        
+        newsTableView.data = [d objectForKey:@"1"];
+        [_contentBgView addSubview:newsTableView];
+        
+//        UIScrollView *labelscroll = [[UIScrollView alloc]init];
+//        labelscroll.frame = CGRectMake(340 *i, 0, _contentBgView.width, _contentBgView.height);
+//        labelscroll.contentSize = newsTableView.size;
+//        [labelscroll addSubview:newsTableView];
+//        [_contentBgView addSubview:labelscroll];
+
+
+    }
+    
+//滑动条返回至第一个
+#warning 滑动条返回至第一个
+    
+    
+    
+    
+    
+
+}
+
+#pragma mark UItableviewEventDelegate
+//上拉刷新
+-(void)pullDown:(NewsNightModelTableView *)tableView{
+
+    //    参数
+    NSMutableDictionary *params  = [[NSMutableDictionary alloc]init];
+    int count = [[NSUserDefaults standardUserDefaults]integerForKey:kpageCount];
+    NSNumber *number = [NSNumber numberWithInt:(count*10)];
+    [params setValue:number forKey:@"count"];
+    int columnID=tableView.columnID;
+    [params setValue:[NSNumber numberWithInt:columnID] forKey:@"columnID"];
+    int sinceID = [[tableView.data[0] objectForKey:@"titleID"] intValue];
+    [params setValue:[NSNumber numberWithInt:sinceID] forKey:@"sinceId"];
+    //    [params setValue:<#(id)#> forKey:@"maxId"];
+    
+    [DataService requestWithURL:URL_getColumn_List andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
+        NSArray *array =  [result objectForKey:@"data"];
+        NSMutableArray *listData = [[NSMutableArray alloc]init];
+        
+        for (ColumnModel * model  in array) {
+            [listData addObject:model];
+        }
+        tableView.data =listData;
+        [tableView reloadData];
+        [tableView doneLoadingTableViewData];
+
+    } andErrorBlock:^(NSError *error) {
+        [tableView doneLoadingTableViewData];
+        
+    }];
+
+}
+//下拉加载
+-(void)pullUp:(NewsNightModelTableView *)tableView{
+    
+    //    参数
+    NSMutableDictionary *params  = [[NSMutableDictionary alloc]init];
+    int count = [[NSUserDefaults standardUserDefaults]integerForKey:kpageCount];
+    NSNumber *number = [NSNumber numberWithInt:(count*10)];
+    [params setValue:number forKey:@"count"];
+    int columnID=tableView.columnID;
+    [params setValue:[NSNumber numberWithInt:columnID] forKey:@"columnID"];
+    int sinceID = [[tableView.data[0] objectForKey:@"titleID"] intValue];
+    [params setValue:[NSNumber numberWithInt:sinceID] forKey:@"sinceId"];
+    //    [params setValue:<#(id)#> forKey:@"maxId"];
+    
+    [DataService requestWithURL:URL_getColumn_List andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
+        NSArray *array =  [result objectForKey:@"data"];
+        NSMutableArray *listData = [[NSMutableArray alloc]init];
+        
+        for (ColumnModel * model  in array) {
+            [listData addObject:model];
+        }
+        [tableView doneLoadingTableViewData];
+        [listData addObjectsFromArray:tableView.data];
+        
+        tableView.data  = listData;
+        [tableView reloadData];
+    } andErrorBlock:^(NSError *error) {
+        [tableView doneLoadingTableViewData];
+        
+    }];
+    
+}
+-(void)tableView:(BaseTableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+
+}
+
+#pragma mark asiRequest
+-(void)requestFailed:(ASIHTTPRequest *)request{
+    
+}
+-(void)requestFinished:(id)result{
+    
+}
+-(void)setButtonsNameArray:(NSArray *)buttonsNameArray{
+    if (_buttonsNameArray !=buttonsNameArray) {
+        [_buttonsNameArray release];
+        _buttonsNameArray = [buttonsNameArray copy];
+
+    }
+    [self reloadButtonsAndViews];
+
+}
 #pragma mark 按钮事件
 -(void)selectAction:(UIButton *)button{
     int page = button.tag -1000;
@@ -119,16 +321,19 @@
     int page = _contentBgView.contentOffset.x/340;
     
     CGPoint point = [_sliderImageView convertPoint:CGPointMake(0, 0) fromView:[UIApplication sharedApplication].keyWindow ];
-    
-    _pf(point.x);
+
+    int  count =self.buttonsArray.count;
+    if (count==0) {
+        count = self.buttonsNameArray.count;
+    }
     //向右平移
-    if (page<self.buttonsArray.count-1) {
+    if (page<count-1) {
         if (70+70-point.x>self.frame.size.width-50) {
             CGPoint cpoint = _buttonBgView.contentOffset;
             cpoint.x += 140 -(self.frame.size.width-50+point.x)-25;
             [_buttonBgView setContentOffset:cpoint animated:YES];
         }
-    }else if(page == self.buttonsArray.count -1){
+    }else if(page == count -1){
         if (70+70-point.x>self.frame.size.width-50) {
             CGPoint cpoint = _buttonBgView.contentOffset;
             cpoint.x += 140 -(self.frame.size.width-50+point.x)-25-70;
