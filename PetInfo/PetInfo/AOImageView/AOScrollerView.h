@@ -21,13 +21,16 @@
 {
     int pageNumer;//页码
      int switchDirection;//方向
-    NSMutableArray *imageNameArr;//图片数组
-    NSMutableArray *titleStrArr;//标题数组
+    NSMutableArray *_imageNameArr;//图片数组
+    NSMutableArray *_titleStrArr;//标题数组
     
     UIScrollView *imageSV;//滚动视图
     int page;//页码
 }
 @property(nonatomic,strong)id<ValueClickDelegate> vDelegate;
+@property (nonatomic,copy) NSMutableArray *imageNameArr;//图片数组
+@property (nonatomic,copy) NSMutableArray *titleStrArr;//标题数组
+
 //自定义实例化方法
 //parameter：
 //imageArr：图片url数组
