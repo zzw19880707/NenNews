@@ -7,7 +7,6 @@
 //
 
 #import "RootViewController.h"
-#import "ColumnTabelViewController.h"
 #import "Uifactory.h"
 #import "FileUrl.h"
 @interface RootViewController ()
@@ -49,7 +48,7 @@
 
     NSString *pathName = [[FileUrl getDocumentsFile] stringByAppendingPathComponent:column_show_file_name];
     NSMutableArray *nameArrays = [[NSMutableArray alloc]initWithContentsOfFile:pathName];
-    
+    return nameArrays;
     NSMutableArray *arrays = [[NSMutableArray alloc]init];
     for (int i =0; i<nameArrays.count; i++) {
 //        UIButton *button =[[UIButton alloc]init];
@@ -89,6 +88,8 @@
 #pragma mark UIScrollViewEventDelegate
 -(void)addButtonAction{
     ColumnTabelViewController *columnVC = [[ColumnTabelViewController alloc]init];
+    columnVC.eventDelegate = self;
+    _po(self.navigationController);
     [self.navigationController pushViewController:columnVC animated:YES];
 }
 -(void)showRightMenu{
@@ -106,10 +107,11 @@
     [super viewDidLoad];
     [self _initNavagationbarButton];
 
-    BaseScrollView *sc = [[BaseScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, ScreenHeight) andButtons:[self _initButton] andContents:[self _initUIView]];
-    sc.eventDelegate = self;
-    [self.view addSubview:sc];
-    [sc release];
+//    _sc  = [[BaseScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, ScreenHeight) andButtons:[self _initButton] andContents:[self _initUIView]];
+    _sc = [[BaseScrollView alloc]initwithButtons:[self _initButton] WithFrame:CGRectMake(0, 0, 320, ScreenHeight)];
+    _sc.eventDelegate = self;
+    [self.view addSubview:_sc];
+
 }
 -(void)viewWillAppear:(BOOL)animated{
     
@@ -135,11 +137,18 @@
     [self.appDelegate.menuCtrl showRightController:YES];
 
 }
-
+#pragma mark columnchangeDelegate 
+-(void)columnChanged:(NSArray *)array{
+    _sc.buttonsNameArray = array;
+}
 #pragma mark 内存管理
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+-(void)dealloc{
+    RELEASE_SAFELY(_sc);
+    [super dealloc];
 }
 
 @end

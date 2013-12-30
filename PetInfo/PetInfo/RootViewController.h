@@ -8,6 +8,9 @@
 
 #import "BaseViewController.h"
 #import "BaseScrollView.h"
-@interface RootViewController : BaseViewController <UIScrollViewEventDelegate,UIScrollViewDelegate>
+#import "ColumnTabelViewController.h"
+@interface RootViewController : BaseViewController <UIScrollViewEventDelegate,UIScrollViewDelegate,ColumnChangedDelegate>{
+    BaseScrollView *_sc;
+}
 
 @end
