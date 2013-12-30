@@ -92,14 +92,14 @@
     NSString *plistPath1 = [FileUrl getDocumentsFile];
     NSString *pathName = [plistPath1 stringByAppendingPathComponent:data_file_name];
     NSDictionary *dica = [[NSDictionary alloc]init];
+    
+//    for (int i = 0; i; <#increment#>) {
+//        <#statements#>
+//    }
+    
     [dica writeToFile:pathName atomically:YES];
     
-    //设置文件初始化
-    NSString *settingPath = [NSHomeDirectory() stringByAppendingPathComponent: kSetting_file_name];
-    [[NSFileManager defaultManager] createFileAtPath: settingPath contents: nil attributes: nil];
-    _settingDic = [[NSMutableDictionary alloc] initWithObjectsAndKeys: [NSNumber numberWithInt: 1], kFont_Size, [NSNumber numberWithBool: YES], KNews_Push, nil];
-    [_settingDic writeToFile: settingPath atomically: YES];
-    
+        
     //搜索历史文件
     NSString *searchPath = [plistPath1 stringByAppendingPathComponent:kSearchHistory_file_name];
     NSArray *searchArray = [[NSArray alloc]init];
@@ -131,6 +131,7 @@
         [dic release];
     }
     [array writeToFile:columnName atomically:YES];
+    
 }
 #pragma mark UI
 - (void)viewDidLoad
@@ -165,7 +166,6 @@
         [ThemeManager shareInstance].nigthModelName =@"night";
     }
     [[ThemeManager shareInstance] setPush];
-    self.view.backgroundColor = [UIColor redColor];
 }
 //移除登陆广告大图
 -(void)_removeBackground{
@@ -209,9 +209,9 @@
     button.backgroundColor = CLEARCOLOR;
     button.titleLabel.backgroundColor = CLEARCOLOR;
     [button setTitle:@"进入\n东北新闻网" forState:UIControlStateNormal];
-    [button setTitleColor:NenNewsTextColor forState:UIControlStateNormal];
+    [button setTitleColor:NenNewsgroundColor forState:UIControlStateNormal];
     [button addTarget:self action:@selector(enter) forControlEvents:UIControlEventTouchUpInside];
-    button.frame = CGRectMake(320*imageNameArray.count -150, 300, 100, 50);
+    button.frame = CGRectMake(320*imageNameArray.count -150, ScreenHeight-180, 100, 50);
     [_scrollView addSubview:button];
     [button release];
     [self.view addSubview:_scrollView];

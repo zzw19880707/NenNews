@@ -20,8 +20,7 @@
     UIScrollView *_scrollView;
     //配置文件信息
     NSUserDefaults *_userDefaults;
-    //设置文件信息
-    NSMutableDictionary *_settingDic;
+
     
     RootViewController *_root;
 }
