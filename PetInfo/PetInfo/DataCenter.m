@@ -51,14 +51,7 @@ static DataCenter *sigleton = nil;
 //按照目录删除文件
 +(void) deleteAllFilesInDir:(NSString*)path {
 	NSError* err=nil;
-//	NSArray* files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&err];
-//	if (err!=nil) {
-//		return;
-//	}
-//	for (NSString* file in files) {
-//		NSString* filepath = [NSString stringWithFormat:@"%@%@",path,file];
-//		[[NSFileManager defaultManager] removeItemAtPath:filepath error:&err];
-//	}
+
     NSFileManager *fileManager = [[NSFileManager alloc] init];
     NSArray* array = [fileManager contentsOfDirectoryAtPath:path error:nil];
     for(int i = 0; i<[array count]; i++)

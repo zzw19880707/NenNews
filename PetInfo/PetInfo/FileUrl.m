@@ -22,5 +22,4 @@
     return plistPath1;
 }
 
-
 @end
