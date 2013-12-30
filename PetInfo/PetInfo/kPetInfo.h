@@ -45,18 +45,21 @@
 #define kisLocation @"isLocation"
 //用户登陆后返回的id
 #define kuser_id @"user_id"
+#define kuser_name @"kuser_name"
+#define kuser_password @"kuser_password"
 #define kbroseMode @"BroseMode"
 #define kpageCount @"pageCount"
 //用户离线下载文件大小，用于断点续传
 #define kdownloadContentSize @"kdownloadContentSize"
-
+//用户当前位置编码,用于天气预报
+#define kLocationCityCode @"kLocationCityCode"
 
 
 //首页加载广告的大图
 #define main_adImage_url @"main_adImage_url"
 #pragma mark Nen_News_Color
-#define NenNewsTextColor COLOR(88, 195, 241)
-#define NenNewsgroundColor COLOR(247, 247, 247)
+#define NenNewsgroundColor COLOR(29, 32, 136)
+#define NenNewsTextColor COLOR(247, 247, 247)
 
 
 #pragma mark 文件名
@@ -65,10 +68,12 @@
 #define data_file_name @"data.plist"
 #define Night_file_name @"Night.plist"
 #define NightModel_file_name @"NightModel.plist"
-#define kSetting_file_name @"kSetting.plist"
+#define kSetting_file_name @"kNenSetting.plist"
 #define kDownloadOffline_file_name @"offline.plist"
 #define kDownloadCache_file_name @"cache.download"
 #define kSearchHistory_file_name @"search_history.plist"
-
-
+#define kCityWeatherCoder_file_name @"city.plist"
+#define kCityCoder_file_name @"citycode.plist"
+#define kCityindex_file_name @"cityindex.plist"
+#define kWeatherData_file_name @"weatherData.plist"
 #endif
