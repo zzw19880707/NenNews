@@ -12,6 +12,7 @@
 #import "BroseModeViewController.h"
 #import "PageCountsViewController.h"
 #import "DataCenter.h"
+#import "FileUrl.h"
 @interface SettingViewController ()
 
 @end
@@ -23,7 +24,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         //setting
-        NSString *settingPath = [NSHomeDirectory() stringByAppendingPathComponent: kSetting_file_name];
+        NSString *settingPath = [[FileUrl getDocumentsFile]  stringByAppendingPathComponent: kSetting_file_name];
         _settingDic = [[NSMutableDictionary alloc] initWithContentsOfFile: settingPath];
         self.title = @"设置";
 
@@ -101,7 +102,7 @@
                 NSArray *segments = [NSArray arrayWithObjects:@"小", @"中", @"大", nil];
                 UISegmentedControl *segmented = [[UISegmentedControl alloc] initWithItems: segments];
                 [segmented addTarget: self action: @selector(fontSizeValueChanged:) forControlEvents: UIControlEventValueChanged];
-                segmented.frame = CGRectMake(cell.frame.size.width - segmented.frame.size.width-19, 2, segmented.frame.size.width, segmented.frame.size.height+1);
+                segmented.frame = CGRectMake(cell.frame.size.width - segmented.frame.size.width-30, 5, segmented.frame.size.width+20, segmented.frame.size.height+10);
                 [cell.contentView addSubview: segmented];
 
                 [segmented setSelectedSegmentIndex: [[_settingDic objectForKey: kFont_Size] intValue]];
@@ -275,7 +276,7 @@
 
 - (void)saveSetting
 {
-    NSString *settingPath = [NSHomeDirectory() stringByAppendingPathComponent: kSetting_file_name];
+    NSString *settingPath = [[FileUrl getDocumentsFile] stringByAppendingPathComponent: kSetting_file_name];
     [_settingDic writeToFile: settingPath atomically: YES];
 }
 
