@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
-
+#import "FileUrl.h"
 
 @implementation AppDelegate
 #pragma mark 内存管理
@@ -37,7 +37,17 @@
     [BPush setDelegate:self];
     //设置角标为0
     [application setApplicationIconBadgeNumber:0];
+    
+
     if (![[NSUserDefaults standardUserDefaults] boolForKey:kisNotFirstLogin]) {
+        
+        //设置文件初始化
+        NSString *settingPath = [[FileUrl getDocumentsFile] stringByAppendingPathComponent: kSetting_file_name];
+        [[NSFileManager defaultManager] createFileAtPath: settingPath contents: nil attributes: nil];
+        //设置文件信息
+        NSMutableDictionary *settingDic = [[NSMutableDictionary alloc] initWithObjectsAndKeys: [NSNumber numberWithInt: 1], kFont_Size, [NSNumber numberWithBool: YES], KNews_Push, nil];
+        [settingDic writeToFile: settingPath atomically: YES];
+        
     // 注册通知（声音、标记、弹出窗口）
     [application registerForRemoteNotificationTypes:
      UIRemoteNotificationTypeAlert
