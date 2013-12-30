@@ -13,6 +13,7 @@
 #import "SearchViewController.h"
 #import "WeatherViewController.h"
 #import "LoginViewController.h"
+#import "UINavigationController+PushAnimated.h"
 @interface RightViewController ()
 
 @end
@@ -23,9 +24,12 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
+        self.view.frame =CGRectMake(0, 0, ScreenWidth,ScreenHeight);
     }
     return self;
+}
+-(void)viewWillAppear:(BOOL)animated{
+    
 }
 //初始化背景图
 -(void)_initFrame {
@@ -42,6 +46,11 @@
         label.text = @"白  天";
     }
     
+    //隐藏登陆
+    UILabel *login = (UILabel *)VIEWWITHTAG(self.view, 1020);
+    [login setHidden:YES];
+    UIButton *loginButton = (UIButton *)VIEWWITHTAG(self.view, 1000);
+    [loginButton setHidden:YES];
     
     //当日天气
     UILabel *weather =(UILabel *)VIEWWITHTAG(self.view, 1021);
@@ -107,7 +116,12 @@
             [self.appDelegate.menuCtrl showRootController:YES];
             break;
         case 1005:
-            [self.appDelegate.menuCtrl presentModalViewController:[[[BaseNavViewController alloc]initWithRootViewController: set]autorelease] animated:YES];
+            if ([self.appDelegate.menuCtrl  respondsToSelector:@selector(customLeftToRightPushViewController:)]) {
+                [self.appDelegate.menuCtrl customLeftToRightPushViewController:set];
+            }else{
+                [self.appDelegate.menuCtrl presentModalViewController:[[[BaseNavViewController alloc]initWithRootViewController: set]autorelease] animated:YES];
+            }
+            
             break;
 
         default:
