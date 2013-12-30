@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>1</key>
+	<array>
+		<dict>
+			<key>type</key>
+			<integer>2</integer>
+			<key>titleID</key>
+			<integer>20</integer>
+			<key>summary</key>
+			<string>18年前超生女婴被2名妇女抱走；家属状告计生部门败诉。</string>
+			<key>title</key>
+			<string>河北警方悬赏1万征抱婴案线索</string>
+			<key>titlePic</key>
+			<string>http://pic4.nipic.com/20090825/3276934_090413064540_2.jpg</string>
+		</dict>
+		<dict>
+			<key>titleID</key>
+			<integer>10</integer>
+			<key>type</key>
+			<integer>1</integer>
+			<key>summary</key>
+			<string>56人均来自衡阳；设贿选另6人因工作调动已终止代表资格。</string>
+			<key>title</key>
+			<string>湖南56名涉贿选人大代表曝光</string>
+			<key>titlePic</key>
+			<string>http://pic4.nipic.com/20090825/3276934_090659079785_2.jpg</string>
+		</dict>
+	</array>
+</dict>
+</plist>
