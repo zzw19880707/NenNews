@@ -29,7 +29,7 @@
 
     UIImageView *background = [[UIImageView alloc]init];
     background.frame = CGRectMake( 0, 0, ScreenWidth, ScreenHeight);
-    [background setImage:[UIImage imageNamed:@"left_right_background_view.jpg"]];
+    [background setImage:[UIImage imageNamed:@"right_background_view.png"]];
     background.tag =1010;
     [self.view addSubview:background];
     [background release];
@@ -58,6 +58,9 @@
 {
     [super viewDidLoad];
     [self _initFrame];
+//    默认选中第一条
+    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+    [_tableView selectRowAtIndexPath:indexPath animated:YES  scrollPosition:UITableViewScrollPositionBottom];
 }
 
 #pragma mark UITableViewDataSource
@@ -86,8 +89,11 @@
         cell.contentView.backgroundColor = CLEARCOLOR;
 
     }
+    //设置选中时颜色
+    cell.selectedBackgroundView = [[[UIView alloc] initWithFrame:cell.frame] autorelease];
+    cell.selectedBackgroundView.backgroundColor = COLOR(14, 110, 184);
     //设置选中状态
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return  cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -98,10 +104,11 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    if (indexPath.row >0) {
+    
+//    if (indexPath.row >0) {
 //        [self presentModalViewController:[[LeftViewController alloc]init] animated:YES];
-        [self.appDelegate.menuCtrl presentModalViewController:[[LeftViewController alloc]init] animated:YES];
-    }
+//        [self.appDelegate.menuCtrl presentModalViewController:[[LeftViewController alloc]init] animated:YES];
+//    }
 }
 
 #pragma mark 内存管理
