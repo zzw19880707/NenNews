@@ -7,7 +7,7 @@
 //
 
 #import "ThemeManager.h"
-
+#import "FileUrl.h"
 @implementation ThemeManager
 static ThemeManager *sigleton = nil;
 
@@ -103,15 +103,17 @@ static ThemeManager *sigleton = nil;
 
 //获取setting文件路径
 -(NSString *)getSettingPath {
-    NSString *settingPath = [NSHomeDirectory() stringByAppendingPathComponent: kSetting_file_name];
+    NSString *settingPath = [[FileUrl getDocumentsFile] stringByAppendingPathComponent: kSetting_file_name];
     _settingPlist =[[NSMutableDictionary alloc] initWithContentsOfFile: settingPath];
     return settingPath;
 }
-//设置字体大小
+//获取字体大小
 - (int)getSizeFont{
     [self getSettingPath];
     return [[_settingPlist objectForKey:kFont_Size]intValue] ;
 }
+
+
 //设置推送信息
 -(void)setPush {
     [self getSettingPath];
