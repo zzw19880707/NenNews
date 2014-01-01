@@ -7,15 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BaseTableView.h"
+#import "NewsNightModelTableView.h"
+#import "BaseViewController.h"
 @protocol UIScrollViewEventDelegate <NSObject>
 @optional
 //add按钮事件
 -(void)addButtonAction;
 -(void)showLeftMenu;
 -(void)showRightMenu;
+-(void)pushViewController:(BaseViewController *)baseViewController;
 @end
-@interface BaseScrollView : UIScrollView <UIScrollViewDelegate,UItableviewEventDelegate,ASIRequest>{
+@interface BaseScrollView : UIScrollView <UIScrollViewDelegate,UItableviewEventDelegate,ASIRequest,NewsNigthTabelViewDelegate>{
     UIScrollView *_buttonBgView;
     UIScrollView *_contentBgView;
     UIImageView *_sliderImageView;

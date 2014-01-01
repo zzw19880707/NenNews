@@ -11,6 +11,8 @@
 #import "ColumnModel.h"
 #import "NewsNightModelTableView.h"
 #import "FileUrl.h"
+#import "WebViewController.h"
+#import "NightModelContentViewController.h"
 @implementation BaseScrollView
 
 - (id)initWithFrame:(CGRect)frame
@@ -194,6 +196,8 @@
         NSMutableDictionary *d = [[NSMutableDictionary alloc]initWithContentsOfFile:[[FileUrl getDocumentsFile]stringByAppendingPathComponent:data_file_name]];
         
         newsTableView.data = [d objectForKey:@"1"];
+        newsTableView.imageData = [d objectForKey:@"imageData"];
+        newsTableView.delegate = self;
         [_contentBgView addSubview:newsTableView];
         
 //        UIScrollView *labelscroll = [[UIScrollView alloc]init];
@@ -215,6 +219,18 @@
 
 }
 
+#pragma mark UIScrollViewEventDelegate
+-(void)ImageViewDidSelected:(NSInteger)index andData:(NSMutableArray *)imageData{
+    
+    if (index>0) {
+        NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
+        nightModel.titleID = [[imageData[index] objectForKey:@"titleID"] intValue];
+        [self.eventDelegate pushViewController:nightModel];
+    }else{
+        WebViewController *webView = [[WebViewController alloc]initWithUrl:[imageData[index] objectForKey:@"contentURL"]];
+        [self.eventDelegate pushViewController:webView];
+    }
+}
 #pragma mark UItableviewEventDelegate
 //上拉刷新
 -(void)pullDown:(NewsNightModelTableView *)tableView{
@@ -280,16 +296,19 @@
     
 }
 -(void)tableView:(BaseTableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-
+    NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
+    ColumnModel *model =tableView.data[indexPath.row];
+    nightModel.titleID = [model.titleID intValue];
+    [self.eventDelegate pushViewController:nightModel];
 }
 
-#pragma mark asiRequest
--(void)requestFailed:(ASIHTTPRequest *)request{
-    
-}
--(void)requestFinished:(id)result{
-    
-}
+//#pragma mark asiRequest
+//-(void)requestFailed:(ASIHTTPRequest *)request{
+//    
+//}
+//-(void)requestFinished:(id)result{
+//    
+//}
 -(void)setButtonsNameArray:(NSArray *)buttonsNameArray{
     if (_buttonsNameArray !=buttonsNameArray) {
         [_buttonsNameArray release];
