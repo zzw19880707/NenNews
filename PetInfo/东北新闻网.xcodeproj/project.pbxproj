@@ -229,11 +229,20 @@
 		FE02E42B1840426400E2B468 /* OpenUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = FE02E4241840426400E2B468 /* OpenUDID.m */; };
 		FE02E43018404FD800E2B468 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE02E42E18404FD700E2B468 /* MainViewController.m */; };
 		FE02E43118404FD800E2B468 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE02E42F18404FD700E2B468 /* MainViewController.xib */; };
+		FE12FFC8187462C900B67DCE /* NightModelContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE12FFC7187462C900B67DCE /* NightModelContentViewController.m */; };
 		FE2F76511861E2E7004153A9 /* DDMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE2F76501861E2E7004153A9 /* DDMenuController.m */; };
 		FE2F76551861E395004153A9 /* LeftViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE2F76531861E395004153A9 /* LeftViewController.m */; };
 		FE2F76561861E395004153A9 /* LeftViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE2F76541861E395004153A9 /* LeftViewController.xib */; };
 		FE2F765A1861E3A4004153A9 /* RightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE2F76581861E3A4004153A9 /* RightViewController.m */; };
 		FE2F765B1861E3A4004153A9 /* RightViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE2F76591861E3A4004153A9 /* RightViewController.xib */; };
+		FE5D54FC1873C9B000BCF01D /* UIImageView+LBBlurredImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FE5D54FB1873C9B000BCF01D /* UIImageView+LBBlurredImage.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		FE5D54FE1873CACA00BCF01D /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE5D54FD1873CACA00BCF01D /* CoreImage.framework */; };
+		FE5D55041873DA9D00BCF01D /* XLCycleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = FE5D55031873DA9D00BCF01D /* XLCycleScrollView.m */; };
+		FE5D55081873EF1D00BCF01D /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE5D55061873EF1D00BCF01D /* WebViewController.m */; };
+		FE5D55091873EF1D00BCF01D /* WebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE5D55071873EF1D00BCF01D /* WebViewController.xib */; };
+		FE5D550D1873F05700BCF01D /* 后退.png in Resources */ = {isa = PBXBuildFile; fileRef = FE5D550A1873F05600BCF01D /* 后退.png */; };
+		FE5D550E1873F05700BCF01D /* 前进.png in Resources */ = {isa = PBXBuildFile; fileRef = FE5D550B1873F05600BCF01D /* 前进.png */; };
+		FE5D550F1873F05700BCF01D /* 刷新.png in Resources */ = {isa = PBXBuildFile; fileRef = FE5D550C1873F05700BCF01D /* 刷新.png */; };
 		FE82536B18687C530070AAB0 /* NightModelScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = FE82536A18687C530070AAB0 /* NightModelScrollView.m */; };
 		FE8777E5185A10EB0070CF74 /* StringValue.h in Resources */ = {isa = PBXBuildFile; fileRef = FE8777E4185A10750070CF74 /* StringValue.h */; };
 		FE9F2216184970FA0008047F /* app_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FE9F2215184970FA0008047F /* app_icon@2x.png */; };
@@ -549,6 +558,8 @@
 		FE02E42F18404FD700E2B468 /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		FE02E4321840530000E2B468 /* BaseURL+Implements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BaseURL+Implements.h"; sourceTree = "<group>"; };
 		FE02E4331840532E00E2B468 /* kPetInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kPetInfo.h; sourceTree = "<group>"; };
+		FE12FFC6187462C900B67DCE /* NightModelContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightModelContentViewController.h; sourceTree = "<group>"; };
+		FE12FFC7187462C900B67DCE /* NightModelContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightModelContentViewController.m; sourceTree = "<group>"; };
 		FE2F764F1861E2E7004153A9 /* DDMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMenuController.h; sourceTree = "<group>"; };
 		FE2F76501861E2E7004153A9 /* DDMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMenuController.m; sourceTree = "<group>"; };
 		FE2F76521861E395004153A9 /* LeftViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftViewController.h; sourceTree = "<group>"; };
@@ -557,6 +568,17 @@
 		FE2F76571861E3A4004153A9 /* RightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightViewController.h; sourceTree = "<group>"; };
 		FE2F76581861E3A4004153A9 /* RightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightViewController.m; sourceTree = "<group>"; };
 		FE2F76591861E3A4004153A9 /* RightViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RightViewController.xib; sourceTree = "<group>"; };
+		FE5D54FA1873C9B000BCF01D /* UIImageView+LBBlurredImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+LBBlurredImage.h"; sourceTree = "<group>"; };
+		FE5D54FB1873C9B000BCF01D /* UIImageView+LBBlurredImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+LBBlurredImage.m"; sourceTree = "<group>"; };
+		FE5D54FD1873CACA00BCF01D /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		FE5D55021873DA9D00BCF01D /* XLCycleScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLCycleScrollView.h; sourceTree = "<group>"; };
+		FE5D55031873DA9D00BCF01D /* XLCycleScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLCycleScrollView.m; sourceTree = "<group>"; };
+		FE5D55051873EF1D00BCF01D /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		FE5D55061873EF1D00BCF01D /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
+		FE5D55071873EF1D00BCF01D /* WebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WebViewController.xib; sourceTree = "<group>"; };
+		FE5D550A1873F05600BCF01D /* 后退.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "后退.png"; sourceTree = "<group>"; };
+		FE5D550B1873F05600BCF01D /* 前进.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "前进.png"; sourceTree = "<group>"; };
+		FE5D550C1873F05700BCF01D /* 刷新.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "刷新.png"; sourceTree = "<group>"; };
 		FE82536918687C530070AAB0 /* NightModelScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightModelScrollView.h; sourceTree = "<group>"; };
 		FE82536A18687C530070AAB0 /* NightModelScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightModelScrollView.m; sourceTree = "<group>"; };
 		FE8777E4185A10750070CF74 /* StringValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StringValue.h; sourceTree = "<group>"; };
@@ -608,6 +630,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE5D54FE1873CACA00BCF01D /* CoreImage.framework in Frameworks */,
 				FE02E417184041AB00E2B468 /* libz.dylib in Frameworks */,
 				FE02E4151840419E00E2B468 /* CoreTelephony.framework in Frameworks */,
 				FE02E3F9184038EC00E2B468 /* QuartzCore.framework in Frameworks */,
@@ -1101,6 +1124,35 @@
 			path = model;
 			sourceTree = "<group>";
 		};
+		FE5D54F41873C49E00BCF01D /* image */ = {
+			isa = PBXGroup;
+			children = (
+				FE5D550A1873F05600BCF01D /* 后退.png */,
+				FE5D550B1873F05600BCF01D /* 前进.png */,
+				FE5D550C1873F05700BCF01D /* 刷新.png */,
+			);
+			name = image;
+			path = "图片模化";
+			sourceTree = "<group>";
+		};
+		FE5D54F91873C9B000BCF01D /* 图片模化 */ = {
+			isa = PBXGroup;
+			children = (
+				FE5D54FA1873C9B000BCF01D /* UIImageView+LBBlurredImage.h */,
+				FE5D54FB1873C9B000BCF01D /* UIImageView+LBBlurredImage.m */,
+			);
+			path = "图片模化";
+			sourceTree = "<group>";
+		};
+		FE5D55011873DA9D00BCF01D /* scrollview循环 */ = {
+			isa = PBXGroup;
+			children = (
+				FE5D55021873DA9D00BCF01D /* XLCycleScrollView.h */,
+				FE5D55031873DA9D00BCF01D /* XLCycleScrollView.m */,
+			);
+			path = "scrollview循环";
+			sourceTree = "<group>";
+		};
 		FEBAEE921867183500CBC711 /* ThemeManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -1122,6 +1174,8 @@
 				EB70496B186FD02700E94C56 /* NewsNightModelTableView.m */,
 				EB70496D186FD42000E94C56 /* NightAndLoadingCell.h */,
 				EB70496E186FD42000E94C56 /* NightAndLoadingCell.m */,
+				FE12FFC6187462C900B67DCE /* NightModelContentViewController.h */,
+				FE12FFC7187462C900B67DCE /* NightModelContentViewController.m */,
 				FEBAEE991867214E00CBC711 /* Night.plist */,
 				FEBAEE9E1867227D00CBC711 /* NightMode */,
 			);
@@ -1177,6 +1231,7 @@
 		FEFFC70318375336001605C5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FE5D54FD1873CACA00BCF01D /* CoreImage.framework */,
 				FE02E416184041AA00E2B468 /* libz.dylib */,
 				FE02E4141840419E00E2B468 /* CoreTelephony.framework */,
 				FE02E3F8184038EC00E2B468 /* QuartzCore.framework */,
@@ -1211,6 +1266,9 @@
 				FE2F76591861E3A4004153A9 /* RightViewController.xib */,
 				EB0102071862A6E20021D998 /* RootViewController.h */,
 				EB0102081862A6E20021D998 /* RootViewController.m */,
+				FE5D55051873EF1D00BCF01D /* WebViewController.h */,
+				FE5D55061873EF1D00BCF01D /* WebViewController.m */,
+				FE5D55071873EF1D00BCF01D /* WebViewController.xib */,
 				EB2642381867C9550004D1D9 /* Setting */,
 				EB2642431867FC970004D1D9 /* DataCenter */,
 				FEBAEE921867183500CBC711 /* ThemeManager */,
@@ -1224,6 +1282,9 @@
 		FEFFC70B18375336001605C5 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FE5D55011873DA9D00BCF01D /* scrollview循环 */,
+				FE5D54F91873C9B000BCF01D /* 图片模化 */,
+				FE5D54F41873C49E00BCF01D /* image */,
 				EB32ACF9186A88D90014DFA5 /* ADVViewController */,
 				FE2F764E1861E2E7004153A9 /* DDMenu */,
 				FE4A849B185023D800A969D1 /* model */,
@@ -1307,9 +1368,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE5D550D1873F05700BCF01D /* 后退.png in Resources */,
 				EB4DC6EE186E816700610D11 /* title_button_add.png in Resources */,
 				EB822D53186D8F3E00B99CAC /* b26.png in Resources */,
 				EB822CD9186D73BF00B99CAC /* LoginViewController.xib in Resources */,
+				FE5D55091873EF1D00BCF01D /* WebViewController.xib in Resources */,
 				EB822D4F186D8F3E00B99CAC /* b22.png in Resources */,
 				EB4DC74A186EE43C00610D11 /* baseScrollview_title_background.png in Resources */,
 				FE2F765B1861E3A4004153A9 /* RightViewController.xib in Resources */,
@@ -1340,6 +1403,7 @@
 				EB822D5F186D8F3E00B99CAC /* b9.png in Resources */,
 				EB822D51186D8F3E00B99CAC /* b24.png in Resources */,
 				EB01021D1862C95A0021D998 /* LeftCell.xib in Resources */,
+				FE5D550E1873F05700BCF01D /* 前进.png in Resources */,
 				EB26423F1867C9810004D1D9 /* about.html in Resources */,
 				EB3DC8E6186D667400E956AF /* weather_background_cloudy.png in Resources */,
 				EB822D56186D8F3E00B99CAC /* b29.png in Resources */,
@@ -1362,6 +1426,7 @@
 				EB4DC71B186E961F00610D11 /* b7@2x.png in Resources */,
 				EBFC115B186C41540094DC05 /* city.plist in Resources */,
 				EB0102351862DF270021D998 /* right_weather_button@2x.png in Resources */,
+				FE5D550F1873F05700BCF01D /* 刷新.png in Resources */,
 				FE02E3431840363100E2B468 /* blueArrow.png in Resources */,
 				EB4251E61871AD6300561CDA /* data.plist in Resources */,
 				EB4DC729186E961F00610D11 /* b21@2x.png in Resources */,
@@ -1485,6 +1550,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FEFFC71118375336001605C5 /* main.m in Sources */,
+				FE5D55081873EF1D00BCF01D /* WebViewController.m in Sources */,
 				FE2F765A1861E3A4004153A9 /* RightViewController.m in Sources */,
 				FEFFC71518375336001605C5 /* AppDelegate.m in Sources */,
 				FE02E3451840363100E2B468 /* EGORefreshTableHeaderView_old.m in Sources */,
@@ -1499,6 +1565,7 @@
 				EBC9D56A18696E4C00B75D7C /* ColumnTabelViewController.m in Sources */,
 				EBC9D51E18692BC000B75D7C /* FileUrl.m in Sources */,
 				EB26424F18681F830004D1D9 /* BroseModeViewController.m in Sources */,
+				FE5D54FC1873C9B000BCF01D /* UIImageView+LBBlurredImage.m in Sources */,
 				FE02E3661840364000E2B468 /* ASIInputStream.m in Sources */,
 				FEBAEEA51867262500CBC711 /* NightModelUIImage.m in Sources */,
 				FE02E3671840364000E2B468 /* ASINetworkQueue.m in Sources */,
@@ -1542,6 +1609,7 @@
 				FEBAEEA21867260B00CBC711 /* NightModelUIButton.m in Sources */,
 				FEBAEE951867187300CBC711 /* ThemeManager.m in Sources */,
 				FE02E43018404FD800E2B468 /* MainViewController.m in Sources */,
+				FE5D55041873DA9D00BCF01D /* XLCycleScrollView.m in Sources */,
 				EB3A31AA18618C0000FF2A69 /* BaseNavViewController+NavigationBar.m in Sources */,
 				FEBAEE9818671B8800CBC711 /* NightModelLabel.m in Sources */,
 				FEE623DB1842F01C002ABDAB /* JSONKit.m in Sources */,
@@ -1550,6 +1618,7 @@
 				FEC333E9184319CA0014209C /* AOScrollerView.m in Sources */,
 				FEC333EA184319CA0014209C /* NSURLAdditions.m in Sources */,
 				FE2F76551861E395004153A9 /* LeftViewController.m in Sources */,
+				FE12FFC8187462C900B67DCE /* NightModelContentViewController.m in Sources */,
 				EB42511B187119BB00561CDA /* ColumnModel.m in Sources */,
 				FEC333EE184319CA0014209C /* UrlImageButton.m in Sources */,
 				EB2642461867FCB10004D1D9 /* DataCenter.m in Sources */,
