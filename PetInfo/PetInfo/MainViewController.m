@@ -8,7 +8,7 @@
 
 #import "MainViewController.h"
 #import "Reachability.h"
-#import "UIImageView+WebCache.h"
+#import "SDWebImage/UIImageView+WebCache.h"
 #import "BaseNavViewController.h"
 #import "DDMenuController.h"
 #import "LeftViewController.h"
@@ -69,12 +69,12 @@
     
     //load背景logo图图片
     UIImage *backImage= [[UIImage imageNamed:@"main_background_logo.png"] autorelease];    UIImageView *backImageView =[[UIImageView alloc]initWithImage:backImage];
-    backImageView.frame = CGRectMake(0, ScreenHeight-88, ScreenWidth, 88);
+    backImageView.frame = CGRectMake(0, ScreenHeight-100, ScreenWidth, 88);
     [_backgroundView addSubview:backImageView];
     [backImageView release];
     //广告图片
     UIImageView *topImageView = [[UIImageView alloc]init];
-    topImageView.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight-88);
+    topImageView.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight-100);
     NSString *url = [[NSString alloc]init];
     if (![_userDefaults boolForKey:kisNotFirstLogin]) {
         url = firstimage;
@@ -88,18 +88,17 @@
 }
 
 -(void)_initplist{
-    //写入初始化文件
+    //写入初始化数据文件
     NSString *plistPath1 = [FileUrl getDocumentsFile];
     NSString *pathName = [plistPath1 stringByAppendingPathComponent:data_file_name];
     NSDictionary *dica = [[NSDictionary alloc]init];
-    
-//    for (int i = 0; i; <#increment#>) {
-//        <#statements#>
-//    }
-    
     [dica writeToFile:pathName atomically:YES];
     
-        
+    
+//    搜藏列表
+    NSString *collectionName = [plistPath1 stringByAppendingPathComponent:kCollection_file_name];
+    [dica writeToFile:collectionName atomically:YES];
+    
     //搜索历史文件
     NSString *searchPath = [plistPath1 stringByAppendingPathComponent:kSearchHistory_file_name];
     NSArray *searchArray = [[NSArray alloc]init];
@@ -113,9 +112,9 @@
     NSString *columnshowName = [plistPath1 stringByAppendingPathComponent:column_show_file_name];
     NSArray *columnsshowName = @[@"头条",@"体育",@"娱乐",@"科技",@"军事",@"中超",@"历史",@"本地",@"教育"];
     NSMutableArray *showarray = [[NSMutableArray alloc]init];
-    for(int i= 0 ; i<columnsshowName.count ;i ++){
+    for(int i= 1 ; i<columnsshowName.count+1 ;i ++){
         
-        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsshowName[i],[NSNumber numberWithInt:i]] forKeys:@[@"name",@"cloumID"]];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsshowName[i-1],[NSNumber numberWithInt:i]] forKeys:@[@"name",@"cloumID"]];
         [showarray addObject:dic];
         [dic release];
     }
