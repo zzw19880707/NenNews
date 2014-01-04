@@ -9,7 +9,13 @@
 #import "AppDelegate.h"
 #import "MainViewController.h"
 #import "FileUrl.h"
-
+#import <RennSDK/RennSDK.h>
+#import <TencentOpenAPI/QQApi.h>
+#import <TencentOpenAPI/QQApiInterface.h>
+#import <TencentOpenAPI/TencentOAuth.h>
+#import <ShareSDK/ShareSDK.h>
+#import "WXApi.h"
+#import "WeiboApi.h"
 @implementation AppDelegate
 #pragma mark 内存管理
 - (void)dealloc
@@ -21,6 +27,74 @@
 //程序入口
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [ShareSDK registerApp:@"1084a0c07656"];
+    /**
+     连接新浪微博开放平台应用以使用相关功能，此应用需要引用SinaWeiboConnection.framework
+     http://open.weibo.com上注册新浪微博开放平台应用，并将相关信息填写到以下字段
+     **/
+    [ShareSDK connectSinaWeiboWithAppKey:@"568898243"
+                               appSecret:@"38a4f8204cc784f81f9f0daaf31e02e3"
+                             redirectUri:@"http://www.sharesdk.cn"];
+    /**
+     连接腾讯微博开放平台应用以使用相关功能，此应用需要引用TencentWeiboConnection.framework
+     http://dev.t.qq.com上注册腾讯微博开放平台应用，并将相关信息填写到以下字段
+     
+     如果需要实现SSO，需要导入libWeiboSDK.a，并引入WBApi.h，将WBApi类型传入接口
+     **/
+    [ShareSDK connectTencentWeiboWithAppKey:@"801307650"
+                                  appSecret:@"ae36f4ee3946e1cbb98d6965b0b2ff5c"
+                                redirectUri:@"http://www.sharesdk.cn"
+                                   wbApiCls:[WeiboApi class]];
+    
+    //连接短信分享
+    [ShareSDK connectSMS];
+    
+    /**
+     连接QQ空间应用以使用相关功能，此应用需要引用QZoneConnection.framework
+     http://connect.qq.com/intro/login/上申请加入QQ登录，并将相关信息填写到以下字段
+     
+     如果需要实现SSO，需要导入TencentOpenAPI.framework,并引入QQApiInterface.h和TencentOAuth.h，将QQApiInterface和TencentOAuth的类型传入接口
+     **/
+    [ShareSDK connectQZoneWithAppKey:@"100371282"
+                           appSecret:@"aed9b0303e3ed1e27bae87c33761161d"
+                   qqApiInterfaceCls:[QQApiInterface class]
+                     tencentOAuthCls:[TencentOAuth class]];
+    
+    /**
+     连接微信应用以使用相关功能，此应用需要引用WeChatConnection.framework和微信官方SDK
+     http://open.weixin.qq.com上注册应用，并将相关信息填写以下字段
+     **/
+    [ShareSDK connectWeChatWithAppId:@"wx4868b35061f87885" wechatCls:[WXApi class]];
+    
+//    /**
+//     连接QQ应用以使用相关功能，此应用需要引用QQConnection.framework和QQApi.framework库
+//     http://mobile.qq.com/api/上注册应用，并将相关信息填写到以下字段
+//     **/
+//    //旧版中申请的AppId（如：QQxxxxxx类型），可以通过下面方法进行初始化
+//    //    [ShareSDK connectQQWithAppId:@"QQ075BCD15" qqApiCls:[QQApi class]];
+//    
+//    [ShareSDK connectQQWithQZoneAppKey:@"100371282"
+//                     qqApiInterfaceCls:[QQApiInterface class]
+//                       tencentOAuthCls:[TencentOAuth class]];
+    
+
+    
+    /**
+     连接人人网应用以使用相关功能，此应用需要引用RenRenConnection.framework
+     http://dev.renren.com上注册人人网开放平台应用，并将相关信息填写到以下字段
+     **/
+    [ShareSDK connectRenRenWithAppId:@"226427"
+                              appKey:@"fc5b8aed373c4c27a05b712acba0f8c3"
+                           appSecret:@"f29df781abdd4f49beca5a2194676ca4"
+                   renrenClientClass:[RennClient class]];
+    
+    
+    
+
+    
+    
+    
+    
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.backgroundColor = [UIColor whiteColor];
     
@@ -115,6 +189,23 @@
 
 }
 
+//检查是否已加入handleOpenURL的处理方法
+- (BOOL)application:(UIApplication *)application  handleOpenURL:(NSURL *)url
+{
+    return [ShareSDK handleOpenURL:url
+                        wxDelegate:self];
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation
+{
+    return [ShareSDK handleOpenURL:url
+                 sourceApplication:sourceApplication
+                        annotation:annotation
+                        wxDelegate:self];
+}
 #pragma mark pushdelegate  回调函数
 - (void) onMethod:(NSString*)method response:(NSDictionary*)data {
     NSLog(@"On method:%@", method);
