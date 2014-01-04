@@ -55,6 +55,7 @@
 #define kLocationCityCode @"kLocationCityCode"
 
 
+
 //首页加载广告的大图
 #define main_adImage_url @"main_adImage_url"
 #pragma mark Nen_News_Color
@@ -76,4 +77,6 @@
 #define kCityCoder_file_name @"citycode.plist"
 #define kCityindex_file_name @"cityindex.plist"
 #define kWeatherData_file_name @"weatherData.plist"
+#define kCollection_file_name @"collection.plist"
+
 #endif

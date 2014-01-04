@@ -10,7 +10,13 @@
 #define PetInfo_BaseURL_Implements_h
 
 #define BASE_URL @"http://192.168.1.145:8080/nen/"
-#define URL_getNews_content @""
+//获取普通新闻内容
+#define URL_getNews_content @"getNewscontent"
+//获取图片新闻内容
+#define URL_getImages_List @"getImagesList"
+//获取专题新闻内容
+#define URL_getThematic_List @"getThematicList"
+//获取栏目下新闻列表
 #define URL_getColumn_List @"getColumnList"
 
 
