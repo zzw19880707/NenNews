@@ -7,8 +7,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WebViewController">
             <connections>
-                <outlet property="goForward" destination="GHJ-pT-S1h" id="2bO-b9-QUQ"/>
-                <outlet property="reload" destination="tKm-Tr-85F" id="bJg-j3-sB5"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="webView" destination="zlz-Up-B7g" id="fKT-wn-cOK"/>
             </connections>
@@ -63,7 +61,7 @@
                     </items>
                 </toolbar>
                 <webView contentMode="scaleToFill" id="zlz-Up-B7g">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="436"/>
+                    <rect key="frame" x="0.0" y="64" width="320" height="372"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>

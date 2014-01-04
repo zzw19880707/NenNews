@@ -58,12 +58,14 @@
     [super viewDidUnload];
 }
 - (IBAction)goBack:(id)sender {
-    
+    if (_webView.canGoBack) {
+        [_webView goBack];
+    }
 }
 
 - (IBAction)goForward:(id)sender {
-    if (_webView.canGoBack) {
-        [_webView goBack];
+    if (_webView.canGoForward) {
+        [_webView goForward];
     }
 }
 - (IBAction)reload:(id)sender {
