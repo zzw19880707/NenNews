@@ -7,8 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+@class ColumnModel;
+@interface NightAndLoadingCell : UITableViewCell{
+    
+    UIImageView *_imageView;
+    UILabel *_titleLabel;
+    UILabel *_contentLabel;
+}
 
-@interface NightAndLoadingCell : UITableViewCell
+@property (nonatomic,retain) ColumnModel *model;
 
 @property (nonatomic,retain) UILabel *titleLable;
 

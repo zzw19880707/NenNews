@@ -7,7 +7,9 @@
 //
 
 #import "NightAndLoadingCell.h"
-
+#import "Uifactory.h"
+#import "ColumnModel.h"
+#import "UIImageView+WebCache.h"
 @implementation NightAndLoadingCell
 
 
@@ -26,12 +28,58 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(NightModeChangeNotification:) name:kNightModeChangeNofication object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(BrownModelChangeNotification:) name:kBrownModelChangeNofication object:nil];
+        [self _initView];
     }
     return self;
 }
 
 
+-(void)_initView {
+//图片视图
+    _imageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 80, 60)];
+    _imageView.backgroundColor = CLEARCOLOR;
+    [self.contentView addSubview:_imageView];
+//    标题
+    _titleLabel = [Uifactory createLabel:ktext];
+    _titleLabel.frame = CGRectMake(100, 10, 320-100-20, 20);
+    _titleLabel.numberOfLines = 1;
+    [_titleLabel setFont:[UIFont systemFontOfSize:13]];
+    [self.contentView addSubview:_titleLabel];
+//     摘要
+    _contentLabel = [Uifactory createLabel:kselectText];
+    _contentLabel.frame =CGRectMake(100, 80-20-10-10, 320-100-20, 30);
+    _contentLabel.numberOfLines = 2;
+    [_contentLabel setFont:[UIFont systemFontOfSize:10]];
+    [self.contentView addSubview:_contentLabel];
 
+}
+//layoutSubviews展示数据，子视图布局
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    //图片视图
+    if (_model.titlePic.length>0) {
+        [_imageView setImageWithURL:[NSURL URLWithString:_model.titlePic]];
+    }else {
+        _titleLabel.frame = CGRectMake(10, 10, 300, 20);
+        _contentLabel.frame = CGRectMake(10, 40, 300, 30);
+        [_imageView setHidden:YES];
+    }
+
+//    标题
+    _titleLabel.text = _model.title;
+//    内容
+    _contentLabel.text = _model.summary;
+}
+
+-(void)setModel:(ColumnModel *)model{
+    if (_model != model) {
+        [_model  release];
+        _model = model;
+    }
+#warning <#message#>
+}
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
@@ -46,5 +94,10 @@
     
 }
 
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_imageView release];
+    [super dealloc];
+}
 
 @end

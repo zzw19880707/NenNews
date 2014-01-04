@@ -6,9 +6,14 @@
 //  Copyright (c) 2014年 佐筱猪. All rights reserved.
 //
 
-#import "BaseViewController.h"
+#import "NightModelViewController.h"
 
-@interface NightModelContentViewController : BaseViewController
+@interface NightModelContentViewController : NightModelViewController <UIAlertViewDelegate>{
+    NSMutableArray *_imageArray;
+    NSArray *_contentArray;
+    NSString *_comAddress;
+    NSString *_createtime;
+}
+@property (nonatomic,retain) NSString *content;
 
-@property (nonatomic,assign) NSInteger titleID;
 @end
