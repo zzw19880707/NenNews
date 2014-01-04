@@ -8,21 +8,23 @@
 
 #import "BaseTableView.h"
 #import "XLCycleScrollView.h"
-
+#import "ColumnModel.h"
 @protocol NewsNigthTabelViewDelegate <NSObject>
 
--(void)ImageViewDidSelected:(NSInteger)index andData:(NSMutableArray *)imageData;
+-(void)ImageViewDidSelected:(NSInteger)index andData:(NSArray *)imageData;
 
 @end
-@interface NewsNightModelTableView : BaseTableView <XLCycleScrollViewDatasource,XLCycleScrollViewDelegate>
+@interface NewsNightModelTableView : BaseTableView <XLCycleScrollViewDatasource,XLCycleScrollViewDelegate>{
+    XLCycleScrollView *_csView ;
+}
 
 
 -(id)initwithColumnID:(int)columnID;
 @property (nonatomic,retain) UIPageControl *pageControl;
 @property (nonatomic,assign) int columnID;
 @property (nonatomic,copy) NSDate *lastDate;
-@property (nonatomic,retain) NSMutableArray *imageData;
+@property (nonatomic,retain) NSArray *imageData;
 @property (nonatomic,retain) UILabel *label ;
 
-@property (nonatomic,assign) id<NewsNigthTabelViewDelegate> delegate;
+@property (nonatomic,assign) id<NewsNigthTabelViewDelegate> changeDelegate;
 @end
