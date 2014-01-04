@@ -158,7 +158,7 @@
         [params setValue:text forKey:@"content"];
         service.eventDelegate = self ;
         [service requestWithURL:URL_Search andparams:params isJoint:YES andhttpMethod:@"POST"];
-        [self showHUD:@"查询中,请稍后" isDim:YES];
+        [self showHUD:INFO_Searching isDim:YES];
         //    隐藏查询表
         [self.tableView setHidden:YES];
     }
@@ -201,7 +201,7 @@
     [params setValue:textField.text forKey:@"content"];
     service.eventDelegate = self ;
     [service requestWithURL:URL_Search andparams:params isJoint:YES andhttpMethod:@"POST"];
-    [self showHUD:@"查询中,请稍后" isDim:YES];
+    [self showHUD:INFO_Searching isDim:YES];
     return YES;
 }
 //点击textfield事件
