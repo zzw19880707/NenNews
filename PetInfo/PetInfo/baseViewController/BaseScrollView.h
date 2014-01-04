@@ -17,7 +17,7 @@
 -(void)showRightMenu;
 -(void)pushViewController:(BaseViewController *)baseViewController;
 @end
-@interface BaseScrollView : UIScrollView <UIScrollViewDelegate,UItableviewEventDelegate,ASIRequest,NewsNigthTabelViewDelegate>{
+@interface BaseScrollView : UIScrollView <UIScrollViewDelegate>{
     UIScrollView *_buttonBgView;
     UIScrollView *_contentBgView;
     UIImageView *_sliderImageView;

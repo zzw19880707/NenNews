@@ -112,6 +112,7 @@
     self.hud.mode = MBProgressHUDModeCustomView;
     self.hud.labelText = title;
 }
+
 //隐藏加载提示
 - (void)hideHUD {
     [self.hud hide:YES];

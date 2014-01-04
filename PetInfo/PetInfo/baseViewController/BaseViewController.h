@@ -48,4 +48,5 @@
 
 
 -(void)setStateBarHidden :(BOOL) statusBarHidden;
+-(void)setTitle:(NSString *)title;
 @end

@@ -23,7 +23,7 @@
     }
     return self;
 }
-
+/*
 -(id)initWithFrame:(CGRect)frame andButtons:(NSArray *) buttons andContents:(NSArray *) contents{
     self = [super initWithFrame:frame];
     if (self) {
@@ -99,7 +99,7 @@
     }
     return self;
 }
-
+*/
 //通过按钮名称初始化
 -(id)initwithButtons:(NSArray *)buttonsName WithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -173,142 +173,27 @@
             }
             [view removeFromSuperview];
         }
-
-//初始化按钮
-    for (int i = 0; i<_buttonsNameArray.count ; i++) {
-        int columnId = [[_buttonsNameArray[i] objectForKey:@"cloumID"] intValue];
-        UIButton *button = [Uifactory createButton:[_buttonsNameArray[i] objectForKey:@"name"]];
-        button.frame =  CGRectMake(10 + 70*i, 0, 60, 30);
+    _buttonsArray = _buttonsNameArray[0];
+    _contentsArray = _buttonsNameArray[1];
+    for (int i = 0 ; i< _buttonsArray.count; i ++) {
+        UIButton *button  =(UIButton *) _buttonsArray[i];
         [button addTarget: self  action:@selector(selectAction:) forControlEvents:UIControlEventTouchUpInside];
-        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-        button.tag = 1000+ i;
         [_buttonBgView addSubview:button];
+        [button release];
         
-        
-        
-        NewsNightModelTableView *newsTableView = [[NewsNightModelTableView alloc]initwithColumnID:columnId];
-        newsTableView.frame = CGRectMake(340 *i, 0, ScreenWidth, ScreenHeight -40);
-        newsTableView.eventDelegate = self;
-        
-        
-        
-        
-        NSMutableDictionary *d = [[NSMutableDictionary alloc]initWithContentsOfFile:[[FileUrl getDocumentsFile]stringByAppendingPathComponent:data_file_name]];
-        
-        newsTableView.data = [d objectForKey:@"1"];
-        newsTableView.imageData = [d objectForKey:@"imageData"];
-        newsTableView.delegate = self;
+        NewsNightModelTableView *newsTableView = _contentsArray[i];
         [_contentBgView addSubview:newsTableView];
-        
-//        UIScrollView *labelscroll = [[UIScrollView alloc]init];
-//        labelscroll.frame = CGRectMake(340 *i, 0, _contentBgView.width, _contentBgView.height);
-//        labelscroll.contentSize = newsTableView.size;
-//        [labelscroll addSubview:newsTableView];
-//        [_contentBgView addSubview:labelscroll];
-
-
+        [newsTableView release];
     }
     
+
 //滑动条返回至第一个
 #warning 滑动条返回至第一个
-    
-    
-    
-    
-    
 
 }
 
-#pragma mark UIScrollViewEventDelegate
--(void)ImageViewDidSelected:(NSInteger)index andData:(NSMutableArray *)imageData{
-    
-    if (index>0) {
-        NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
-        nightModel.titleID = [[imageData[index] objectForKey:@"titleID"] intValue];
-        [self.eventDelegate pushViewController:nightModel];
-    }else{
-        WebViewController *webView = [[WebViewController alloc]initWithUrl:[imageData[index] objectForKey:@"contentURL"]];
-        [self.eventDelegate pushViewController:webView];
-    }
-}
-#pragma mark UItableviewEventDelegate
-//上拉刷新
--(void)pullDown:(NewsNightModelTableView *)tableView{
 
-    //    参数
-    NSMutableDictionary *params  = [[NSMutableDictionary alloc]init];
-    int count = [[NSUserDefaults standardUserDefaults]integerForKey:kpageCount];
-    NSNumber *number = [NSNumber numberWithInt:(count*10)];
-    [params setValue:number forKey:@"count"];
-    int columnID=tableView.columnID;
-    [params setValue:[NSNumber numberWithInt:columnID] forKey:@"columnID"];
-    int sinceID = [[tableView.data[0] objectForKey:@"titleID"] intValue];
-    [params setValue:[NSNumber numberWithInt:sinceID] forKey:@"sinceId"];
-    //    [params setValue:<#(id)#> forKey:@"maxId"];
-    
-    [DataService requestWithURL:URL_getColumn_List andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
-        NSArray *array =  [result objectForKey:@"data"];
-        NSMutableArray *listData = [[NSMutableArray alloc]init];
-        
-        for (ColumnModel * model  in array) {
-            [listData addObject:model];
-        }
-        tableView.data =listData;
-        [tableView reloadData];
-        [tableView doneLoadingTableViewData];
 
-    } andErrorBlock:^(NSError *error) {
-        [tableView doneLoadingTableViewData];
-        
-    }];
-
-}
-//下拉加载
--(void)pullUp:(NewsNightModelTableView *)tableView{
-    
-    //    参数
-    NSMutableDictionary *params  = [[NSMutableDictionary alloc]init];
-    int count = [[NSUserDefaults standardUserDefaults]integerForKey:kpageCount];
-    NSNumber *number = [NSNumber numberWithInt:(count*10)];
-    [params setValue:number forKey:@"count"];
-    int columnID=tableView.columnID;
-    [params setValue:[NSNumber numberWithInt:columnID] forKey:@"columnID"];
-    int sinceID = [[tableView.data[0] objectForKey:@"titleID"] intValue];
-    [params setValue:[NSNumber numberWithInt:sinceID] forKey:@"sinceId"];
-    //    [params setValue:<#(id)#> forKey:@"maxId"];
-    
-    [DataService requestWithURL:URL_getColumn_List andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
-        NSArray *array =  [result objectForKey:@"data"];
-        NSMutableArray *listData = [[NSMutableArray alloc]init];
-        
-        for (ColumnModel * model  in array) {
-            [listData addObject:model];
-        }
-        [tableView doneLoadingTableViewData];
-        [listData addObjectsFromArray:tableView.data];
-        
-        tableView.data  = listData;
-        [tableView reloadData];
-    } andErrorBlock:^(NSError *error) {
-        [tableView doneLoadingTableViewData];
-        
-    }];
-    
-}
--(void)tableView:(BaseTableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
-    ColumnModel *model =tableView.data[indexPath.row];
-    nightModel.titleID = [model.titleID intValue];
-    [self.eventDelegate pushViewController:nightModel];
-}
-
-//#pragma mark asiRequest
-//-(void)requestFailed:(ASIHTTPRequest *)request{
-//    
-//}
-//-(void)requestFinished:(id)result{
-//    
-//}
 -(void)setButtonsNameArray:(NSArray *)buttonsNameArray{
     if (_buttonsNameArray !=buttonsNameArray) {
         [_buttonsNameArray release];
@@ -341,10 +226,8 @@
     
     CGPoint point = [_sliderImageView convertPoint:CGPointMake(0, 0) fromView:[UIApplication sharedApplication].keyWindow ];
 
-    int  count =self.buttonsArray.count;
-    if (count==0) {
-        count = self.buttonsNameArray.count;
-    }
+    int  count  = self.buttonsNameArray.count;
+    
     //向右平移
     if (page<count-1) {
         if (70+70-point.x>self.frame.size.width-50) {
@@ -394,12 +277,14 @@
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+
     if (scrollView.contentOffset.x ==0) {
         [self.eventDelegate showLeftMenu];
     }
     if (scrollView.contentOffset.x==scrollView.contentSize.width -340) {
         [self.eventDelegate showRightMenu];
     }
+
 
 }
 -(void)dealloc{
