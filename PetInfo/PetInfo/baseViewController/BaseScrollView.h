@@ -24,7 +24,7 @@
 }
 //button宽70 ，frame（10+70*i,0,60,30）
 //content
--(id)initWithFrame:(CGRect)frame andButtons:(NSArray *) buttons andContents:(NSArray *) contents;
+//-(id)initWithFrame:(CGRect)frame andButtons:(NSArray *) buttons andContents:(NSArray *) contents;
 //通过按钮名称初始化
 
 -(id)initwithButtons:(NSArray *)buttonsName WithFrame:(CGRect)frame;
