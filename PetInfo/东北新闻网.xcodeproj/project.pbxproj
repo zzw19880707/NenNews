@@ -324,6 +324,8 @@
 		FE2F76561861E395004153A9 /* LeftViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE2F76541861E395004153A9 /* LeftViewController.xib */; };
 		FE2F765A1861E3A4004153A9 /* RightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE2F76581861E3A4004153A9 /* RightViewController.m */; };
 		FE2F765B1861E3A4004153A9 /* RightViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE2F76591861E3A4004153A9 /* RightViewController.xib */; };
+		FE5531371879990D00E671CA /* PushNewsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE5531361879990D00E671CA /* PushNewsViewController.m */; };
+		FE55313A18799F3900E671CA /* CollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE55313918799F3900E671CA /* CollectionViewController.m */; };
 		FE5D54FC1873C9B000BCF01D /* UIImageView+LBBlurredImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FE5D54FB1873C9B000BCF01D /* UIImageView+LBBlurredImage.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		FE5D54FE1873CACA00BCF01D /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE5D54FD1873CACA00BCF01D /* CoreImage.framework */; };
 		FE5D55041873DA9D00BCF01D /* XLCycleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = FE5D55031873DA9D00BCF01D /* XLCycleScrollView.m */; };
@@ -794,6 +796,10 @@
 		FE2F76571861E3A4004153A9 /* RightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightViewController.h; sourceTree = "<group>"; };
 		FE2F76581861E3A4004153A9 /* RightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightViewController.m; sourceTree = "<group>"; };
 		FE2F76591861E3A4004153A9 /* RightViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RightViewController.xib; sourceTree = "<group>"; };
+		FE5531351879990D00E671CA /* PushNewsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNewsViewController.h; sourceTree = "<group>"; };
+		FE5531361879990D00E671CA /* PushNewsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNewsViewController.m; sourceTree = "<group>"; };
+		FE55313818799F3900E671CA /* CollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollectionViewController.h; sourceTree = "<group>"; };
+		FE55313918799F3900E671CA /* CollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollectionViewController.m; sourceTree = "<group>"; };
 		FE5D54FA1873C9B000BCF01D /* UIImageView+LBBlurredImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+LBBlurredImage.h"; sourceTree = "<group>"; };
 		FE5D54FB1873C9B000BCF01D /* UIImageView+LBBlurredImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+LBBlurredImage.m"; sourceTree = "<group>"; };
 		FE5D54FD1873CACA00BCF01D /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
@@ -1760,6 +1766,10 @@
 				FE2F76591861E3A4004153A9 /* RightViewController.xib */,
 				EB0102071862A6E20021D998 /* RootViewController.h */,
 				EB0102081862A6E20021D998 /* RootViewController.m */,
+				FE5531351879990D00E671CA /* PushNewsViewController.h */,
+				FE5531361879990D00E671CA /* PushNewsViewController.m */,
+				FE55313818799F3900E671CA /* CollectionViewController.h */,
+				FE55313918799F3900E671CA /* CollectionViewController.m */,
 				FE5D55051873EF1D00BCF01D /* WebViewController.h */,
 				FE5D55061873EF1D00BCF01D /* WebViewController.m */,
 				FE5D55071873EF1D00BCF01D /* WebViewController.xib */,
@@ -2097,9 +2107,11 @@
 				FE02E3621840364000E2B468 /* ASIDataDecompressor.m in Sources */,
 				FE02E3631840364000E2B468 /* ASIDownloadCache.m in Sources */,
 				FE02E3641840364000E2B468 /* ASIFormDataRequest.m in Sources */,
+				FE5531371879990D00E671CA /* PushNewsViewController.m in Sources */,
 				FEBAB6D2185DE63B008AAECD /* BaseScrollView.m in Sources */,
 				EB5221571877AA0A00C2155F /* PSTCollectionViewCell.m in Sources */,
 				EBE7563C1878028500851B4D /* SDWebImageDownloader.m in Sources */,
+				FE55313A18799F3900E671CA /* CollectionViewController.m in Sources */,
 				FE02E3651840364000E2B468 /* ASIHTTPRequest.m in Sources */,
 				EB52215F1877AA0A00C2155F /* PSTGridLayoutItem.m in Sources */,
 				EBC9D56A18696E4C00B75D7C /* ColumnTabelViewController.m in Sources */,
