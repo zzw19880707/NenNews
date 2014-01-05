@@ -18,7 +18,8 @@
 #define URL_getThematic_List @"getThematicList"
 //获取栏目下新闻列表
 #define URL_getColumn_List @"getColumnList"
-
+//获取推送新闻
+#define URL_getPush_List @"getPushList"
 
 
 //传入查询内容 返回查询结果。 post请求
