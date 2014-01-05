@@ -7,7 +7,9 @@
 //
 
 #import "LeftViewController.h"
-
+#import "RootViewController.h"
+#import "PushNewsViewController.h"
+#import "CollectionViewController.h"
 @interface LeftViewController ()
 
 @end
@@ -102,13 +104,18 @@
 #pragma mark uitabledelegate
 //选中修改mainviewcontroller 显示内容
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    
-//    if (indexPath.row >0) {
-//        [self presentModalViewController:[[LeftViewController alloc]init] animated:YES];
-//        [self.appDelegate.menuCtrl presentModalViewController:[[LeftViewController alloc]init] animated:YES];
-//    }
+    BaseViewController *baseView ;
+    if (indexPath.row==0) {
+        baseView = [[RootViewController alloc]init];
+    } else if( indexPath.row ==1){
+        baseView = [[PushNewsViewController alloc]init];
+    }else if (indexPath.row ==2){
+        baseView = [[CollectionViewController alloc]init];
+    }
+    self.appDelegate.menuCtrl.rootViewController = baseView;
+    [self.appDelegate.menuCtrl showRootController:YES];
+
 }
 
 #pragma mark 内存管理
