@@ -67,62 +67,78 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    static NSString *listIndentifier=@"HomeDetailCell";
-    static NSString *imageIndentifier=@"imageIndentifier";
-    if (_imageData.count>0&&indexPath.section==0) {
-        UITableViewCell *imageCell = [tableView dequeueReusableCellWithIdentifier:@"imageIndentifier"];
-        if (imageCell == nil) {
-            imageCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:imageIndentifier];
-            _csView = [[XLCycleScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 120)];
-            _csView.delegate = self;
-            _csView.datasource = self;
-            [_csView.pageControl setHidden:YES];
-            UIView *view =[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 135)];
-            [view addSubview:_csView];
-            [_csView release];
-            
-            self.label = [Uifactory createLabel:ktext];
-            self.label.frame = CGRectMake(0, 120, 200, 15 );
-            self.label.text = [_imageData[0] objectForKey:@"title"];
-            self.label.font = [UIFont systemFontOfSize:12];
-            [view addSubview:self.label];
-            [self.label release];
-            
-            self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(320 - 12*_imageData.count-5, 120, 12*_imageData.count, 15)];
-            _pageControl.backgroundColor = [UIColor clearColor];
-            self.pageControl.userInteractionEnabled = NO;
-            self.pageControl.numberOfPages =_imageData.count  ;
-            self.pageControl.currentPage= 0;
-            [view addSubview:self.pageControl];
-            
-            [imageCell.contentView addSubview:view];
-            [view release];
+    
+    if (_type == 1) {
+        static NSString *pushIndentifier = @"PushIndentifier";
+        UITableViewCell *Cell = [tableView dequeueReusableCellWithIdentifier:pushIndentifier];
+        if (Cell == nil) {
+            Cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:pushIndentifier];
         }
-        imageCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        return imageCell;
+        Cell.textLabel.text =  [self.data[indexPath.row] objectForKey:@"title"];
+        return Cell;
 
     }else{
-    
-        NightAndLoadingCell *cell=[tableView  dequeueReusableCellWithIdentifier:listIndentifier];
-        
-        if (cell==nil) {//nib文件名
+        static NSString *listIndentifier=@"HomeDetailCell";
+        static NSString *imageIndentifier=@"imageIndentifier";
+        if (_imageData.count>0&&indexPath.section==0) {
+            UITableViewCell *imageCell = [tableView dequeueReusableCellWithIdentifier:@"imageIndentifier"];
+            if (imageCell == nil) {
+                imageCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:imageIndentifier];
+                _csView = [[XLCycleScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 120)];
+                _csView.delegate = self;
+                _csView.datasource = self;
+                [_csView.pageControl setHidden:YES];
+                UIView *view =[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 135)];
+                [view addSubview:_csView];
+                [_csView release];
+                
+                self.label = [Uifactory createLabel:ktext];
+                self.label.frame = CGRectMake(0, 120, 200, 15 );
+                self.label.text = [_imageData[0] objectForKey:@"title"];
+                self.label.font = [UIFont systemFontOfSize:12];
+                [view addSubview:self.label];
+                [self.label release];
+                
+                self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(320 - 12*_imageData.count-5, 120, 12*_imageData.count, 15)];
+                _pageControl.backgroundColor = [UIColor clearColor];
+                self.pageControl.userInteractionEnabled = NO;
+                self.pageControl.numberOfPages =_imageData.count  ;
+                self.pageControl.currentPage= 0;
+                [view addSubview:self.pageControl];
+                
+                [imageCell.contentView addSubview:view];
+                [view release];
+            }
+            imageCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            return imageCell;
             
-            cell = [[NightAndLoadingCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:listIndentifier];
+        }else{
+            
+            NightAndLoadingCell *cell=[tableView  dequeueReusableCellWithIdentifier:listIndentifier];
+            
+            if (cell==nil) {//nib文件名
+                
+                cell = [[NightAndLoadingCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:listIndentifier];
+            }
+            ColumnModel *model =[self.data[indexPath.row ] retain];
+            cell.model = model;
+            return  cell;
+            
         }
-        ColumnModel *model =[self.data[indexPath.row ] retain];
-        cell.model = model;
-        return  cell;
-
     }
-
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (_imageData.count >0&&indexPath.section==0) {
-        return 135;
+    if (_type == 0) {
+        if (_imageData.count >0&&indexPath.section==0) {
+            return 135;
+        }else{
+            return 80;
+        }
     }else{
-        return 80;
+        return 44;
     }
+    
 }
 #pragma  mark XLCycleScrollViewDatasource
 - (NSInteger)numberOfPages
@@ -151,7 +167,8 @@
 }
 
 -(void)reloadData{
-    [_csView reloadData];
     [super reloadData];
+    [_csView reloadData];
+
 }
 @end

@@ -20,6 +20,7 @@
 
 
 -(id)initwithColumnID:(int)columnID;
+@property (nonatomic,assign) int type;//0:rootview  1:pushnews
 @property (nonatomic,retain) UIPageControl *pageControl;
 @property (nonatomic,assign) int columnID;
 @property (nonatomic,copy) NSDate *lastDate;
