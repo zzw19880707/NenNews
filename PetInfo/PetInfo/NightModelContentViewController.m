@@ -9,6 +9,7 @@
 #import "NightModelContentViewController.h"
 #import "NewsContentModel.h"
 #import "Uifactory.h"
+#import "UIButton+WebCache.h"
 #import "UIImageView+WebCache.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "PlayerViewController.h"
@@ -48,6 +49,7 @@
         [self showHUDComplete:INFO_EndRequestNetWork];
         _createtime = model.createtime;
         _comAddress = model.comAddress;
+        _abnewsArray = model.abnews;
         [self performSelector:@selector(hideHUD) withObject:nil afterDelay:.5];
 
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -109,16 +111,14 @@
     //初始化图片列表
     for (int i =0 ; i< _contentArray.count ; i++){
         NSString *content = _contentArray[i];
-
         //图片
         if (i%2==1) {
             [_imageArray addObject:content];
-            UIImageView *imageView = [[UIImageView alloc]init];
-            [imageView setImageWithURL:[NSURL URLWithString:content]];
-            [imageView setImageWithURL:[NSURL URLWithString:content] placeholderImage:nil];
-            imageView.frame = CGRectMake(scr_width,height, 280, 210);
-            [backgroundView addSubview:imageView];
-            [imageView release];
+            UIButton *button = [[UIButton alloc]init];
+            [button setImageWithURL:[NSURL URLWithString:content] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"logo_280x210.png"]];
+            button.frame = CGRectMake(scr_width,height, 280, 210);
+            [backgroundView addSubview:button];
+            [button release];
             height+=220;
         }
         //文字
@@ -129,7 +129,6 @@
             if (content.length<=2) {
                 continue;
             }
-            textView.textColor= [UIColor redColor];
             textView.font = [UIFont systemFontOfSize:10];
             textView.textAlignment = 
             textView.scrollEnabled = NO;
@@ -139,15 +138,45 @@
             [textView sizeToFit];
             [backgroundView addSubview:textView];
             height+=textView.height;
-            height+=26;
+//            height+=26;
         }
     }
-
+//有相关新闻
+    if (_abnewsArray.count>0) {
+        UILabel *abnewslabel = [Uifactory createLabel:ktext];
+        abnewslabel.text= @"相关新闻";
+        abnewslabel.font = [UIFont systemFontOfSize:13];
+        abnewslabel.frame = CGRectMake(10, height, 50, 15);
+        [backgroundView addSubview:abnewslabel];
+        height+=20;
+        for (int i = 0 ; i< _abnewsArray.count ; i++) {
+            int tag = [[_abnewsArray[i] objectForKey:@"titleId"] intValue];
+            NSString *title = [_abnewsArray[i] objectForKey:@"title"];
+//相关新闻图标
+            UIImageView *icon = [[UIImageView alloc]init];
+            icon.image = [UIImage imageNamed:@""];
+            icon.frame = CGRectMake(20, height+5, 15, 20);
+            [backgroundView addSubview:icon];
+            [icon release];
+//            相关新闻按钮
+            UIButton *button = [[UIButton alloc]init];
+            button.frame = CGRectMake(40, height, ScreenWidth - 40 -20, 30);
+            [button setTitle:title forState:UIControlStateNormal];
+            [button addTarget:self action:@selector(pushAction:) forControlEvents:UIControlEventTouchUpInside];
+            button.tag = tag;
+            [backgroundView addSubview:button];
+            [button release];
+            height +=35;
+        }
+        
+    }
     backgroundView.contentSize = CGSizeMake(ScreenWidth, height+40);
 
     [self.view addSubview:backgroundView];
     
 }
+
+
 //图片新闻
 -(void)_initImageView{
     
@@ -232,6 +261,14 @@
     [self.view addSubview:backgroundView];
 
 }
+#pragma  mark aciton
+-(void)pushAction :(UIButton *) button {
+    int tag = button.tag;
+    NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
+    nightModel.type = @"0";//model.type;
+    nightModel.titleID = [NSString stringWithFormat:@"%d",tag];
+    [self.navigationController pushViewController:nightModel animated:YES];
+}
 -(void)playAction :(UIButton *)button {
     NSString *ktype =[self getConnectionAvailable];
     if ([ktype isEqualToString:@"none"]) {
@@ -253,7 +290,11 @@
 }
 #pragma mark UIAlertViewDelegate
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
+    if (buttonIndex == 0 ) {
+        
+    }else{
+        [self play];
+    }
 }
 - (void)didReceiveMemoryWarning
 {
