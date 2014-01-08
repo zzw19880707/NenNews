@@ -15,6 +15,7 @@
 #import "RightViewController.h"
 #import "ThemeManager.h"
 #import "FileUrl.h"
+#import "FMDB/src/FMDatabase.h"
 #define firstimage @"http://a.hiphotos.baidu.com/image/w%3D2048/sign=9f5289ba0b55b3199cf9857577918326/4d086e061d950a7b32998b7f0bd162d9f3d3c9d9.jpg"
 @interface MainViewController ()
 
@@ -36,7 +37,6 @@
     _longitude = 0;
     _latitude = 0;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kisLocation];
-
 }
 //添加rootview
 -(void)_initViewController{
@@ -78,23 +78,71 @@
     NSString *url = [[NSString alloc]init];
     if (![_userDefaults boolForKey:kisNotFirstLogin]) {
         url = firstimage;
+        [_userDefaults setValue:firstimage forKey:main_adImage_url];
+        [_userDefaults synchronize];
     }else{
-        url = [_userDefaults stringForKey:main_adImage_url];
+//        当前无网络
+        if ([[self getConnectionAvailable] isEqualToString:@"none"]) {
+            url = [_userDefaults stringForKey:main_adImage_url];
+            [topImageView setImageWithURL:[NSURL URLWithString:url]];
+            [_backgroundView addSubview:topImageView];
+            [topImageView release];
+            [self.view  addSubview: _backgroundView];
+        }else{//有网络，访问ao接口 获取图片地址
+            [DataService requestWithURL:URL_AO andparams:nil andhttpMethod:@"GET" completeBlock:^(id result) {
+                NSDictionary *dic = [result objectForKey:@"AoPicture"];
+                NSString  *Aourl = [dic objectForKey:@"pictureUrl"];
+                [topImageView setImageWithURL:[NSURL URLWithString:Aourl]];
+                [_userDefaults setValue:Aourl forKey:main_adImage_url];
+                [_userDefaults synchronize];
+                [_backgroundView addSubview:topImageView];
+                [topImageView release];
+                [self.view  addSubview: _backgroundView];
+            } andErrorBlock:^(NSError *error) {
+                
+            }];
+        }
     }
-    [topImageView setImageWithURL:[NSURL URLWithString:url]];
-    [_backgroundView addSubview:topImageView];
-    [topImageView release];
-    [self.view  addSubview: _backgroundView];
+    
 }
-
+-(void)_initDB{
+    //初始化数据库
+    FMDatabase *db = [FileUrl getDB];
+    if (![db open]) {
+        NSLog(@"Could not open db.");
+        return ;
+    }
+////    栏目表
+////    栏目id   栏目名称  是否有主图  是否显示
+//    [db executeUpdate:@"CREATE TABLE columnList (column INTEGER PRIMARY KEY, columnName TEXT, isImage INTEGER, isshow INTEGER)"];
+//    NSArray *columnsName = @[@"头条",@"辽宁",@"文娱",@"社会",@"时尚",@"教育",@"民生",@"英语",@"新农村建设",@"旅游",@"财经",@"体育"];
+//    for (int i = 0 ; i <columnsName.count; i++) {
+////        NSString *sql = ;
+//        [db executeUpdate:[NSString stringWithFormat:@"insert into columnList VALUES (%d,'%@',%d,%d);",i+1,columnsName[i],0,(i<7?1:0)]];
+//    }
+    
+//    收藏表
+//    titleid  标题  type类型
+    [db executeUpdate:@"CREATE TABLE collectionList (titleid INTEGER PRIMARY KEY, titleName TEXT, type INTEGER)"];
+//   数据源列表
+    
+//    1.columndata表
+//    titleid type类型  summary描述 title标题 img主图  isselected是否选过DEFAULT 0
+    [db executeUpdate:@"CREATE TABLE columnData (titleid INTEGER PRIMARY KEY, titleName TEXT, summary TEXT, type INTEGER,img TEXT, isselected INTEGER DEFAULT 0)"];
+//    2.contentdata表
+//    titleid title标题 content新闻内容 createtime创建时间 comAddress来源 url
+    [db executeUpdate:@"CREATE TABLE contentdata (titleid INTEGER PRIMARY KEY, title TEXT, content TEXT, createtime TEXT,comAddress TEXT, url TEXT)"];
+//    3.abnews表 相关新闻
+//    abnewsid   newsid主新闻  title标题   titleid标题id  type（0代表相关，1代表专题）
+    [db executeUpdate:@"CREATE TABLE abnewscolumn (abnewsid INTEGER PRIMARY KEY, newsid INTEGER, title TEXT, titleid TEXT,type INTEGER )"];
+}
 -(void)_initplist{
-    //写入初始化数据文件
     NSString *plistPath1 = [FileUrl getDocumentsFile];
+    //写入初始化数据文件
     NSString *pathName = [plistPath1 stringByAppendingPathComponent:data_file_name];
     NSDictionary *dica = [[NSDictionary alloc]init];
     [dica writeToFile:pathName atomically:YES];
-    
-    
+
 //    搜藏列表
     NSString *collectionName = [plistPath1 stringByAppendingPathComponent:kCollection_file_name];
     [dica writeToFile:collectionName atomically:YES];
@@ -106,26 +154,27 @@
     
     //设置夜间模式
     [_userDefaults setBool:YES forKey:kisNightModel];
+    [_userDefaults setInteger:1 forKey:kpageCount];
     [_userDefaults synchronize];
     
     //初始化菜单
     NSString *columnshowName = [plistPath1 stringByAppendingPathComponent:column_show_file_name];
-    NSArray *columnsshowName = @[@"头条",@"体育",@"娱乐",@"科技",@"军事",@"中超",@"历史",@"本地",@"教育"];
+    NSArray *columnsshowName = @[@"头条",@"辽宁",@"文娱",@"社会",@"时尚",@"教育"];
     NSMutableArray *showarray = [[NSMutableArray alloc]init];
     for(int i= 1 ; i<columnsshowName.count+1 ;i ++){
         
-        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsshowName[i-1],[NSNumber numberWithInt:i]] forKeys:@[@"name",@"cloumID"]];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsshowName[i-1],[NSNumber numberWithInt:i],[NSNumber numberWithInt:1]] forKeys:@[@"name",@"cloumID",@"showimage"]];
         [showarray addObject:dic];
         [dic release];
     }
     [showarray writeToFile:columnshowName atomically:YES];
     
     NSString *columnName = [plistPath1 stringByAppendingPathComponent:column_disshow_file_name];
-    NSArray *columnsName = @[@"CBA",@"NBA",@"财经",@"社会",@"手机",@"数码",@"情感",@"女人",@"房产"];
+    NSArray *columnsName = @[@"民生",@"英语",@"新农村建设",@"旅游",@"财经",@"体育"];
     NSMutableArray *array = [[NSMutableArray alloc]init];
     for(int i= 0 ; i<columnsName.count ;i ++){
         
-        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsName[i],[NSNumber numberWithInt:i]] forKeys:@[@"name",@"cloumID"]];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsName[i],[NSNumber numberWithInt:i],[NSNumber numberWithInt:0]] forKeys:@[@"name",@"cloumID",@"showimage"]];
         [array addObject:dic];
         [dic release];
     }
@@ -137,16 +186,13 @@
 {
     [super viewDidLoad];
     _userDefaults=[NSUserDefaults standardUserDefaults];
-
     [self _initLocation];
-    
+    [self Location];
     //加载进入应用后大图
     [self _initBackgroundView];
-    
-    
     //第一次登陆
     if (![_userDefaults boolForKey:kisNotFirstLogin]) {
-        
+        [self _initDB];
         [self _initplist];
         #warning 推送绑定
         [BPush bindChannel];
@@ -178,7 +224,6 @@
         [self setStateBarHidden:NO];
         [self _initViewController];
     }];
-    
 }
 //增加引导图
 -(void)_addGuidePageView{
@@ -219,6 +264,10 @@
     UIPageControl *pageControl = [[UIPageControl alloc]init];
     pageControl.frame = CGRectMake((ScreenWidth-100)/2, ScreenHeight -70, 100, 30);
     pageControl.tag = 100;
+    if (WXHLOSVersion()>=6.0) {
+        pageControl.pageIndicatorTintColor = [UIColor grayColor];
+        pageControl.currentPageIndicatorTintColor = NenNewsgroundColor;
+    }
     pageControl.currentPage = 0 ;
     pageControl.numberOfPages = imageNameArray.count;
     pageControl.backgroundColor = [UIColor clearColor];
@@ -226,6 +275,7 @@
     [self.view addSubview:pageControl];
     [pageControl release];
 }
+
 //引导图
 -(void)viewDidEnd{
     [UIView animateWithDuration:0.5 animations:^{
@@ -239,25 +289,6 @@
 }
 
 
-//定位
--(void)Location
-{
-    //开启定位服务
-    if([CLLocationManager locationServicesEnabled]){
-        CLLocationManager *locationManager = [[CLLocationManager alloc] init];
-        locationManager.delegate = self;
-        //设置不筛选，(距离筛选器distanceFilter,下面表示设备至少移动1000米,才通知委托更新）
-        locationManager.distanceFilter = kCLDistanceFilterNone;
-        //精度10米
-        [locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
-        [locationManager startUpdatingLocation];
-    }else{//未开启定位服务
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setFloat:_longitude forKey:kuser_longitude];
-        [userDefaults setFloat:_latitude forKey:kuser_latitude];
-        [userDefaults setBool:NO forKey:kisLocation];
-    }
-}
 #pragma mark scrolldelegate 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     int pageindex = scrollView.contentOffset.x / 320 ;
@@ -286,7 +317,28 @@
     CGRect frame = CGRectMake(pagecontrol.currentPage* ScreenWidth, 0, ScreenWidth, ScreenHeight);
     [_scrollView scrollRectToVisible:frame animated:YES];
 }
-
+#pragma mark Location
+//定位
+-(void)Location
+{
+    //开启定位服务
+    if([CLLocationManager locationServicesEnabled]){
+        CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+        locationManager.delegate = self;
+        //设置不筛选，(距离筛选器distanceFilter,下面表示设备至少移动1000米,才通知委托更新）
+        locationManager.distanceFilter = kCLDistanceFilterNone;
+        //精度10米
+        [locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
+        [locationManager startUpdatingLocation];
+    }else{//未开启定位服务
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setFloat:_longitude forKey:kuser_longitude];
+        [userDefaults setFloat:_latitude forKey:kuser_latitude];
+        [userDefaults setBool:NO forKey:kisLocation];
+        [userDefaults setValue:@"101070101" forKey:kLocationCityCode];
+        [userDefaults synchronize];
+    }
+}
 #pragma mark - CLLocationManager delegate
 - (void)locationManager:(CLLocationManager *)manager
 	didUpdateToLocation:(CLLocation *)newLocation
@@ -298,8 +350,27 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setFloat:_longitude forKey:kuser_longitude];
     [userDefaults setFloat:_latitude forKey:kuser_latitude];
-    [userDefaults setBool:YES forKey:kisLocation];
+//    获取当前城市名称
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:newLocation
+                   completionHandler:^(NSArray *placemarks, NSError *error){
+                       
+                       for (CLPlacemark *place in placemarks) {
+                           NSLog(@"locality,%@",place.locality);               // 市
+                           NSString *citycode = [[NSBundle mainBundle]pathForResource:@"citycode" ofType:@"plist"];
+                           NSDictionary *dic =[[NSDictionary alloc]initWithContentsOfFile:citycode];
+                           NSString *code = [dic objectForKey:place.locality];
+                           if (code ==nil) {
+                               code = @"101070101";
+                           }
+                           [userDefaults setValue:code forKey:kLocationCityCode];
+                           [userDefaults synchronize];
+                       }
+                   }];
+
     
+    [userDefaults setBool:YES forKey:kisLocation];
+    [userDefaults synchronize];
 }
 
 - (void)locationManager:(CLLocationManager *)manager
@@ -309,32 +380,10 @@
     [manager stopUpdatingLocation];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:NO forKey:kisLocation];
-}
-
-#pragma mark asirequest delegate
--(void)requestFinished:(id)result
-{
-
-
-    
-    //获取应用程序沙盒的Documents目录
-    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
-    NSString *plistPath1 = [paths objectAtIndex:0];
-    NSString *pathName = [plistPath1 stringByAppendingPathComponent:@"HomeCellData.plist"];
-
-    NSMutableDictionary * dic =[[NSMutableDictionary alloc] initWithContentsOfFile:pathName];
+    [userDefaults setValue:@"101070101" forKey:kLocationCityCode];
+    [userDefaults synchronize];
 
 }
--(void)requestFailed:(ASIHTTPRequest *)asirequest
-{
-    _po([[asirequest error] localizedDescription]);
-    NSUserDefaults *userDefaults=[NSUserDefaults standardUserDefaults];
-    if (![userDefaults boolForKey:kisNotFirstLogin]) {
-//        [self RemoveandInit];
-    }
-}
-
-
 
 #pragma mark 内存管理
 - (void)didReceiveMemoryWarning
