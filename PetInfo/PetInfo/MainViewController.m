@@ -123,18 +123,18 @@
     
 //    收藏表
 //    titleid  标题  type类型
-    [db executeUpdate:@"CREATE TABLE collectionList (titleid INTEGER PRIMARY KEY, titleName TEXT, type INTEGER)"];
+    [db executeUpdate:@"CREATE TABLE collectionList (titleid TEXT PRIMARY KEY, titleName TEXT, type INTEGER)"];
 //   数据源列表
     
 //    1.columndata表
 //    titleid type类型  summary描述 title标题 img主图  isselected是否选过DEFAULT 0
-    [db executeUpdate:@"CREATE TABLE columnData (titleid INTEGER PRIMARY KEY, titleName TEXT, summary TEXT, type INTEGER,img TEXT, isselected INTEGER DEFAULT 0)"];
+    [db executeUpdate:@"CREATE TABLE columnData (titleid TEXT PRIMARY KEY, titleName TEXT, summary TEXT, type INTEGER,img TEXT, isselected INTEGER DEFAULT 0)"];
 //    2.contentdata表
 //    titleid title标题 content新闻内容 createtime创建时间 comAddress来源 url
-    [db executeUpdate:@"CREATE TABLE contentdata (titleid INTEGER PRIMARY KEY, title TEXT, content TEXT, createtime TEXT,comAddress TEXT, url TEXT)"];
+    [db executeUpdate:@"CREATE TABLE contentdata (titleid TEXT PRIMARY KEY, title TEXT, content TEXT, createtime TEXT,comAddress TEXT, url TEXT)"];
 //    3.abnews表 相关新闻
 //    abnewsid   newsid主新闻  title标题   titleid标题id  type（0代表相关，1代表专题）
-    [db executeUpdate:@"CREATE TABLE abnewscolumn (abnewsid INTEGER PRIMARY KEY, newsid INTEGER, title TEXT, titleid TEXT,type INTEGER )"];
+    [db executeUpdate:@"CREATE TABLE abnewscolumn (abnewsid TEXT PRIMARY KEY, newsid TEXT, title TEXT, titleid TEXT,type INTEGER )"];
 }
 -(void)_initplist{
     NSString *plistPath1 = [FileUrl getDocumentsFile];
