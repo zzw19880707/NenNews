@@ -8,7 +8,7 @@
 
 #import "BaseViewController.h"
 
-@interface RightViewController : BaseViewController
+@interface RightViewController : BaseViewController <ASIRequest>
 
 - (IBAction)selectAction:(UIButton *)sender;
 @end

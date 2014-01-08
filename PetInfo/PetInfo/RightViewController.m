@@ -52,10 +52,22 @@
     UIButton *loginButton = (UIButton *)VIEWWITHTAG(self.view, 1000);
     [loginButton setHidden:YES];
     
-    //当日天气
-    UILabel *weather =(UILabel *)VIEWWITHTAG(self.view, 1021);
-}
 
+    DataService *service = [[DataService alloc]init];
+    service.eventDelegate = self;
+    NSString *locationcityid = [[NSUserDefaults standardUserDefaults] objectForKey:kLocationCityCode];
+    NSString *url = [Weather_URL stringByAppendingString:[NSString stringWithFormat:@"%@%@",locationcityid,@".html"]];
+    [service requestWithURL:url andparams:nil isJoint:NO andhttpMethod:@"GET"];
+
+}
+-(void)requestFailed:(ASIHTTPRequest *)request{
+}
+-(void)requestFinished:(id)result{
+    NSDictionary *dic = [result objectForKey:@"weatherinfo"];
+    //当日天气
+    UILabel *weatherLabel =(UILabel *)VIEWWITHTAG(self.view, 1021);
+    weatherLabel.text = [NSString stringWithFormat:@"%@/%@",[dic objectForKey:@"st1"],[dic objectForKey:@"st2"]];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -116,12 +128,7 @@
             [self.appDelegate.menuCtrl showRootController:YES];
             break;
         case 1005:
-            if ([self.appDelegate.menuCtrl  respondsToSelector:@selector(customLeftToRightPushViewController:)]) {
-                [self.appDelegate.menuCtrl customLeftToRightPushViewController:set];
-            }else{
-                [self.appDelegate.menuCtrl presentModalViewController:[[[BaseNavViewController alloc]initWithRootViewController: set]autorelease] animated:YES];
-            }
-            
+            [self.appDelegate.menuCtrl presentModalViewController:[[[BaseNavViewController alloc]initWithRootViewController: set]autorelease] animated:YES];
             break;
 
         default:
