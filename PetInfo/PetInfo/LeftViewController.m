@@ -10,6 +10,7 @@
 #import "RootViewController.h"
 #import "PushNewsViewController.h"
 #import "CollectionViewController.h"
+#import "BaseNavViewController.h"
 @interface LeftViewController ()
 
 @end
@@ -110,10 +111,12 @@
         baseView = [[RootViewController alloc]init];
     } else if( indexPath.row ==1){
         baseView = [[PushNewsViewController alloc]init];
-    }else if (indexPath.row ==2){
+    }else {
         baseView = [[CollectionViewController alloc]init];
     }
-    self.appDelegate.menuCtrl.rootViewController = baseView;
+    
+    BaseNavViewController *navViewController = [[BaseNavViewController alloc]initWithRootViewController:baseView];
+    self.appDelegate.menuCtrl.rootViewController = navViewController;
     [self.appDelegate.menuCtrl showRootController:YES];
 
 }
