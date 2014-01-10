@@ -7,14 +7,28 @@
 //
 
 #import "NightModelViewController.h"
-
-@interface NightModelContentViewController : NightModelViewController <UIAlertViewDelegate>{
+#import <AssetsLibrary/AssetsLibrary.h>
+#import "MJPhotoBrowser.h"
+@interface NightModelContentViewController : NightModelViewController <UIAlertViewDelegate ,MJPhotoBrowserDelegate>{
     NSMutableArray *_imageArray;//图片数组
     NSArray *_contentArray;//内容数组
     NSString *_comAddress;//来源
     NSString *_createtime;//创建时间
     NSArray *_abnewsArray;//摘要数组
-}
-@property (nonatomic,retain) NSString *content;
+    float _height;
+    UIScrollView *_backgroundView;
+    
+    NSMutableArray *_selections;
 
+}
+@property (nonatomic, strong) ALAssetsLibrary *assetLibrary;
+@property (nonatomic, strong) NSMutableArray *assets;
+@property (nonatomic, retain) UIScrollView *backgroundView;
+
+@property (nonatomic,retain) NSString *content;
+@property (nonatomic,retain) NSArray *contentArray;
+
+
+@property (nonatomic, strong) NSMutableArray *photos;
+@property (nonatomic, strong) NSMutableArray *thumbs;
 @end
