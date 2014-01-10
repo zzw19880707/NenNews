@@ -10,6 +10,9 @@
 #define PetInfo_kPetInfo_h
 
 #pragma mark NSNotificationCenter
+//图片浏览器返回通知
+#define kImageReturnNofication @"kImageReturnNofication"
+
 //夜间模式开启/关闭
 #define kNightModeChangeNofication @"kNightModeChangeNofication"
 #define kbackground @"background"
