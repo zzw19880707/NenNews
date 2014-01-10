@@ -118,7 +118,7 @@
 		<string>广元</string>
 		<string>攀枝花</string>
 	</array>
-	<key>天津市</key>
+	<key>天津</key>
 	<array>
 		<string>天津</string>
 		<string>宝坻</string>
@@ -335,7 +335,7 @@
 		<string>衢州</string>
 		<string>宁波</string>
 	</array>
-	<key>海南省</key>
+	<key>海南</key>
 	<array>
 		<string>海口</string>
 		<string>三亚</string>
@@ -505,7 +505,7 @@
 		<string>沙坪坝</string>
 		<string>永川</string>
 	</array>
-	<key>陕西省</key>
+	<key>陕西</key>
 	<array>
 		<string>西安</string>
 		<string>延安</string>
@@ -518,7 +518,7 @@
 		<string>咸阳</string>
 		<string>渭南</string>
 	</array>
-	<key>青海省</key>
+	<key>青海</key>
 	<array>
 		<string>西宁</string>
 		<string>黄南</string>
