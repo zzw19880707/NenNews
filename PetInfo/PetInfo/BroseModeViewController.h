@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface BroseModeViewController : UITableViewController
+#import "BaseTableViewController.h"
+@interface BroseModeViewController : BaseTableViewController
 
 @end
