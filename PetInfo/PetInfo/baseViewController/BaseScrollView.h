@@ -15,7 +15,8 @@
 -(void)addButtonAction;
 -(void)showLeftMenu;
 -(void)showRightMenu;
--(void)pushViewController:(BaseViewController *)baseViewController;
+-(void)autoRefreshData:(NewsNightModelTableView *)tableView;
+//-(void)pushViewController:(BaseViewController *)baseViewController;
 @end
 @interface BaseScrollView : UIScrollView <UIScrollViewDelegate>{
     UIScrollView *_buttonBgView;

@@ -113,7 +113,7 @@
 
         
 //        滚动条
-        _sliderImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10+15, 30, 30, 10)];
+        _sliderImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10+15, 30, 30, 5)];
         _sliderImageView.image = [UIImage imageNamed:@"navigationbar_background.png"];
         
 //        scrollerView
@@ -165,16 +165,17 @@
 
 //刷新该title及内容数据
 -(void)reloadButtonsAndViews{
-    _buttonBgView.contentSize =CGSizeMake( 70*_buttonsNameArray.count, 38);
-    _contentBgView.contentSize = CGSizeMake(340*_buttonsNameArray.count, self.frame.size.height-40);
+    _buttonsArray = _buttonsNameArray[0];
+    _contentsArray = _buttonsNameArray[1];
+    _buttonBgView.contentSize =CGSizeMake( 70*_buttonsArray.count, 38);
+    _contentBgView.contentSize = CGSizeMake(340*_buttonsArray.count, self.frame.size.height-40);
         for (UIView *view in [_buttonBgView subviews]) {
             if ((UIImageView *)view ==_sliderImageView) {
                 continue;
             }
             [view removeFromSuperview];
         }
-    _buttonsArray = _buttonsNameArray[0];
-    _contentsArray = _buttonsNameArray[1];
+    
     for (int i = 0 ; i< _buttonsArray.count; i ++) {
         UIButton *button  =(UIButton *) _buttonsArray[i];
         [button addTarget: self  action:@selector(selectAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -182,10 +183,10 @@
         [button release];
         
         NewsNightModelTableView *newsTableView = _contentsArray[i];
+        newsTableView.tag = 1300+i;
         [_contentBgView addSubview:newsTableView];
         [newsTableView release];
     }
-    
 
 //滑动条返回至第一个
 #warning 滑动条返回至第一个
@@ -255,11 +256,16 @@
         }
     }
     
-    
+    NewsNightModelTableView *table= (NewsNightModelTableView *)VIEWWITHTAG(scrollView, 1300+scrollView.contentOffset.x /340);
+    [table autoRefreshData];
+    [self.eventDelegate autoRefreshData:table];
     switch (scrollView.tag) {
         case 10000:
             break;
         case 10001:
+
+            
+
             break;
         default:
             break;
@@ -272,6 +278,7 @@
         CGPoint point = _sliderImageView.origin;
         point=CGPointMake(scrollView.contentOffset.x /340 *70 +25, point.y);
         _sliderImageView.origin = point;
+        
     }
     
 }
