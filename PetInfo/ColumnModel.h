@@ -10,10 +10,10 @@
 
 @interface ColumnModel : BaseModel
 
-@property (nonatomic,retain) NSNumber *titleId;
-@property (nonatomic,copy) NSString *type;
-@property (nonatomic,copy) NSString *summary;
+@property (nonatomic,copy) NSString *newsId;
+@property (nonatomic,copy) NSNumber *type;
+@property (nonatomic,copy) NSString *newsAbstract;
 @property (nonatomic,copy) NSString *title;
-@property (nonatomic,copy) NSString *titlePic;
+@property (nonatomic,copy) NSString *img;
 
 @end
