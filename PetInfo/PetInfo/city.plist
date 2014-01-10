@@ -7,6 +7,97 @@
 		<array>
 			<dict>
 				<key>市名</key>
+				<string>沈阳</string>
+				<key>编码</key>
+				<string>101070101</string>
+			</dict>
+			<dict>
+				<key>市名</key>
+				<string>鞍山</string>
+				<key>编码</key>
+				<string>101070301</string>
+			</dict>
+			<dict>
+				<key>市名</key>
+				<string>抚顺</string>
+				<key>编码</key>
+				<string>101070401</string>
+			</dict>
+			<dict>
+				<key>市名</key>
+				<string>本溪</string>
+				<key>编码</key>
+				<string>101070501</string>
+			</dict>
+			<dict>
+				<key>市名</key>
+				<string>丹东</string>
+				<key>编码</key>
+				<string>101070601</string>
+			</dict>
+			<dict>
+				<key>市名</key>
+				<string>葫芦岛</string>
+				<key>编码</key>
+				<string>101071401</string>
+			</dict>
+			<dict>
+				<key>市名</key>
+				<string>营口</string>
+				<key>编码</key>
+				<string>101070801</string>
+			</dict>
+			<dict>
+				<key>市名</key>
+				<string>阜新</string>
+				<key>编码</key>
+				<string>101070901</string>
+			</dict>
+			<dict>
+				<key>市名</key>
+				<string>辽阳</string>
+				<key>编码</key>
+				<string>101071001</string>
+			</dict>
+			<dict>
+				<key>市名</key>
+				<string>铁岭</string>
+				<key>编码</key>
+				<string>101071101</string>
+			</dict>
+			<dict>
+				<key>市名</key>
+				<string>朝阳</string>
+				<key>编码</key>
+				<string>101071201</string>
+			</dict>
+			<dict>
+				<key>市名</key>
+				<string>盘锦</string>
+				<key>编码</key>
+				<string>101071301</string>
+			</dict>
+			<dict>
+				<key>市名</key>
+				<string>大连</string>
+				<key>编码</key>
+				<string>101070201</string>
+			</dict>
+			<dict>
+				<key>市名</key>
+				<string>锦州</string>
+				<key>编码</key>
+				<string>101070701</string>
+			</dict>
+		</array>
+		<key>省</key>
+		<string>辽宁</string>
+	</dict>
+	<dict>
+		<key>市</key>
+		<array>
+			<dict>
+				<key>市名</key>
 				<string>北京</string>
 				<key>编码</key>
 				<string>101010100</string>
@@ -224,7 +315,7 @@
 			</dict>
 		</array>
 		<key>省</key>
-		<string>天津市</string>
+		<string>天津</string>
 	</dict>
 	<dict>
 		<key>市</key>
@@ -1928,7 +2019,7 @@
 			</dict>
 		</array>
 		<key>省</key>
-		<string>青海省</string>
+		<string>青海</string>
 	</dict>
 	<dict>
 		<key>市</key>
@@ -2104,7 +2195,7 @@
 			</dict>
 		</array>
 		<key>省</key>
-		<string>陕西省</string>
+		<string>陕西</string>
 	</dict>
 	<dict>
 		<key>市</key>
@@ -2487,7 +2578,7 @@
 			</dict>
 		</array>
 		<key>省</key>
-		<string>海南省</string>
+		<string>海南</string>
 	</dict>
 	<dict>
 		<key>市</key>
@@ -2816,97 +2907,6 @@
 		</array>
 		<key>省</key>
 		<string>吉林</string>
-	</dict>
-	<dict>
-		<key>市</key>
-		<array>
-			<dict>
-				<key>市名</key>
-				<string>沈阳</string>
-				<key>编码</key>
-				<string>101070101</string>
-			</dict>
-			<dict>
-				<key>市名</key>
-				<string>鞍山</string>
-				<key>编码</key>
-				<string>101070301</string>
-			</dict>
-			<dict>
-				<key>市名</key>
-				<string>抚顺</string>
-				<key>编码</key>
-				<string>101070401</string>
-			</dict>
-			<dict>
-				<key>市名</key>
-				<string>本溪</string>
-				<key>编码</key>
-				<string>101070501</string>
-			</dict>
-			<dict>
-				<key>市名</key>
-				<string>丹东</string>
-				<key>编码</key>
-				<string>101070601</string>
-			</dict>
-			<dict>
-				<key>市名</key>
-				<string>葫芦岛</string>
-				<key>编码</key>
-				<string>101071401</string>
-			</dict>
-			<dict>
-				<key>市名</key>
-				<string>营口</string>
-				<key>编码</key>
-				<string>101070801</string>
-			</dict>
-			<dict>
-				<key>市名</key>
-				<string>阜新</string>
-				<key>编码</key>
-				<string>101070901</string>
-			</dict>
-			<dict>
-				<key>市名</key>
-				<string>辽阳</string>
-				<key>编码</key>
-				<string>101071001</string>
-			</dict>
-			<dict>
-				<key>市名</key>
-				<string>铁岭</string>
-				<key>编码</key>
-				<string>101071101</string>
-			</dict>
-			<dict>
-				<key>市名</key>
-				<string>朝阳</string>
-				<key>编码</key>
-				<string>101071201</string>
-			</dict>
-			<dict>
-				<key>市名</key>
-				<string>盘锦</string>
-				<key>编码</key>
-				<string>101071301</string>
-			</dict>
-			<dict>
-				<key>市名</key>
-				<string>大连</string>
-				<key>编码</key>
-				<string>101070201</string>
-			</dict>
-			<dict>
-				<key>市名</key>
-				<string>锦州</string>
-				<key>编码</key>
-				<string>101070701</string>
-			</dict>
-		</array>
-		<key>省</key>
-		<string>辽宁</string>
 	</dict>
 </array>
 </plist>
