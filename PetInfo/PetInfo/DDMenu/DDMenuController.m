@@ -789,13 +789,7 @@
 
 //显示下载页面
 -(void)showDownloadView{
-    if (WXHLOSVersion()>=7.0) {
-        [self setStatusBarStyle:UIStatusBarStyleLightContent];
-        [self setStatusBarHidden:YES];
-        
-    }else{
-        [[UIApplication sharedApplication] setStatusBarHidden:YES];
-    }
+    [self setStateBarHidden:YES];
 
     ProgressView *progress = [[ProgressView alloc]initWithPath:@"http://free2.macx.cn:81/tools/system/CleanMyMac-v1-10-8.dmg"];
     progress.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
@@ -811,19 +805,21 @@
         progress.alpha = 0;
     } completion:^(BOOL finished) {
         [progress removeFromSuperview];
-        if (WXHLOSVersion()>=7.0) {
-            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-            [[UIApplication sharedApplication] setStatusBarHidden:NO];
-            
-        }else{
-            [[UIApplication sharedApplication] setStatusBarHidden:NO];
-        }
-
+        [self setStateBarHidden:NO];
     }];
 }
 #pragma mark ProgressViewDelegate
 -(void)finishDownload{
     [self finishDownloadVIew];
+    [self setStateBarHidden:NO];
 }
-
+-(void)setStateBarHidden :(BOOL) statusBarHidden{
+    if (WXHLOSVersion()>=7.0) {
+        [self setStatusBarStyle:UIStatusBarStyleLightContent];
+        [self setStatusBarHidden:statusBarHidden];
+        
+    }else{
+        [[UIApplication sharedApplication] setStatusBarHidden:statusBarHidden];
+    }
+}
 @end
