@@ -21,5 +21,5 @@
 
 @property (nonatomic,retain) NSMutableDictionary *collectionDic;
 //0普通新闻1专题新闻2图片新闻3视频新闻
-@property (nonatomic,retain) NSString *type;
+@property (nonatomic,assign) int type;
 @end
