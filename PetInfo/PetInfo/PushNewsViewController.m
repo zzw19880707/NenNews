@@ -28,7 +28,7 @@
     [super viewDidLoad];
     NewsNightModelTableView *table = [[NewsNightModelTableView alloc]init];
     table.eventDelegate = self;
-    table.frame = CGRectMake(0, 0, ScreenWidth , ScreenHeight - 44-20);
+    table.frame = CGRectMake(0, 0, ScreenWidth , ScreenHeight );
     [self.view addSubview:table];
     [table autoRefreshData];
     
@@ -44,28 +44,33 @@
     [params setValue:number forKey:@"count"];
     if (tableView.data.count>0) {
         ColumnModel *model = tableView.data[0];
-        int sinceID = [model.titleId intValue];
+        int sinceID = [model.newsId intValue];
         [params setValue:[NSNumber numberWithInt:sinceID] forKey:@"maxId"];
     }
     //    [params setValue:<#(id)#> forKey:@"maxId"];
-    
-    [DataService requestWithURL:URL_getPush_List andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
-        NSArray *array =  [result objectForKey:@"data"];
-        NSMutableArray *listData = [[NSMutableArray alloc]init];
-        
-        for (NSDictionary *dic  in array) {
-            ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
-            [listData addObject:model];
-        }
-        tableView.data =listData;
+    if ([self getConnectionAlert]) {
+        [DataService requestWithURL:URL_getPush_List andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
+            NSArray *array =  [result objectForKey:@"data"];
+            NSMutableArray *listData = [[NSMutableArray alloc]init];
+            
+            for (NSDictionary *dic  in array) {
+                ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
+                [listData addObject:model];
+            }
+            tableView.data =listData;
+            
+            [tableView reloadData];
+            [tableView doneLoadingTableViewData];
+            
+        } andErrorBlock:^(NSError *error) {
+            [tableView doneLoadingTableViewData];
+            
+        }];
 
-        [tableView reloadData];
+    }else{
         [tableView doneLoadingTableViewData];
-        
-    } andErrorBlock:^(NSError *error) {
-        [tableView doneLoadingTableViewData];
-        
-    }];
+
+    }
 }
 //下拉加载
 -(void)pullUp:(NewsNightModelTableView *)tableView{
@@ -77,33 +82,37 @@
     [params setValue:number forKey:@"count"];
     if (tableView.data.count>0) {
         ColumnModel *model = tableView.data[tableView.data.count];
-        int sinceID = [model.titleId intValue];
+        int sinceID = [model.newsId intValue];
         [params setValue:[NSNumber numberWithInt:sinceID] forKey:@"sinceId"];
     }
-    [DataService requestWithURL:URL_getPush_List andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
-        NSArray *array =  [result objectForKey:@"data"];
-        NSMutableArray *listData = [[NSMutableArray alloc]init];
-        
-        for (NSDictionary *dic  in array) {
-            ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
-            [listData addObject:model];
-        }
+    if ([self getConnectionAlert]) {
+        [DataService requestWithURL:URL_getPush_List andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
+            NSArray *array =  [result objectForKey:@"data"];
+            NSMutableArray *listData = [[NSMutableArray alloc]init];
+            
+            for (NSDictionary *dic  in array) {
+                ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
+                [listData addObject:model];
+            }
+            [tableView doneLoadingTableViewData];
+            [listData addObjectsFromArray:tableView.data];
+            
+            tableView.data  = listData;
+            [tableView reloadData];
+        } andErrorBlock:^(NSError *error) {
+            [tableView doneLoadingTableViewData];
+        }];
+    }else{
         [tableView doneLoadingTableViewData];
-        [listData addObjectsFromArray:tableView.data];
-        
-        tableView.data  = listData;
-        [tableView reloadData];
-    } andErrorBlock:^(NSError *error) {
-        [tableView doneLoadingTableViewData];
-    }];
+    }
     
 }
 -(void)tableView:(NewsNightModelTableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
         NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
         ColumnModel *model =tableView.data[indexPath.row];
-        nightModel.type = model.type;
-        nightModel.titleID = [NSString stringWithFormat:@"%@",model.titleId];
+        nightModel.type = [model.type intValue];
+        nightModel.titleID = [NSString stringWithFormat:@"%@",model.newsId];
         [self.navigationController pushViewController:nightModel animated:YES];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
