@@ -71,7 +71,7 @@
         [bgView release];
 //      初始化content内容图
         _contentBgView = [Uifactory createScrollView];
-        _contentBgView.frame =CGRectMake(0, 40, frame.size.width+20, frame.size.height - 40);
+        _contentBgView.frame =CGRectMake(0, 40, frame.size.width+20, self.bounds.size.height - 40);
         _contentBgView.tag =10001;
         _contentBgView.pagingEnabled =YES;
         _contentBgView.delegate = self;
@@ -91,7 +91,7 @@
     _buttonsArray = _buttonsNameArray[0];
     _contentsArray = _buttonsNameArray[1];
     _buttonBgView.contentSize =CGSizeMake( 70*_buttonsArray.count, 38);
-    _contentBgView.contentSize = CGSizeMake(340*_buttonsArray.count, self.frame.size.height-40);
+    _contentBgView.contentSize = CGSizeMake(340*_buttonsArray.count, self.bounds.size.height - 44-20-40);
         for (UIView *view in [_buttonBgView subviews]) {
             if ((UIImageView *)view ==_sliderImageView) {
                 continue;
@@ -112,8 +112,7 @@
     }
 
 //滑动条返回至第一个
-#warning 滑动条返回至第一个
-
+    _contentBgView.contentOffset = CGPointMake(0, 0) ;
 }
 
 
@@ -124,11 +123,10 @@
         _buttonsNameArray = [buttonsNameArray copy];
     }
     [self reloadButtonsAndViews];
-//    [_buttonBgView viewWithTag:<#(NSInteger)#>]
 }
 #pragma mark 按钮事件
 -(void)selectAction:(UIButton *)button{
-    int page = button.tag -1000;
+    int page = button.tag-1 -1000;
     [UIView animateWithDuration:0.5 animations:^{
         CGPoint spoint = _sliderImageView.origin;
         spoint.x = 10+15+page *70;
@@ -149,7 +147,7 @@
     
     CGPoint point = [_sliderImageView convertPoint:CGPointMake(0, 0) fromView:[UIApplication sharedApplication].keyWindow ];
 
-    int  count  = self.buttonsNameArray.count;
+    int  count  = self.buttonsArray.count;
     
     //向右平移
     if (page<count-1) {
@@ -185,9 +183,6 @@
         case 10000:
             break;
         case 10001:
-
-            
-
             break;
         default:
             break;
@@ -206,7 +201,7 @@
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-
+    
     if (scrollView.contentOffset.x ==0) {
         [self.eventDelegate showLeftMenu];
     }
