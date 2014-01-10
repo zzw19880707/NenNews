@@ -53,14 +53,39 @@
     _contentLabel.numberOfLines = 2;
     [_contentLabel setFont:[UIFont systemFontOfSize:10]];
     [self.contentView addSubview:_contentLabel];
+    
+    
+    
 
 }
 //layoutSubviews展示数据，子视图布局
 -(void)layoutSubviews{
     [super layoutSubviews];
+
+    int type = [_model.type intValue] ;
+    UILabel *typeLabel = [[UILabel alloc]init];
+    typeLabel.frame = CGRectMake(320 - 40, 60, 40, 20);
+    typeLabel.font = [UIFont systemFontOfSize:12];
+    typeLabel.textColor = NenNewsTextColor;
+    typeLabel.backgroundColor = NenNewsgroundColor;
+    typeLabel.textAlignment = NSTextAlignmentCenter;
+    if (type ==0 ) {
+        typeLabel.backgroundColor = CLEARCOLOR;
+        typeLabel.text = @"";
+    }else if (type ==1) {//专题
+        typeLabel.text = @"专题";
+    }else if (type==2){ //图片
+        typeLabel.text = @"图集";
+    }else if (type==3){//视频
+        typeLabel.text = @"视频";
+    }
+
+    [self.contentView addSubview:typeLabel];
+    [typeLabel release];
+
     //图片视图
-    if (_model.titlePic.length>0) {
-        [_imageView setImageWithURL:[NSURL URLWithString:_model.titlePic]];
+    if (![_model.img isEqualToString:@"0"]&&![_model.img isEqualToString:@"imgList"]) {
+        [_imageView setImageWithURL:[NSURL URLWithString:_model.img]];
     }else {
         _titleLabel.frame = CGRectMake(10, 10, 300, 20);
         _contentLabel.frame = CGRectMake(10, 40, 300, 30);
@@ -70,7 +95,8 @@
 //    标题
     _titleLabel.text = _model.title;
 //    内容
-    _contentLabel.text = _model.summary;
+    _contentLabel.text = _model.newsAbstract;
+
 }
 
 -(void)setModel:(ColumnModel *)model{
