@@ -87,10 +87,20 @@
     return isExistenceNetwork;
 }
 
+//判断当前网络是否存在。存在则正常访问，不存在则提示当前网络不存在
+-(BOOL)getConnectionAlert{
+    if ([self isConnectionAvailable]) {
+        return YES;
+    }else{
+        [self showHUD:INFO_NetNoReachable isDim:YES];
+        [self performSelector:@selector(hideHUD) withObject:nil afterDelay:1];
+        return NO;
+    }
+}
 //显示加载提示
 - (BOOL )showHUD:(NSString *)title isDim:(BOOL)isDim {
     self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-
+    
     if ([self isConnectionAvailable]) {
         self.hud.labelText = title;
         self.hud.dimBackground = isDim;
@@ -172,7 +182,7 @@
     self.network = [self getConnectionAvailable];
     //设置navegation背景颜色
     self.navigationController.navigationBar.tintColor = NenNewsgroundColor;
-	[self.view setBackgroundColor:NenNewsgroundColor];
+	[self.view setBackgroundColor:CLEARCOLOR];
 
 
     NSArray *viewControllers = self.navigationController.viewControllers;
@@ -185,7 +195,7 @@
         UIButton *button = [[UIButton alloc]init];
         button.backgroundColor = NenNewsgroundColor;
         [button setImage:[UIImage imageNamed:@"navagiton_back.png"] forState:UIControlStateNormal];
-        button.frame = CGRectMake(0, 0, 40, 30);
+        button.frame = CGRectMake(0, 0, 40, 40);
         //        button.showsTouchWhenHighlighted = YES;
         [button addTarget:self action:@selector(cencel) forControlEvents:UIControlEventTouchUpInside];
         UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
@@ -196,7 +206,7 @@
             button.backgroundColor = NenNewsgroundColor;
             //        [button setTitle:@"返回" forState:UIControlStateNormal];
             [button setImage:[UIImage imageNamed:@"navagiton_back.png"] forState:UIControlStateNormal];
-            button.frame = CGRectMake(0, 0, 40, 30);
+            button.frame = CGRectMake(0, 0, 40, 40);
             //        button.showsTouchWhenHighlighted = YES;
             [button addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
             UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
