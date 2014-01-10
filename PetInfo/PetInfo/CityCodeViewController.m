@@ -26,13 +26,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    self.tableView.sectionIndexColor = [UIColor grayColor];
+    self.tableView.separatorStyle= UITableViewCellSeparatorStyleNone;
     NSString *str = [[NSBundle mainBundle]pathForResource:@"city" ofType:@"plist"];
     self.cityData = [NSArray arrayWithContentsOfFile:str];
     //索引
     NSString *index = [[NSBundle mainBundle]pathForResource:@"cityindex" ofType:@"plist"];
     _dataDic = [[NSDictionary dictionaryWithContentsOfFile:index]retain];
-
     
     NSMutableArray *keyarray = [[NSMutableArray alloc]init];
     for (int i = 0 ; i<_cityData.count;  i++ ) {
