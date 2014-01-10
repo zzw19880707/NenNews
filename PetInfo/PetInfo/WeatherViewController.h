@@ -7,7 +7,6 @@
 //
 
 #import "BaseViewController.h"
-#import "DataService.h"
 @interface WeatherViewController : BaseViewController <ASIRequest>
 {
     NSDictionary *_dataDic;

@@ -83,11 +83,12 @@
             }
         }
     }
-    DataService *service = [[DataService alloc]init];
-    service.eventDelegate = self;
-    NSString *url = [Weather_URL stringByAppendingString:[NSString stringWithFormat:@"%@%@",locationcityid,@".html"]];
-    [service requestWithURL:url andparams:nil isJoint:NO andhttpMethod:@"GET"];
-
+    if ([self getConnectionAlert]) {
+        DataService *service = [[DataService alloc]init];
+        service.eventDelegate = self;
+        NSString *url = [Weather_URL stringByAppendingString:[NSString stringWithFormat:@"%@%@",locationcityid,@".html"]];
+        [service requestWithURL:url andparams:nil isJoint:NO andhttpMethod:@"GET"];
+    }
 }
 
 //填充数据
