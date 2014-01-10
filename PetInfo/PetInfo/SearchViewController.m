@@ -8,9 +8,11 @@
 
 #import "SearchViewController.h"
 #import "FileUrl.h"
+#import "NightModelContentViewController.h"
 #import "DataCenter.h"
-@interface SearchViewController ()
-
+@interface SearchViewController (){
+    UIView *_searchBGView;
+}
 @end
 
 @implementation SearchViewController
@@ -24,24 +26,17 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
+-(void)_initSearchBar{
     //读取搜索历史文件
     _searchHistoryData = [[[NSMutableArray alloc]initWithContentsOfFile:[[FileUrl getDocumentsFile] stringByAppendingPathComponent:kSearchHistory_file_name]]retain];
     _searchData = [[NSMutableArray arrayWithArray: [[NSArray alloc]initWithContentsOfFile:[[FileUrl getDocumentsFile] stringByAppendingPathComponent:kSearchHistory_file_name]]] retain];
     
-//    //设置背景色
-    UIImageView *searchImageVIew = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"navigationbar_background.png"]];
-    searchImageVIew.frame = CGRectMake(0, 0, 320, 40);
-    [self.view addSubview:searchImageVIew];
-    [searchImageVIew release];
-    
     //设置textfield
     _searchBar = [[UITextField alloc]initWithFrame:CGRectMake(15, 5, 290, 30)];
     _searchBar.borderStyle = UITextBorderStyleRoundedRect;
+    _searchBar.placeholder = @"\t\t搜索";
+    //    _searchBar.
     _searchBar.delegate = self;
-    [_searchBar becomeFirstResponder];
     _searchBar.clearsOnBeginEditing = YES;
     _searchBar.returnKeyType = UIReturnKeyDone;
     _searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -49,18 +44,31 @@
     _searchBar.leftViewMode = UITextFieldViewModeAlways;
     _searchBar.leftView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"search_textfield_background.png"]];
     _searchBar.disabledBackground =[UIImage imageNamed:@"navigationbar_background.png"];
-
-    [self.view addSubview:_searchBar];
+    self.navigationItem.titleView = _searchBar ;
+}
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    _searchBGView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
+    _searchBGView.backgroundColor = NenNewsTextColor;
+    _searchBGView.userInteractionEnabled = YES;
+    [self.view addSubview:_searchBGView];
     
+    
+    [self _initSearchBar];
     
     _tableView = [[UITableView alloc]init];
     _tableView.tag = 1304;
-    int tableheigh = 200;
-//    _searchData.count *44 + (_searchData.count==0?0:50);
-    _tableView.frame=CGRectMake(0, 40, ScreenWidth, tableheigh);
+//    int tableheigh = 200;
+    _tableView.frame=CGRectMake(0, 44+20, ScreenWidth, ScreenHeight);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    _tableView.delaysContentTouches = NO;
     [self.view addSubview:_tableView];
+    _tableView.height = _searchData.count *44;
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(disFocus:)];
+    [_searchBGView addGestureRecognizer:tapGesture];
+
     //清空按钮
     UIButton *clearButton = [[UIButton alloc]init];
     clearButton.frame = CGRectMake(0, 5, ScreenWidth, 44);
@@ -69,7 +77,8 @@
     [clearButton addTarget:self action:@selector(clearHistory) forControlEvents:UIControlEventTouchUpInside];
     clearButton.backgroundColor = CLEARCOLOR;
     _tableView.tableFooterView = clearButton;
-    
+//    [self.view addSubview:_searchBGView];
+
     _resultTableView = [[UITableView alloc]init];
 
 }
@@ -102,8 +111,23 @@
     [_tableView reloadData];
     [_tableView.tableFooterView setHidden:YES ];
 //    _tableView.bottom = 0;
+    _tableView.height = 0;
 }
+-(void)disFocus:(UITapGestureRecognizer *)UIGR{
 
+    [self bgViewhidden];
+
+}
+-(void) bgViewhidden {
+    [_searchBar resignFirstResponder];
+    [UIView animateWithDuration:0.2 animations:^{
+        _searchBGView.alpha = 0;
+        _tableView.alpha = 0;
+    } completion:^(BOOL finished) {
+        [_searchBGView setHidden:YES];
+        [_tableView setHidden:YES];
+    }];
+}
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -117,7 +141,7 @@
         return [_searchData count];
 
     }else{
-        return 0;
+        return [_resultData count];
     }
 }
 
@@ -125,7 +149,6 @@
 {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (tableView.tag == 1304) {
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
             
@@ -135,95 +158,114 @@
         }
         
         UILabel *label = (UILabel *)[cell.contentView viewWithTag:101];
+    if (tableView.tag == 1304) {
+
         label.text = _searchData[indexPath.row];
     }else{
 #warning
+        label.text = [_resultData[indexPath.row] objectForKey:@"title"];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (tableView.tag == 1304) {
-        //显示navigation和statebar
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
-        [self setStateBarHidden:NO];
-        //textfield失去响应
-        [_searchBar resignFirstResponder];
-//        _searchBar.text = nil;
-        NSString *text = _searchData[indexPath.row];
-        //    访问数据
-        DataService *service = [[DataService alloc]init];
-        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-        [params setValue:text forKey:@"content"];
-        service.eventDelegate = self ;
-        [service requestWithURL:URL_Search andparams:params isJoint:YES andhttpMethod:@"POST"];
-        [self showHUD:INFO_Searching isDim:YES];
-        //    隐藏查询表
-        [self.tableView setHidden:YES];
+    if ([self getConnectionAlert]) {
+        if (tableView.tag == 1304) {
+            //textfield失去响应
+            [_searchBar resignFirstResponder];
+            NSString *text = _searchData[indexPath.row];
+            //    访问数据
+            DataService *service = [[DataService alloc]init];
+            NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+            [params setValue:text forKey:@"name"];
+            service.eventDelegate = self ;
+            [service requestWithURL:URL_Search andparams:params isJoint:YES andhttpMethod:@"POST"];
+            [self showHUD:INFO_Searching isDim:YES];
+            //    隐藏查询表
+            [self.tableView setHidden:YES];
+            [self bgViewhidden];
+        }else{
+#warning
+            NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
+            nightModel.titleID = [self.resultData[indexPath.row] objectForKey:@"newsId"] ;
+            nightModel.type = 0;
+            [self.navigationController pushViewController:nightModel animated:YES];
+        }
+
     }
 }
 #pragma mark asirequestDelegate
 
 -(void)requestFailed:(ASIHTTPRequest *)request{
+    [self hideHUD];
+
 #warning
 }
 -(void)requestFinished:(id)result{
     [self hideHUD];
-#warning 
+    
+//    resultData
+
 }
 
 #pragma mark - UITextField Delegate
-//点击done按钮事件
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    //显示navigation和statebar
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    [self setStateBarHidden:NO];
-    //textfield失去响应
-    [textField resignFirstResponder];
-//    未输入则不查询，也不添加到查询记录中
-    if (textField.text ==nil||[textField.text isEqualToString:@""]) {
-        return YES;
-    }
-//    如果搜索历史中存在 也不存入到查询记录中
-    if ([_searchHistoryData indexOfObject:textField.text] ==NSNotFound) {
-        //添加到查询记录中
-        [_searchHistoryData addObject:textField.text];
-    }
 
-//    隐藏查询表
-    [self.tableView setHidden:YES];
-    
-//    访问数据
-    DataService *service = [[DataService alloc]init];
-    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-    [params setValue:textField.text forKey:@"content"];
-    service.eventDelegate = self ;
-    [service requestWithURL:URL_Search andparams:params isJoint:YES andhttpMethod:@"POST"];
-    [self showHUD:INFO_Searching isDim:YES];
-    return YES;
-}
 //点击textfield事件
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
     textField.text = nil;
-    //    隐藏navigation和statebar
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-    [self setStateBarHidden:YES];
 //    刷新数据
     self.searchData = _searchHistoryData;
     [self.tableView reloadData];
-    [self.tableView setHidden:NO];
+//    [self.tableView setHidden:NO];
 //    如果数据大于0 则显示foot按钮
     if (_searchHistoryData.count >0) {
         [_tableView.tableFooterView setHidden:NO ];
     }else{
         [_tableView.tableFooterView setHidden:YES ];
-
     }
-    
+    [_searchBGView setHidden:NO];
+    [_tableView setHidden:NO];
+    if (_searchData.count *44>ScreenHeight) {
+        _tableView.height = ScreenHeight;
+    }else{
+        _tableView.height = _searchData.count *44 +44;
+    }
+    [UIView animateWithDuration:0.2 animations:^{
+        _searchBGView.alpha = 1;
+        _tableView.alpha =1;
+    } completion:^(BOOL finished) {
+        
+    }];
     return YES;
 }
+//点击done按钮事件
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    //    未输入则不查询，也不添加到查询记录中
+    if (textField.text ==nil||[textField.text isEqualToString:@""]) {
+        return NO;
+    }
+    //    如果搜索历史中存在 也不存入到查询记录中
+    if ([_searchHistoryData indexOfObject:textField.text] ==NSNotFound) {
+        //添加到查询记录中
+        [_searchHistoryData addObject:textField.text];
+    }
+
+    if ([self getConnectionAlert]) {
+        [self bgViewhidden];
+        //    访问数据
+        DataService *service = [[DataService alloc]init];
+        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+        [params setValue:textField.text forKey:@"content"];
+        service.eventDelegate = self ;
+        [service requestWithURL:URL_Search andparams:params isJoint:YES andhttpMethod:@"POST"];
+        [self showHUD:INFO_Searching isDim:YES];
+    }else{
+        [textField resignFirstResponder];
+    }
+    return YES;
+}
+
 - (void)filter:(UITextField *)textField
 {
     if ([textField.text length] == 0) {
@@ -235,8 +277,16 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:regex];
     self.searchData=[_searchHistoryData filteredArrayUsingPredicate:predicate] ;
     [self.tableView reloadData];
-    if (_searchData.count==0&&_searchHistoryData.count>0) {
+    if (_searchData.count *44>ScreenHeight) {
+    }else{
+        _tableView.height = _searchData.count *44 +44;
+    }
+//    _tableView.height = ;
+    if (_searchData.count==0) {
+        _tableView.height = 0;
         [_tableView.tableFooterView setHidden:YES ];
+    }else{
+        [_tableView.tableFooterView setHidden:NO ];
 
     }
 }
