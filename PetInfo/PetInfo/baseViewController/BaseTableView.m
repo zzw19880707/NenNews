@@ -114,7 +114,7 @@
 //            [_moreButton setTitle:@"加载完成" forState:UIControlStateNormal];
 //        }
         if (!self.isMore) {
-            [_moreButton setTitle:@"到底啦..." forState:UIControlStateNormal];
+            [_moreButton setTitle:@"到底啦" forState:UIControlStateNormal];
             _moreButton.enabled = NO;
         }
     }else{
