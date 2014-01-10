@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface PageCountsViewController : UITableViewController
+#import "BaseTableViewController.h"
+@interface PageCountsViewController : BaseTableViewController
 
 @end
