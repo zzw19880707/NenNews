@@ -94,13 +94,17 @@
                 
                 self.label = [Uifactory createLabel:ktext];
                 self.label.frame = CGRectMake(0, 120, 200, 15 );
-                self.label.text = [_imageData[0] objectForKey:@"title"];
+                self.label.text = [_imageData[0] objectForKey:@"pictureTitle"];
                 self.label.font = [UIFont systemFontOfSize:12];
                 [view addSubview:self.label];
                 [self.label release];
                 
                 self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(320 - 12*_imageData.count-5, 120, 12*_imageData.count, 15)];
                 _pageControl.backgroundColor = [UIColor clearColor];
+                if (WXHLOSVersion()>=6.0) {
+                    self.pageControl.pageIndicatorTintColor = [UIColor grayColor];
+                    self.pageControl.currentPageIndicatorTintColor = NenNewsgroundColor;
+                }
                 self.pageControl.userInteractionEnabled = NO;
                 self.pageControl.numberOfPages =_imageData.count  ;
                 self.pageControl.currentPage= 0;
@@ -163,7 +167,7 @@
 }
 -(void)PageExchange:(NSInteger)index{
     _pageControl.currentPage = index;
-    self.label.text = [_imageData[index] objectForKey:@"title"];
+    self.label.text = [_imageData[index] objectForKey:@"pictureTitle"];
 }
 
 -(void)reloadData{
