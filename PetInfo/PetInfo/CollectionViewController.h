@@ -7,7 +7,9 @@
 //
 
 #import "BaseViewController.h"
+#import "NewsNightModelTableView.h"
 
-@interface CollectionViewController : BaseViewController
+@interface CollectionViewController : BaseViewController <UItableviewEventDelegate>
+
 
 @end
