@@ -23,89 +23,12 @@
     }
     return self;
 }
-/*
--(id)initWithFrame:(CGRect)frame andButtons:(NSArray *) buttons andContents:(NSArray *) contents{
-    self = [super initWithFrame:frame];
-    if (self) {
-//        self.contentSize = CGSizeMake(ScreenWidth+2, ScreenHeight);
-//        self.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
-        self.buttonsArray = buttons;
-        self.contentsArray = contents;
-        //用于分割线
-        UIView *bgView = [[UIView alloc]init];
-        bgView.backgroundColor =[UIColor grayColor];
-        bgView.frame = CGRectMake(0, 0, frame.size.width, 40);
-    
-        _sliderImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10+15, 30, 30, 10)];
-        
-        _sliderImageView.image = [UIImage imageNamed:@"navigationbar_background.png"];
-        
-        _buttonBgView = [Uifactory createScrollView];
-        _buttonBgView.frame =CGRectMake(0, 0, frame.size.width- 40, 39);
-        [_buttonBgView addSubview:_sliderImageView];
 
-//        _buttonBgView.backgroundColor = NenNewsgroundColor;
-        _buttonBgView.contentSize =CGSizeMake( 70*buttons.count, 38);
-        _buttonBgView.showsHorizontalScrollIndicator = NO;
-        _buttonBgView.showsVerticalScrollIndicator = NO;
-        _buttonBgView.bounces = NO;
-        _buttonBgView.tag =10000;
-        for (int i = 0; i<buttons.count ; i++) {
-            UIButton *button = (UIButton *)buttons[i];
-            [button addTarget: self  action:@selector(selectAction:) forControlEvents:UIControlEventTouchUpInside];
-            button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-            button.tag = 1000+i;
-            [_buttonBgView addSubview:button];
-            [button release];
-        }
-        
-        UIView *addButtonView = [[UIView alloc]initWithFrame:CGRectMake(ScreenWidth - 40, 0, 40, 39)];
-        addButtonView.backgroundColor = NenNewsTextColor;
-        UIButton *addButton = [[UIButton alloc]init];
-        [addButton setImage:[UIImage imageNamed:@"title_button_add.png"] forState:UIControlStateNormal];
-        addButton.frame =CGRectMake(0, 0, 40, 40);
-        [addButton addTarget:self action:@selector(addcolumn) forControlEvents:UIControlEventTouchUpInside];
-        [addButtonView addSubview:addButton];
-        [bgView addSubview:addButtonView];
-        [addButton  release];
-        [addButtonView release];
-    
-        [bgView addSubview:_buttonBgView];
-        [self addSubview:bgView];
-        [bgView release];
-        
-        _contentBgView = [Uifactory createScrollView];
-        _contentBgView.frame =CGRectMake(0, 40, frame.size.width+20, frame.size.height - 40);
-        _contentBgView.tag =10001;
-        _contentBgView.pagingEnabled =YES;
-        _contentBgView.delegate = self;
-        _contentBgView.showsHorizontalScrollIndicator=NO;
-        _contentBgView.showsVerticalScrollIndicator=NO;
-        _contentBgView.contentSize = CGSizeMake(340*buttons.count, frame.size.height-40);
-        _contentBgView.bounces = NO;
-        int _tx = 0 ;
-        for (int i = 0;i<contents.count ; i++) {
-            
-            UIScrollView *labelscroll = [[UIScrollView alloc]init];
-            labelscroll.frame = CGRectMake(340 *i, 0, _contentBgView.width, _contentBgView.height);
-            UIView *view =(UIView *)contents[i];
-            labelscroll.contentSize = view.size;
-            [labelscroll addSubview:view];
-            [_contentBgView addSubview:labelscroll];
-            _tx +=340;
-        }
-        [self addSubview:_contentBgView];
-        
-    }
-    return self;
-}
-*/
 //通过按钮名称初始化
 -(id)initwithButtons:(NSArray *)buttonsName WithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-//        self.buttonsArray = @[@""];
-//        self.contentsArray = @[@""];
+
         //用于分割线
         UIView *bgView = [[UIView alloc]init];
         bgView.backgroundColor =[UIColor grayColor];
@@ -199,10 +122,9 @@
     if (_buttonsNameArray !=buttonsNameArray) {
         [_buttonsNameArray release];
         _buttonsNameArray = [buttonsNameArray copy];
-
     }
     [self reloadButtonsAndViews];
-
+//    [_buttonBgView viewWithTag:<#(NSInteger)#>]
 }
 #pragma mark 按钮事件
 -(void)selectAction:(UIButton *)button{

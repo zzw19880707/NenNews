@@ -53,7 +53,7 @@
     
     NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
     ColumnModel *model =tableView.data[indexPath.row];
-    nightModel.type = model.type;
+    nightModel.type = [model.type intValue];
     nightModel.titleID = [NSString stringWithFormat:@"%@",model.newsId];
     [self.navigationController pushViewController:nightModel animated:YES];
     
