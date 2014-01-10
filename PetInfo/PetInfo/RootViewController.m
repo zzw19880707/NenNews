@@ -117,6 +117,9 @@
 
 }
 
+-(void)autoRefreshData:(NewsNightModelTableView *)tableView{
+    [self getData:tableView];
+}
 #pragma mark
 #pragma mark UI
 - (void)viewDidLoad
@@ -127,7 +130,11 @@
     _sc = [[BaseScrollView alloc]initwithButtons:[self _initButton] WithFrame:CGRectMake(0, 0, 320, ScreenHeight)];
     _sc.eventDelegate = self;
     [self.view addSubview:_sc];
-
+    
+    
+    NewsNightModelTableView *table  = (NewsNightModelTableView *) VIEWWITHTAG( VIEWWITHTAG(_sc, 10001), 1300);
+    [table autoRefreshData];
+    [self getData:table];
 }
 -(void)viewWillAppear:(BOOL)animated{
     
@@ -152,83 +159,105 @@
         [self.navigationController pushViewController:webView animated:YES];
     }else{
         NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
-        nightModel.titleID = [imageData[index] objectForKey:@"titleID"] ;
-        nightModel.titleID = [imageData[index] objectForKey:@"type"];
+        nightModel.titleID = [imageData[index] objectForKey:@"newsId"] ;
+        nightModel.type = [[imageData[index] objectForKey:@"type"] intValue];
         [self.navigationController pushViewController:nightModel animated:YES];
     }
 }
 #pragma mark UItableviewEventDelegate
-//上拉刷新
--(void)pullDown:(NewsNightModelTableView *)tableView{
-    
+-(void)getData :(NewsNightModelTableView *)tableView{
+    if ([self getConnectionAlert]) {
+
     //    参数
     NSMutableDictionary *params  = [[NSMutableDictionary alloc]init];
     int count = [[NSUserDefaults standardUserDefaults]integerForKey:kpageCount];
-    NSNumber *number = [NSNumber numberWithInt:(count*10)];
+    NSNumber *number = [NSNumber numberWithInt:((count+1)*10)];
     [params setValue:number forKey:@"count"];
     int columnID=tableView.columnID;
     [params setValue:[NSNumber numberWithInt:columnID] forKey:@"columnID"];
     if (tableView.data.count>0) {
         ColumnModel *model = tableView.data[0];
-        int sinceID = [model.titleId intValue];
-        [params setValue:[NSNumber numberWithInt:sinceID] forKey:@"maxId"];
+        NSString *sinceID = model.newsId;
+        [params setValue:sinceID forKey:@"maxId"];
     }
     
     //    [params setValue:<#(id)#> forKey:@"maxId"];
+        [DataService requestWithURL:URL_getColumn_List andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
+            NSArray *array =  [result objectForKey:@"data"];
+            NSMutableArray *listData = [[NSMutableArray alloc]init];
+            
+            for (NSDictionary *dic  in array) {
+                ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
+                [listData addObject:model];
+            }
+            tableView.isMore = true;
+            
+            [listData addObjectsFromArray:tableView.data];
+            tableView.data =listData;
+            tableView.imageData = [result objectForKey:@"picture"];
+            [tableView reloadData];
+            [tableView doneLoadingTableViewData];
+            
+        } andErrorBlock:^(NSError *error) {
+            
+        }];
+    }else{
+        [tableView doneLoadingTableViewData];
+
+    }
     
-    [DataService requestWithURL:URL_getColumn_List andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
-        NSArray *array =  [result objectForKey:@"data"];
-        NSMutableArray *listData = [[NSMutableArray alloc]init];
-        
-        for (NSDictionary *dic  in array) {
-            ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
-            [listData addObject:model];
-        }
-        tableView.data =listData;
-        tableView.imageData = [result objectForKey:@"picture"];
-        [tableView reloadData];
-        [tableView doneLoadingTableViewData];
-        
-    } andErrorBlock:^(NSError *error) {
-        [tableView doneLoadingTableViewData];
-        
-    }];
+
 }
+//上拉刷新
+-(void)pullDown:(NewsNightModelTableView *)tableView{
+    if ([self getConnectionAlert]) {
+        [self getData:tableView];
+    }}
 //下拉加载
 -(void)pullUp:(NewsNightModelTableView *)tableView{
     
     //    参数
     NSMutableDictionary *params  = [[NSMutableDictionary alloc]init];
     int count = [[NSUserDefaults standardUserDefaults]integerForKey:kpageCount];
-    NSNumber *number = [NSNumber numberWithInt:(count*10)];
+    NSNumber *number = [NSNumber numberWithInt:((count+1)*10)];
     [params setValue:number forKey:@"count"];
     int columnID=tableView.columnID;
     [params setValue:[NSNumber numberWithInt:columnID] forKey:@"columnID"];
     if (tableView.data.count>0) {
-        ColumnModel *model = tableView.data[tableView.data.count];
-        int sinceID = [model.titleId intValue];
-        [params setValue:[NSNumber numberWithInt:sinceID] forKey:@"sinceId"];
+        ColumnModel *model = [tableView.data lastObject];
+        NSString *sinceID = model.newsId;
+        [params setValue:sinceID forKey:@"sinceId"];
+    }
+    if ([self getConnectionAlert]) {
+        [DataService requestWithURL:URL_getColumn_List andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
+            NSArray *array =  [result objectForKey:@"data"];
+            NSArray *imageArray = [result objectForKey:@"picture"];
+            NSMutableArray *listData = [[NSMutableArray alloc]init];
+            
+            for (NSDictionary *dic  in array) {
+                ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
+                [listData addObject:model];
+            }
+            
+            [tableView doneLoadingTableViewData];
+            NSMutableArray *arr = [NSMutableArray arrayWithArray:tableView.data];
+            [arr addObjectsFromArray:listData];
+            tableView.data  = arr;
+            tableView.imageData = imageArray;
+            if (listData.count < count*10) {
+                tableView.isMore = false;
+            }
+            [tableView reloadData];
+            
+        } andErrorBlock:^(NSError *error) {
+            [tableView doneLoadingTableViewData];
+            
+        }];
+    }else{
+        [tableView doneLoadingTableViewData];
+
     }
     
-    [DataService requestWithURL:URL_getColumn_List andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
-        NSArray *array =  [result objectForKey:@"data"];
-        NSArray *imageArray = [result objectForKey:@"picture"];
-        NSMutableArray *listData = [[NSMutableArray alloc]init];
-        
-        for (NSDictionary *dic  in array) {
-            ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
-            [listData addObject:model];
-        }
-        [tableView doneLoadingTableViewData];
-        [listData addObjectsFromArray:tableView.data];
-        
-        tableView.data  = listData;
-        tableView.imageData = imageArray;
-        [tableView reloadData];
-    } andErrorBlock:^(NSError *error) {
-        [tableView doneLoadingTableViewData];
-        
-    }];
     
 }
 -(void)tableView:(NewsNightModelTableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -237,8 +266,8 @@
     }else{
         NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
         ColumnModel *model =tableView.data[indexPath.row];
-        nightModel.type = @"3";//model.type;
-        nightModel.titleID = [NSString stringWithFormat:@"%@",model.titleId];
+        nightModel.type = [model.type intValue];
+        nightModel.titleID = [NSString stringWithFormat:@"%@",model.newsId];
         [self.navigationController pushViewController:nightModel animated:YES];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -259,7 +288,7 @@
 
 #pragma mark columnchangeDelegate 
 -(void)columnChanged:(NSArray *)array{
-    _sc.buttonsNameArray = array;
+    _sc.buttonsNameArray = [self _initButton];
 }
 #pragma mark 内存管理
 - (void)didReceiveMemoryWarning
