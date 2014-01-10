@@ -203,13 +203,16 @@ static NSString *kFieldKey=@"kFieldKey";
     DataService *service = [[DataService alloc]init];
     service.eventDelegate = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:username,@"username",password,@"password",[NSNumber numberWithBool:YES],@"quickforward",@"ls",@"handlekey", nil];
-    [service requestWithURL:url
-                  andparams:params isJoint:NO andhttpMethod:@"POST"];
-    NSUserDefaults *userDefaults=[[NSUserDefaults standardUserDefaults]init];
-    [userDefaults setObject:username forKey:kuser_name];
-    [userDefaults setObject:password forKey:kuser_password];
-
-    [userDefaults synchronize];
+    if ([self getConnectionAlert]) {
+        [service requestWithURL:url
+                      andparams:params isJoint:NO andhttpMethod:@"POST"];
+        NSUserDefaults *userDefaults=[[NSUserDefaults standardUserDefaults]init];
+        [userDefaults setObject:username forKey:kuser_name];
+        [userDefaults setObject:password forKey:kuser_password];
+        
+        [userDefaults synchronize];
+    }
+    
 
 }
 
