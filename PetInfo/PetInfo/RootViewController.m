@@ -45,12 +45,12 @@
         button.frame = CGRectMake(10 + 70*i, 0, 60, 30);
 
         button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-        button.tag = 1000+ i;
+        button.tag = 1000+ columnId;
         [buttonArrays addObject:button];
         
         
         NewsNightModelTableView *newsTableView = [[NewsNightModelTableView alloc]initwithColumnID:columnId];
-        newsTableView.frame = CGRectMake(340 *i, 0, ScreenWidth, ScreenHeight -40);
+        newsTableView.frame = CGRectMake(340 *i, 0, ScreenWidth, ScreenHeight -44-20);
         newsTableView.eventDelegate = self;
         newsTableView.changeDelegate = self;
         
