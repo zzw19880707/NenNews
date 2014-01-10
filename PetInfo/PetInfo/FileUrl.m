@@ -21,5 +21,11 @@
     NSString *plistPath1 = [paths objectAtIndex:0];
     return plistPath1;
 }
-
+//返回数据库文件名
++ (NSString *)getDBFile{
+    return  [[self getDocumentsFile] stringByAppendingPathComponent:@"NenNews.db"];
+}
++ (FMDatabase *)getDB{
+    return  [FMDatabase databaseWithPath:[self getDBFile]];
+}
 @end
