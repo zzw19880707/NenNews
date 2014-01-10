@@ -52,13 +52,20 @@
     UIButton *loginButton = (UIButton *)VIEWWITHTAG(self.view, 1000);
     [loginButton setHidden:YES];
     
+    [self getWeather];
+   
 
-    DataService *service = [[DataService alloc]init];
-    service.eventDelegate = self;
-    NSString *locationcityid = [[NSUserDefaults standardUserDefaults] objectForKey:kLocationCityCode];
-    NSString *url = [Weather_URL stringByAppendingString:[NSString stringWithFormat:@"%@%@",locationcityid,@".html"]];
-    [service requestWithURL:url andparams:nil isJoint:NO andhttpMethod:@"GET"];
-
+}
+-(void)getWeather {
+    if ([[self getConnectionAvailable] isEqualToString:@"none"]) {
+        
+    }else{
+        DataService *service = [[DataService alloc]init];
+        service.eventDelegate = self;
+        NSString *locationcityid = [[NSUserDefaults standardUserDefaults] objectForKey:kLocationCityCode];
+        NSString *url = [Weather_simple_URL stringByAppendingString:[NSString stringWithFormat:@"%@%@",locationcityid,@".html"]];
+        [service requestWithURL:url andparams:nil isJoint:NO andhttpMethod:@"GET"];
+    }
 }
 -(void)requestFailed:(ASIHTTPRequest *)request{
 }
@@ -66,7 +73,7 @@
     NSDictionary *dic = [result objectForKey:@"weatherinfo"];
     //当日天气
     UILabel *weatherLabel =(UILabel *)VIEWWITHTAG(self.view, 1021);
-    weatherLabel.text = [NSString stringWithFormat:@"%@/%@",[dic objectForKey:@"st1"],[dic objectForKey:@"st2"]];
+    weatherLabel.text = [NSString stringWithFormat:@"%@/%@",[dic objectForKey:@"temp2"],[dic objectForKey:@"temp1"]];
 }
 - (void)viewDidLoad
 {
@@ -100,7 +107,7 @@
             break;
         case 1001:
             [self.appDelegate.menuCtrl presentModalViewController:[[[BaseNavViewController alloc]initWithRootViewController: weather]autorelease] animated:YES];
-            
+            [self getWeather];
             break;
         case 1002://夜间模式
             
