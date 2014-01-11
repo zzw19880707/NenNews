@@ -48,9 +48,10 @@
     self.navigationItem.rightBarButtonItems = buttonArray;
 
     NSString *key = self.newsId;
-    
-    int newsId =[_db intForQuery:@"select newsId from collectionList where newsId = ? ",key];
-    if (newsId >0) {
+    self.db = [FileUrl getDB];
+    [_db open];
+    NSString *rs =[_db stringForQuery:@"select newsId from collectionList where newsId = ? ",key];
+    if (rs.length>0) {
         button.selected =YES;
     }
 
@@ -60,20 +61,13 @@
     [super viewDidLoad];
 }
 -(void)viewWillAppear:(BOOL)animated{
-    NSString *path = [FileUrl getDocumentsFile];
-    NSString *pathName = [path stringByAppendingPathComponent:kCollection_file_name];
-    self.collectionDic = [[NSMutableDictionary alloc]initWithContentsOfFile:pathName];
-    if (self.collectionDic.count ==0) {
-        self.collectionDic = [[NSMutableDictionary alloc]init];
-    }
-    [super viewWillAppear:animated];
     [self _initButton];
-    self.db = [FileUrl getDB];
+
+    [super viewWillAppear:animated];
+
 }
 -(void)viewWillDisappear:(BOOL)animated{
-    NSString *path = [FileUrl getDocumentsFile];
-    NSString *pathName = [path stringByAppendingPathComponent:kCollection_file_name];
-    [self.collectionDic writeToFile:pathName atomically:YES];
+
     [_db close];
     [super viewWillDisappear:animated];
 }
@@ -306,20 +300,34 @@
 
     NSString *key =self.newsId;
     if (button.selected) {
-        [_db executeUpdate:@"delete from collectionList where newsId = ?",key];
-        [self showHUD:INFO_DisCollectionSuccess isDim:YES];
+        BOOL success =[_db executeUpdate:@"delete from collectionList where newsId = ?",key];
+        if (success) {
+            [self showHUD:INFO_DisCollectionSuccess isDim:YES];
+            button.selected = !button.selected;
+        }else{
+            [self showHUD:INFO_DisCollectionError isDim:YES];
+            button.selected = NO;
+
+        }
+        
     }else{
-        [_db executeUpdate:@"insert into collectionList values (?,?,?)",key,_titleLabel,_type];
-        [self showHUD:INFO_CollectionSuccess isDim:YES];
+        BOOL success =[_db executeUpdate:@"insert into collectionList values (?,?,?)",key,_titleLabel,[NSNumber numberWithInt:_type]];
+        
+        if (success) {
+            [self showHUD:INFO_CollectionSuccess isDim:YES];
+            button.selected = !button.selected;
+        }else{
+            [self showHUD:INFO_CollectionError isDim:YES];
+            button.selected = YES;
+        }
+        
     }
-    button.selected = !button.selected;
     [self performSelector:@selector(hideHUD) withObject:nil afterDelay:.5];
 }
 
 
 
 -(void)dealloc{
-    RELEASE_SAFELY(_collectionDic);
     RELEASE_SAFELY(_db);
     [super dealloc];
 }

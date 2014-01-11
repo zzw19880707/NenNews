@@ -19,7 +19,7 @@
 //用于分享的图片地址
 @property (nonatomic,retain) NSString *ImageUrl;
 
-@property (nonatomic,retain) NSMutableDictionary *collectionDic;
+
 //0普通新闻1专题新闻2图片新闻3视频新闻
 @property (nonatomic,assign) int type;
 
