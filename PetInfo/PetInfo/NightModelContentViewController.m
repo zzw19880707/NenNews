@@ -43,7 +43,7 @@
 
     [self showHUD:INFO_RequestNetWork isDim:YES];
     NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-    [params setValue:self.titleID forKey:@"titleId"];//
+    [params setValue:self.newsId forKey:@"titleId"];//
     //图片新闻
     if (self.type ==2) {
         if ([self getConnectionAlert]) {
@@ -134,7 +134,8 @@
     titleLabel.font = [UIFont boldSystemFontOfSize:16];
     titleLabel.textAlignment = UITextAlignmentLeft;
     //设置字体大小适应label宽度
-    titleLabel.adjustsFontSizeToFitWidth = YES;
+//    titleLabel.adjustsFontSizeToFitWidth = YES;
+    titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     [self.backgroundView addSubview:titleLabel];
     _height +=30;
     
@@ -429,8 +430,8 @@
 -(void)pushAction :(UIButton *) button {
     int tag = button.tag;
     NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
-    nightModel.type = @"0";//model.type;
-    nightModel.titleID = [NSString stringWithFormat:@"%@", [_abnewsArray[tag] objectForKey:@"titleId"]];
+    nightModel.type = 0;//model.type;
+    nightModel.newsId = [NSString stringWithFormat:@"%@", [_abnewsArray[tag] objectForKey:@"titleId"]];
     [self.navigationController pushViewController:nightModel animated:YES];
 }
 -(void)playAction :(UIButton *)button {
