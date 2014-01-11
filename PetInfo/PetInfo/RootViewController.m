@@ -53,7 +53,7 @@
         newsTableView.frame = CGRectMake(340 *i, 0, ScreenWidth, ScreenHeight -44-20);
         newsTableView.eventDelegate = self;
         newsTableView.changeDelegate = self;
-        
+        newsTableView.type = 0;
         NSMutableDictionary *d = [[NSMutableDictionary alloc]initWithContentsOfFile:[[FileUrl getDocumentsFile]stringByAppendingPathComponent:data_file_name]];
 
         NSMutableDictionary *dic = [d objectForKey:[NSString stringWithFormat:@"%d",columnId]];
@@ -159,7 +159,7 @@
         [self.navigationController pushViewController:webView animated:YES];
     }else{
         NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
-        nightModel.titleID = [imageData[index] objectForKey:@"newsId"] ;
+        nightModel.newsId = [imageData[index] objectForKey:@"newsId"] ;
         nightModel.type = [[imageData[index] objectForKey:@"type"] intValue];
         [self.navigationController pushViewController:nightModel animated:YES];
     }
@@ -199,7 +199,7 @@
             [tableView doneLoadingTableViewData];
             
         } andErrorBlock:^(NSError *error) {
-            
+            [tableView doneLoadingTableViewData];
         }];
     }else{
         [tableView doneLoadingTableViewData];
@@ -212,7 +212,10 @@
 -(void)pullDown:(NewsNightModelTableView *)tableView{
     if ([self getConnectionAlert]) {
         [self getData:tableView];
-    }}
+    }else{
+        [tableView doneLoadingTableViewData];
+    }
+}
 //下拉加载
 -(void)pullUp:(NewsNightModelTableView *)tableView{
     
@@ -267,7 +270,7 @@
         NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
         ColumnModel *model =tableView.data[indexPath.row];
         nightModel.type = [model.type intValue];
-        nightModel.titleID = [NSString stringWithFormat:@"%@",model.newsId];
+        nightModel.newsId = [NSString stringWithFormat:@"%@",model.newsId];
         [self.navigationController pushViewController:nightModel animated:YES];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
