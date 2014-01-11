@@ -9,12 +9,13 @@
 #import "NightModelViewController.h"
 #import "FileUrl.h"
 #import <ShareSDK/ShareSDK.h>
-@interface NightModelViewController ()
-
+#import "FileUrl.h"
+#import "FMDatabaseAdditions.h"
+@interface NightModelViewController (){
+}
 @end
 
 @implementation NightModelViewController
-@synthesize collectionDic= _collectionDic;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -46,11 +47,13 @@
     NSArray *buttonArray = @[[shareItem autorelease],[backItem autorelease]];
     self.navigationItem.rightBarButtonItems = buttonArray;
 
-    NSString *key = [NSString stringWithFormat:@"%d",self.titleID];
-    NSString *title = [self.collectionDic objectForKey:key];
-    if (title.length >0) {
+    NSString *key = self.newsId;
+    
+    int newsId =[_db intForQuery:@"select newsId from collectionList where newsId = ? ",key];
+    if (newsId >0) {
         button.selected =YES;
     }
+
 }
 - (void)viewDidLoad
 {
@@ -65,12 +68,14 @@
     }
     [super viewWillAppear:animated];
     [self _initButton];
-
+    self.db = [FileUrl getDB];
+    [_db open];
 }
 -(void)viewWillDisappear:(BOOL)animated{
     NSString *path = [FileUrl getDocumentsFile];
     NSString *pathName = [path stringByAppendingPathComponent:kCollection_file_name];
     [self.collectionDic writeToFile:pathName atomically:YES];
+    [_db close];
     [super viewWillDisappear:animated];
 }
 #pragma mark Action
@@ -298,23 +303,25 @@
 }
 //收藏
 -(void)collectAction:(UIButton *)button{
-    NSString *key =[NSString stringWithFormat:@"%d",self.titleID];
+    
+
+    NSString *key =self.newsId;
     if (button.selected) {
-        [self.collectionDic removeObjectForKey:key];
+        [_db executeUpdate:@"delete from collectionList where newsId = ?",key];
         [self showHUD:INFO_DisCollectionSuccess isDim:YES];
     }else{
-        [self.collectionDic setValue:self.titleLabel forKey:key];
+        [_db executeUpdate:@"insert into collectionList values (?,?,?)",key,_titleLabel,_type];
         [self showHUD:INFO_CollectionSuccess isDim:YES];
     }
     button.selected = !button.selected;
     [self performSelector:@selector(hideHUD) withObject:nil afterDelay:.5];
-
 }
 
 
 
 -(void)dealloc{
     RELEASE_SAFELY(_collectionDic);
+    RELEASE_SAFELY(_db);
     [super dealloc];
 }
 - (void)didReceiveMemoryWarning

@@ -7,12 +7,12 @@
 //
 
 #import "BaseViewController.h"
-
+@class FMDatabase;
 @interface NightModelViewController : BaseViewController{
     NSMutableDictionary *_collectionDic;
 }
 
-@property (nonatomic,retain) NSString *titleID;
+@property (nonatomic,retain) NSString *newsId;
 @property (nonatomic,retain) NSString *titleLabel;
 //用于分享的链接
 @property (nonatomic,retain) NSString *url;
@@ -22,4 +22,6 @@
 @property (nonatomic,retain) NSMutableDictionary *collectionDic;
 //0普通新闻1专题新闻2图片新闻3视频新闻
 @property (nonatomic,assign) int type;
+
+@property (nonatomic,retain) FMDatabase *db;
 @end
