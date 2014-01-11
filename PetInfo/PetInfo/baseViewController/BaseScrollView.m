@@ -13,6 +13,7 @@
 #import "FileUrl.h"
 #import "WebViewController.h"
 #import "NightModelContentViewController.h"
+
 @implementation BaseScrollView
 
 - (id)initWithFrame:(CGRect)frame
@@ -47,7 +48,6 @@
         _buttonBgView.showsVerticalScrollIndicator = NO;
         _buttonBgView.bounces = NO;
         _buttonBgView.tag =10000;
-
         
 
         //        add按钮
@@ -149,20 +149,25 @@
 
     int  count  = self.buttonsArray.count;
     
-    //向右平移
-    if (page<count-1) {
-        if (70+70-point.x>self.frame.size.width-50) {
-            CGPoint cpoint = _buttonBgView.contentOffset;
-            cpoint.x += 140 -(self.frame.size.width-50+point.x)-25;
-            [_buttonBgView setContentOffset:cpoint animated:YES];
-        }
-    }else if(page == count -1){
-        if (70+70-point.x>self.frame.size.width-50) {
-            CGPoint cpoint = _buttonBgView.contentOffset;
-            cpoint.x += 140 -(self.frame.size.width-50+point.x)-25-70;
-            [_buttonBgView setContentOffset:cpoint animated:YES];
+    if (_isRight) {
+        
+    }else{
+        //向右平移
+        if (page<count-1) {
+            if (70+70-point.x>self.frame.size.width-50) {
+                CGPoint cpoint = _buttonBgView.contentOffset;
+                cpoint.x += 140 -(self.frame.size.width-50+point.x)-25;
+                [_buttonBgView setContentOffset:cpoint animated:YES];
+            }
+        }else if(page == count -1){
+            if (70+70-point.x>self.frame.size.width-50) {
+                CGPoint cpoint = _buttonBgView.contentOffset;
+                cpoint.x += 140 -(self.frame.size.width-50+point.x)-25-70;
+                [_buttonBgView setContentOffset:cpoint animated:YES];
+            }
         }
     }
+   
     //向左平移
     if (page>0) {
         if (-point.x-70<0) {
@@ -179,14 +184,14 @@
     NewsNightModelTableView *table= (NewsNightModelTableView *)VIEWWITHTAG(scrollView, 1300+scrollView.contentOffset.x /340);
     [table autoRefreshData];
     [self.eventDelegate autoRefreshData:table];
-    switch (scrollView.tag) {
-        case 10000:
-            break;
-        case 10001:
-            break;
-        default:
-            break;
-    }
+//    switch (scrollView.tag) {
+//        case 10000:
+//            break;
+//        case 10001:
+//            break;
+//        default:
+//            break;
+//    }
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -206,9 +211,11 @@
         [self.eventDelegate showLeftMenu];
     }
     if (scrollView.contentOffset.x==scrollView.contentSize.width -340) {
+        _isRight = YES;
         [self.eventDelegate showRightMenu];
+    }else{
+        _isRight = NO;
     }
-
 
 }
 -(void)dealloc{

@@ -22,6 +22,7 @@
     UIScrollView *_buttonBgView;
     UIScrollView *_contentBgView;
     UIImageView *_sliderImageView;
+    BOOL _isRight;
 }
 //button宽70 ，frame（10+70*i,0,60,30）
 //content
