@@ -26,6 +26,7 @@
     return  [[self getDocumentsFile] stringByAppendingPathComponent:@"NenNews.db"];
 }
 + (FMDatabase *)getDB{
-    return  [FMDatabase databaseWithPath:[self getDBFile]];
+    FMDatabase *db = [FMDatabase databaseWithPath:[self getDBFile] ];
+    return  db;
 }
 @end
