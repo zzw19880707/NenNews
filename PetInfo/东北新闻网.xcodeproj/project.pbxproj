@@ -235,6 +235,7 @@
 		EBA1EA93187F85D700EAF3F2 /* city.plist in Resources */ = {isa = PBXBuildFile; fileRef = EBA1EA92187F85D700EAF3F2 /* city.plist */; };
 		EBA1EA96187F919B00EAF3F2 /* weather_location_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EBA1EA94187F919B00EAF3F2 /* weather_location_button@2x.png */; };
 		EBA1EA97187F919B00EAF3F2 /* weather_location_button.png in Resources */ = {isa = PBXBuildFile; fileRef = EBA1EA95187F919B00EAF3F2 /* weather_location_button.png */; };
+		EBA8A71C1881092400195D67 /* NightModelTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = EBA8A71B1881092400195D67 /* NightModelTextView.m */; };
 		EBC3A79A187E3890008D4259 /* right_item_button.png in Resources */ = {isa = PBXBuildFile; fileRef = EBC3A798187E3890008D4259 /* right_item_button.png */; };
 		EBC3A79B187E3890008D4259 /* right_item_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EBC3A799187E3890008D4259 /* right_item_button@2x.png */; };
 		EBC3A79D187E38CC008D4259 /* left_background_view@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EBC3A79C187E38CC008D4259 /* left_background_view@2x.png */; };
@@ -617,6 +618,8 @@
 		EBA1EA92187F85D700EAF3F2 /* city.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = city.plist; sourceTree = "<group>"; };
 		EBA1EA94187F919B00EAF3F2 /* weather_location_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "weather_location_button@2x.png"; sourceTree = "<group>"; };
 		EBA1EA95187F919B00EAF3F2 /* weather_location_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = weather_location_button.png; sourceTree = "<group>"; };
+		EBA8A71A1881092400195D67 /* NightModelTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightModelTextView.h; sourceTree = "<group>"; };
+		EBA8A71B1881092400195D67 /* NightModelTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightModelTextView.m; sourceTree = "<group>"; };
 		EBC3A798187E3890008D4259 /* right_item_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right_item_button.png; sourceTree = "<group>"; };
 		EBC3A799187E3890008D4259 /* right_item_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right_item_button@2x.png"; sourceTree = "<group>"; };
 		EBC3A79C187E38CC008D4259 /* left_background_view@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left_background_view@2x.png"; sourceTree = "<group>"; };
@@ -1606,6 +1609,8 @@
 				FEBAEE9718671B8800CBC711 /* NightModelLabel.m */,
 				EB2642471867FF590004D1D9 /* FontLabel.h */,
 				EB2642481867FF590004D1D9 /* FontLabel.m */,
+				EBA8A71A1881092400195D67 /* NightModelTextView.h */,
+				EBA8A71B1881092400195D67 /* NightModelTextView.m */,
 				FEBAEEA01867260B00CBC711 /* NightModelUIButton.h */,
 				FEBAEEA11867260B00CBC711 /* NightModelUIButton.m */,
 				FEBAEEA31867262500CBC711 /* NightModelUIImage.h */,
@@ -2019,6 +2024,7 @@
 				FE02E3601840364000E2B468 /* ASIAuthenticationDialog.m in Sources */,
 				FE02E3611840364000E2B468 /* ASIDataCompressor.m in Sources */,
 				EB70496F186FD42000E94C56 /* NightAndLoadingCell.m in Sources */,
+				EBA8A71C1881092400195D67 /* NightModelTextView.m in Sources */,
 				FE02E3621840364000E2B468 /* ASIDataDecompressor.m in Sources */,
 				FE02E3631840364000E2B468 /* ASIDownloadCache.m in Sources */,
 				EB3CB337187CF89100280966 /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
