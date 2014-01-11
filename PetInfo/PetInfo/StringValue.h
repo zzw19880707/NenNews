@@ -16,6 +16,8 @@
 #define INFO_EndRequestNetWork @"加载完成!"
 #define INFO_ERROR @"出错了"
 #define INFO_CollectionSuccess @"收藏成功"
+#define INFO_CollectionError @"收藏失败,可能该新闻已经收藏"
 #define INFO_DisCollectionSuccess @"取消收藏成功"
+#define INFO_DisCollectionError @"取消收藏失败"
 #define INFO_Searching @"查询中,请稍后"
 #endif
