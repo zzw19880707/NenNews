@@ -11,5 +11,5 @@
 
 @interface CollectionViewController : BaseViewController <UItableviewEventDelegate>
 
-
+@property (nonatomic,retain) NewsNightModelTableView *tableView;
 @end
