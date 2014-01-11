@@ -187,7 +187,7 @@
         }else{
 #warning
             NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
-            nightModel.titleID = [self.resultData[indexPath.row] objectForKey:@"newsId"] ;
+            nightModel.newsId = [self.resultData[indexPath.row] objectForKey:@"newsId"] ;
             nightModel.type = 0;
             [self.navigationController pushViewController:nightModel animated:YES];
         }
