@@ -30,7 +30,7 @@
     _refreshHeaderView.backgroundColor=[UIColor clearColor];
     self.dataSource=self;
     self.delegate=self;
-    self.refreshHeader=YES;
+//    self.refreshHeader=YES;
     _moreButton=[[UIButton buttonWithType:UIButtonTypeCustom]retain];
     _moreButton.backgroundColor=[UIColor clearColor];
     _moreButton.frame=CGRectMake(0, 0, ScreenWidth, 40);
@@ -147,8 +147,10 @@
 //监听scrollview  下拉到一定状态。
 //滑动是实时调用
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-	
-	[_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+	if (_refreshHeader) {
+        [_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+    }else{
+    }
     
 }
 //拖拽时停止调用
