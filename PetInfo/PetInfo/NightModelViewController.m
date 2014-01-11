@@ -69,7 +69,6 @@
     [super viewWillAppear:animated];
     [self _initButton];
     self.db = [FileUrl getDB];
-    [_db open];
 }
 -(void)viewWillDisappear:(BOOL)animated{
     NSString *path = [FileUrl getDocumentsFile];
