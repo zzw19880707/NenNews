@@ -18,15 +18,25 @@
     if(self){
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(NightModeChangeNotification:) name:kNightModeChangeNofication object:nil];
         self.isMore = YES;
-        self.refreshHeader = YES;
+        
     }
     return self;
 }
+-(id)initWithData:(NSArray *)data type:(int)type{
+    self = [self init];
+    if (self) {
+        self.data = data;
+        self.type = type;
+        self.refreshHeader = NO;
 
+    }
+    return self;
+}
 -(id)initwithColumnID:(int)columnID{
     self = [self init];
     if (self) {
         self.columnID = columnID;
+        self.refreshHeader = YES;
     }
     return self;
 }
@@ -74,10 +84,12 @@
         if (Cell == nil) {
             Cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:pushIndentifier];
         }
-        Cell.textLabel.text =  [self.data[indexPath.row] objectForKey:@"title"];
+        ColumnModel *model = self.data[indexPath.row];
+        Cell.textLabel.text =  model.title;
         return Cell;
 
-    }else{
+    }else
+    {
         static NSString *listIndentifier=@"HomeDetailCell";
         static NSString *imageIndentifier=@"imageIndentifier";
         if (_imageData.count>0&&indexPath.section==0) {
@@ -155,7 +167,6 @@
     UIImageView *imgaeView =[[[UIImageView alloc]init]autorelease];
     NSURL  *url = [NSURL URLWithString:[_imageData[index] objectForKey:@"pictureUrl"] ];
     [imgaeView setImageWithURL:url];
-//    [imgaeView setImageWithURL:<#(NSURL *)#>]
     imgaeView.frame =CGRectMake(0, 0, 320, 120);
     return imgaeView;
 }
@@ -172,7 +183,9 @@
 
 -(void)reloadData{
     [super reloadData];
-    [_csView reloadData];
+    if (_csView !=nil) {
+        [_csView reloadData];
+    }
 
 }
 @end

@@ -18,7 +18,7 @@
     XLCycleScrollView *_csView ;
 }
 
-
+-(id)initWithData:(NSArray *)data type:(int)type;
 -(id)initwithColumnID:(int)columnID;
 @property (nonatomic,assign) int type;//0:rootview  1:pushnews
 @property (nonatomic,retain) UIPageControl *pageControl;
