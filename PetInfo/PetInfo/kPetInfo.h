@@ -28,9 +28,8 @@
 #pragma mark DIC_KEY
 #define kFont_Size @"kFontSize"
 #define KNews_Push @"KNewsPUSH"
-
+//打开模式
 #define kBrownModelChangeNofication @"kBrownModelChangeNofication"
-
 
 #pragma mark UserDefaults
 //判断是否是夜间模式
