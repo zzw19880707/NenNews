@@ -19,4 +19,8 @@
 
 @property (nonatomic,retain) UILabel *titleLable;
 
+- (id)initWithshoWImage:(BOOL)showImage type:(int)type selected :(BOOL)isselected;
+@property (nonatomic,assign) BOOL isselected;
+@property (nonatomic,assign) BOOL showImage;
+@property (nonatomic,assign) int type;
 @end
