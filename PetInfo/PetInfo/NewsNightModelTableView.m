@@ -136,6 +136,7 @@
                 
                 cell = [[NightAndLoadingCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:listIndentifier];
             }
+#warning 
             ColumnModel *model =[self.data[indexPath.row ] retain];
             cell.model = model;
             return  cell;
