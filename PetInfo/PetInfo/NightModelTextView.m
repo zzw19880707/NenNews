@@ -7,25 +7,68 @@
 //
 
 #import "NightModelTextView.h"
+#import "ThemeManager.h"
 
 @implementation NightModelTextView
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
+-(id)init{
+    self = [super init];
     if (self) {
-        // Initialization code
+        //字体改变通知
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(FontSizeChangeNotification:) name:kFontSizeChangeNofication object:nil];
+//        字体颜色通知
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(NightModeChangeNotification:) name:kNightModeChangeNofication object:nil];
+
     }
-    return self;
+    return  self;
+}
+- (id)initWithFrame:(CGRect)frame{
+    self = [self init];
+    if (self) {
+        self.frame = frame;
+        [self setTextSize];
+        [self setColor];
+    }
+    return  self;
+}
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+    [super dealloc];
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
+//设置颜色
+-(void)NightModeChangeNotification:(NSNotification *)notification{
+    [self setColor];
 }
-*/
+-(void)setColor{
+    UIColor *textColor = [[ThemeManager shareInstance] getColorWithName:ktext];
+    self.textColor = textColor;
+    self.backgroundColor = [[ThemeManager shareInstance] getBackgroundColor];
+}
+
+//设置字体大小
+-(void)FontSizeChangeNotification:(NSNotification *)notification{
+    [self setTextSize];
+}
+-(void)setTextSize{
+    int mulriple = [[ThemeManager shareInstance]getSizeFont];
+    float mul = 0.0f;
+    switch (mulriple) {
+        case 0:
+            mul = 10.0f;
+            break;
+        case 1:
+            mul = 12.0f;
+            break;
+        case 2:
+            mul = 14.0f;
+            break;
+        default:
+            mul = 12.0f;
+            break;
+    }
+    self.font = [UIFont systemFontOfSize:mul];
+}
+
 
 @end
