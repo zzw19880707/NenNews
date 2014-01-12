@@ -15,6 +15,7 @@
 -(void)addButtonAction;
 -(void)showLeftMenu;
 -(void)showRightMenu;
+-(void)setEnableGesture:(BOOL)b;
 -(void)autoRefreshData:(NewsNightModelTableView *)tableView;
 //-(void)pushViewController:(BaseViewController *)baseViewController;
 @end

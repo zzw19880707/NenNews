@@ -126,7 +126,7 @@
 }
 #pragma mark 按钮事件
 -(void)selectAction:(UIButton *)button{
-    int page = button.tag-1 -1000;
+    int page = button.tag -1000;
     [UIView animateWithDuration:0.5 animations:^{
         CGPoint spoint = _sliderImageView.origin;
         spoint.x = 10+15+page *70;
@@ -208,14 +208,18 @@
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
     
     if (scrollView.contentOffset.x ==0) {
+        [self.eventDelegate setEnableGesture:YES];
         [self.eventDelegate showLeftMenu];
-    }
-    if (scrollView.contentOffset.x==scrollView.contentSize.width -340) {
+    }else if (scrollView.contentOffset.x==scrollView.contentSize.width -340) {
+        [self.eventDelegate setEnableGesture:YES];
         _isRight = YES;
         [self.eventDelegate showRightMenu];
     }else{
+        [self.eventDelegate setEnableGesture:NO];
         _isRight = NO;
     }
+    
+
 
 }
 -(void)dealloc{
