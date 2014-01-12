@@ -45,7 +45,7 @@
         button.frame = CGRectMake(10 + 70*i, 0, 60, 30);
 
         button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-        button.tag = 1000+ columnId;
+        button.tag = 1000+ i;
         [buttonArrays addObject:button];
         
         
@@ -116,7 +116,9 @@
     [self.appDelegate.menuCtrl showLeftController:YES];
 
 }
-
+-(void)setEnableGesture:(BOOL)b{
+    [self.appDelegate.menuCtrl setEnableGesture:b];
+}
 -(void)autoRefreshData:(NewsNightModelTableView *)tableView{
     [self getData:tableView];
 }
