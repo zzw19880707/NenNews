@@ -32,7 +32,8 @@
 -(UIColor *)getBackgroundColor;
 //返回当前模式下，字体的大小
 - (int)getSizeFont;
-
+//返回打开模式
+-(int)getBroseModel;
 //设置推送开启关闭
 - (void)setPush;
 @end

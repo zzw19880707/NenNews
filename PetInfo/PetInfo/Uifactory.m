@@ -39,4 +39,9 @@
     return [scrollView autorelease];
 }
 
+//创建textview，改变字体大小及背景颜色
++ (NightModelTextView *)createTextView:(CGRect)frame{
+    NightModelTextView *textView = [[NightModelTextView alloc]initWithFrame:frame];
+    return [textView autorelease];
+}
 @end

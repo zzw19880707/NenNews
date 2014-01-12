@@ -34,7 +34,11 @@ static ThemeManager *sigleton = nil;
     return self;
 }
 
-
+//返回打开模式
+-(int)getBroseModel{
+    int  brose = [[NSUserDefaults standardUserDefaults]integerForKey:kbroseMode];
+    return brose;
+}
 //获取主题目录
 - (NSString *)getThemePath {
     if (self.nigthModelName == nil) {

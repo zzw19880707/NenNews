@@ -11,6 +11,7 @@
 #import "FontLabel.h"
 #import "NightModelUIButton.h"
 #import "NightModelScrollView.h"
+#import "NightModelTextView.h"
 @interface Uifactory : NSObject
 
 //创建Label 不改变字体大小的label
@@ -21,4 +22,6 @@
 + (NightModelUIButton *)createButton:(NSString *)titleName;
 //创建scrollview，改变背景颜色
 + (NightModelScrollView *)createScrollView ;
+//创建textview，改变字体大小及背景颜色
++ (NightModelTextView *)createTextView:(CGRect)frame;
 @end
