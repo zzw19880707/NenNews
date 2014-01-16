@@ -9,7 +9,9 @@
 #import "WeatherViewController.h"
 #import "CityCodeViewController.h"
 #import "FileUrl.h"
-@interface WeatherViewController ()
+@interface WeatherViewController (){
+    NSTimer *_timer;
+}
 
 @end
 
@@ -36,7 +38,7 @@
     UIBarButtonItem *itme = [[UIBarButtonItem alloc]initWithCustomView:button];
     self.navigationItem.rightBarButtonItem =itme;
     [itme release];
-    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(changeweatherView) userInfo:nil repeats:YES];
+    _timer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(changeweatherView) userInfo:nil repeats:YES] ;
 }
 
 #pragma mark Action
@@ -187,8 +189,7 @@
 }
 #pragma mark ASIRequest
 -(void)requestFailed:(ASIHTTPRequest *)request{
-    _po([[request error]localizedDescription]);
-#warning
+
 }
 -(void)requestFinished:(id)result{
     NSDictionary *dic = [result objectForKey:@"weatherinfo"];
@@ -198,61 +199,97 @@
     [_dataDic writeToFile:path atomically:YES];
     [self _loadWeatherData];
 }
-
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
 }
-
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+}
 - (void)dealloc {
+    if ([_timer isValid]) {
+        [_timer release];
+    }
     [_today release];
     [_todayLowtTmperature release];
     [_todayHighTemperature release];
     [_todayWeather release];
     [_todayWind release];
+    [_todayImageFirst release];
+    [_todayImageSecond release];
+    [_todayView release];
+
+    
     [_secondDay release];
     [_secondImageview release];
     [_secondTemperature release];
     [_secondWeather release];
-    [_secondWind release];
-    [_city release];
-    [_todayImageFirst release];
-    [_todayImageSecond release];
     [_secondImageSecond release];
-    [_thirdImageSecond release];
-    [_fourthImageSecond release];
-    [_todayView release];
+    [_secondWind release];
     [_secondView release];
+    
+
+    [_thirdDay release];
+    [_thirdImageview release];
+    [_thirdTemperature release];
+    [_thirdWeather release];
+    [_thirdImageSecond release];
+    [_thirdWind release];
     [_thirdView release];
-    [_fourthView release];
+
     [_backgroundView release];
+    [_city release];
+
+    
+    [_fourthDay release];
+    [_fourthImageview release];
+    [_fourthTemperature release];
+    [_fourthWeather release];
+    [_fourthImageSecond release];
+    [_fourthWind release];
+    [_fourthView release];
+    [_dataDic release];
     [super dealloc];
 }
 - (void)viewDidUnload {
-    [self setToday:nil];
-    [self setTodayLowtTmperature:nil];
-    [self setTodayHighTemperature:nil];
-    [self setTodayWeather:nil];
-    [self setTodayWind:nil];
-    [self setSecondDay:nil];
-    [self setSecondImageview:nil];
-    [self setSecondTemperature:nil];
-    [self setSecondWeather:nil];
-    [self setSecondWind:nil];
-    [self setCity:nil];
-    [self setTodayImageFirst:nil];
-    [self setTodayImageSecond:nil];
-    [self setSecondImageSecond:nil];
-    [self setThirdImageSecond:nil];
-    [self setFourthImageSecond:nil];
-
-    [self setTodayView:nil];
-    [self setSecondView:nil];
-    [self setThirdView:nil];
-    [self setFourthView:nil];
-    [self setBackgroundView:nil];
+    _timer = nil;
+    
+    _today =nil;
+    _todayLowtTmperature =nil;
+    _todayHighTemperature =nil;
+    _todayWeather =nil;
+    _todayWind =nil;
+    _todayImageFirst =nil;
+    _todayImageSecond =nil;
+    _todayView =nil;
+    
+    
+    _secondDay =nil;
+    _secondImageview =nil;
+    _secondTemperature =nil;
+    _secondWeather =nil;
+    _secondImageSecond =nil;
+    _secondWind =nil;
+    _secondView =nil;
+    
+    _thirdDay =nil;
+    _thirdImageview =nil;
+    _thirdTemperature =nil;
+    _thirdWeather =nil;
+    _thirdImageSecond =nil;
+    _thirdWind =nil;
+    _thirdView =nil;
+    
+    _backgroundView =nil;
+    _city =nil;
+    
+    _fourthDay =nil;
+    _fourthImageview =nil;
+    _fourthTemperature =nil;
+    _fourthWeather =nil;
+    _fourthImageSecond =nil;
+    _fourthWind =nil;
+    _fourthView =nil;
+    _dataDic =nil;
     [super viewDidUnload];
 }
 
