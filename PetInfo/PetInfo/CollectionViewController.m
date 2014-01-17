@@ -11,6 +11,7 @@
 #import "FMDatabase.h"
 #import "FileUrl.h"
 #import "ColumnModel.h"
+#import "Uifactory.h"
 @interface CollectionViewController ()
 
 @end
@@ -43,15 +44,14 @@
     NSArray *data =[[NSArray alloc]init];
     NSMutableArray *dataArray = [[NSMutableArray alloc]init];
     
-    FMDatabase *db = [FileUrl getDB];
-    [db open];
+
     NSString *sql ;
     if (lastId.length>0) {
         sql = [NSString stringWithFormat:@"SELECT  * FROM collectionList where newsId< '%@'  order by newsId DESC limit %@ ",lastId,collection_count];
     }else{
         sql = [NSString stringWithFormat:@"SELECT  * FROM collectionList order by newsId DESC  limit %@;",collection_count];
     }
-    FMResultSet *rs = [db executeQuery:sql];
+    FMResultSet *rs = [self.db executeQuery:sql];
     while ([rs next]){
         int type = [rs intForColumn:@"type"];
         NSString *newId = [rs stringForColumn:@"newsId"];
