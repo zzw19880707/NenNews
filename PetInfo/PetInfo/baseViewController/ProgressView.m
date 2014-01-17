@@ -19,6 +19,13 @@
     if (self!=nil) {
         //kReachabilityChangedNotification 网络状态改变时触发的通知
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeNetwork:) name:kReachabilityChangedNotification object:nil];
+        self.reachability = [Reachability reachabilityForInternetConnection];
+        //开始监听网络
+        [self.reachability startNotifier];
+        
+        NetworkStatus status = self.reachability.currentReachabilityStatus;
+        [self checkNetWork:status];
+        self.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
     }
     return self;
 }
@@ -26,20 +33,19 @@
 -(id)initWithPath:(NSString *)path{
     self = [self init];
     if (self!=nil) {
-        self.reachability = [Reachability reachabilityForInternetConnection];
-        //开始监听网络
-        [self.reachability startNotifier];
-        
-        NetworkStatus status = self.reachability.currentReachabilityStatus;
-        [self checkNetWork:status];
-        self.path = path;
-        self.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
+//        self.reachability = [Reachability reachabilityForInternetConnection];
+//        //开始监听网络
+//        [self.reachability startNotifier];
+//        
+//        NetworkStatus status = self.reachability.currentReachabilityStatus;
+//        [self checkNetWork:status];
+//        self.path = path;
+//        self.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
     }
     return self;
 }
 -(void)drawRect:(CGRect)rect{
     [super drawRect:rect];
-//    NSUserDefaults *userDefaluts =[NSUserDefaults standardUserDefaults];
     [UIApplication sharedApplication].statusBarHidden=YES;
     //---------------------ASI下载--------------------
     UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
@@ -50,13 +56,7 @@
     [_progressView setMinProgressValue:0];
     [_progressView setMaxProgressValue:100];
 
-//    float totleSize = [[userDefaluts objectForKey:kdownloadContentSize] intValue];
-//    NSString *temPath = NSTemporaryDirectory();
-//    float lastprogress =[DataCenter fileSizeForDir:temPath];
-//    _pf(lastprogress/totleSize*100.0f);
-//    if (lastprogress!=0) {
-//        [_progressView setProgress: [_progressView minProgressValue]+lastprogress/totleSize*100.0f];
-//    }
+
     [self addSubview:_progressView];
     
     

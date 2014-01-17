@@ -770,7 +770,7 @@
 -(void)showDownloadView{
     [self setStateBarHidden:YES];
 
-    ProgressView *progress = [[ProgressView alloc]initWithPath:@"http://free2.macx.cn:81/tools/system/CleanMyMac-v1-10-8.dmg"];
+    ProgressView *progress = [[ProgressView alloc]init];
     progress.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
     progress.alpha=0.8;
     progress.backgroundColor = [UIColor grayColor];
