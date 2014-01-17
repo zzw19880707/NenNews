@@ -15,6 +15,15 @@
     [super dealloc];
     
 }
+//- (id)initWithNewsId:(NSString *)newsId{
+//    self = [self init];
+//    if (self != nil) {
+//        self.colorName = colorName;
+//        self.isSelect = NO;
+//    }
+//    return self;
+//}
+
 
 - (id)initWithColorName:(NSString *)colorName {
     self = [self init];
@@ -46,8 +55,11 @@
     if (_isSelect !=isSelect) {
         _isSelect = isSelect;
     }
-    //选中时，更改调用的字体颜色
-    _colorName = kselectText;
+    if ([_colorName isEqualToString:ktext]&&isSelect) {
+        //选中时，更改调用的字体颜色
+        _colorName = kselectText;
+    }
+    
     [self setColor];
 }
 

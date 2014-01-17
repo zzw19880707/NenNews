@@ -40,8 +40,8 @@
 }
 
 //创建textview，改变字体大小及背景颜色
-+ (NightModelTextView *)createTextView:(CGRect)frame{
-    NightModelTextView *textView = [[NightModelTextView alloc]initWithFrame:frame];
++ (NightModelTextView *)createTextView{
+    NightModelTextView *textView = [[NightModelTextView alloc]init];
     return [textView autorelease];
 }
 @end

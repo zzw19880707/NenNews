@@ -10,5 +10,4 @@
 
 @interface NightModelTextView : UITextView
 
-- (id)initWithFrame:(CGRect)frame;
 @end

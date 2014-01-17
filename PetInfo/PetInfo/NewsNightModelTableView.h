@@ -20,10 +20,10 @@
 
 -(id)initWithData:(NSArray *)data type:(int)type;
 -(id)initwithColumnID:(int)columnID;
-@property (nonatomic,assign) int type;//0:rootview  1:pushnews
+@property (nonatomic,assign) int type;//0:rootview  1:collectionview 2:pushview
 @property (nonatomic,retain) UIPageControl *pageControl;
 @property (nonatomic,assign) int columnID;
-@property (nonatomic,copy) NSDate *lastDate;
+@property (nonatomic,assign) int lastDate;
 @property (nonatomic,retain) NSArray *imageData;
 @property (nonatomic,retain) UILabel *label ;
 

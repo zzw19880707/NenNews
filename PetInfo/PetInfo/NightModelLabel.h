@@ -18,4 +18,6 @@
 
 - (id)initWithColorName:(NSString *)colorName ;
 
+//- (id)initWithNewsId:(NSString *)newsId;
+//@property (nonatomic,retain) NSString *newsId;
 @end

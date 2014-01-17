@@ -15,6 +15,7 @@
 #import "PlayerViewController.h"
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
+#import "ThemeManager.h"
 #import "MBProgressHUD.h"
 @interface NightModelContentViewController (){
     UIImageView *_imageView;
@@ -42,16 +43,18 @@
     [super viewDidLoad];
 
     [self showHUD:INFO_RequestNetWork isDim:YES];
+    self.view.backgroundColor = [[ThemeManager shareInstance] getBackgroundColor];
     NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
     [params setValue:self.newsId forKey:@"titleId"];//
+    [self getConnectionAlert];
+
     //图片新闻
     if (self.type ==2) {
-        if ([self getConnectionAlert]) {
-            [DataService requestWithURL:URL_getImages_List andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
+            [DataService requestWithURL:URL_getImages_List andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
                 NSDictionary *dic = [result objectForKey:@"news"];
                 if ((NSNull *)dic == [NSNull null]) {
                     [self hideHUD];
-                    [self showHUD:INFO_ERROR isDim:NO];
+                    [self showHUD:INFO_ERROR isDim:YES];
                     [self performSelector:@selector(hideHUD) withObject:nil afterDelay:1];
                     return ;
                 }
@@ -60,27 +63,31 @@
                 self.url = model.url;
                 self.content = model.content;
                 [self showHUDComplete:INFO_EndRequestNetWork];
-                _createtime = model.pubtime;
+                _createtime = model.pubTime;
                 _comAddress = model.comeAddress;
                 _imageArray = [result objectForKey:@"picture"] ;
                 [self performSelector:@selector(hideHUD) withObject:nil afterDelay:.5];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self _initImageView];
+                    if (_imageArray.count==0) {
+                        _Contenttype = 0;
+                        [self _initView];
+                    }else{
+                        [self _initImageView];
+
+                    }
                 });
                 
                 
             } andErrorBlock:^(NSError *error) {
                 [self performSelector:@selector(hideHUD) withObject:nil afterDelay:.5];
             }];
-        }
 
     }else{
-        if ([self getConnectionAlert]) {
-            [DataService requestWithURL:URL_getNews_content andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
+            [DataService requestWithURL:URL_getNews_content andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
                 NSDictionary *dic = [result objectForKey:@"news"];
                 if ((NSNull *)dic == [NSNull null]) {
                     [self hideHUD];
-                    [self showHUD:INFO_ERROR isDim:NO];
+                    [self showHUD:INFO_ERROR isDim:YES];
                     [self performSelector:@selector(hideHUD) withObject:nil afterDelay:1];
                     return ;
                 }
@@ -89,7 +96,7 @@
                 self.url = model.url;
                 self.content = model.content;
                 [self showHUDComplete:INFO_EndRequestNetWork];
-                _createtime = model.pubtime;
+                _createtime = model.pubTime;
                 _comAddress = model.comeAddress;
                 _abnewsArray = [result objectForKey:@"abnews"] ;
                 [self performSelector:@selector(hideHUD) withObject:nil afterDelay:.5];
@@ -117,7 +124,6 @@
                 [self performSelector:@selector(hideHUD) withObject:nil afterDelay:.5];
                 
             }];
-        }
     }
     
     
@@ -125,35 +131,37 @@
 
 -(void) initTitle {
     self.backgroundView = [Uifactory createScrollView] ;
-    self.backgroundView.frame = CGRectMake(0,20+44, ScreenWidth, ScreenHeight);
+    self.backgroundView.frame = CGRectMake(0,0, ScreenWidth, ScreenHeight);
     _height = 0.0;
     //    标题
     UILabel *titleLabel = [Uifactory createLabel:ktext];
-    titleLabel.frame = CGRectMake(scr_width, _height, ScreenWidth, 20);
+    titleLabel.frame = CGRectMake(scr_width, _height, ScreenWidth-20, 20);
     titleLabel.text = self.titleLabel;
-    titleLabel.font = [UIFont boldSystemFontOfSize:16];
-    titleLabel.textAlignment = UITextAlignmentLeft;
+    titleLabel.font = [UIFont boldSystemFontOfSize:20];
+    titleLabel.numberOfLines = 0;
+//    titleLabel.textAlignment = UITextAlignmentLeft;
     //设置字体大小适应label宽度
 //    titleLabel.adjustsFontSizeToFitWidth = YES;
     titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+    [titleLabel sizeToFit];
     [self.backgroundView addSubview:titleLabel];
-    _height +=30;
+    _height +=titleLabel.height +10;
     
     //    来源
     UILabel *comAddress = [Uifactory createLabel:kselectText];
-    comAddress.frame = CGRectMake(scr_width, _height, 80, 10);
+    comAddress.frame = CGRectMake(scr_width, _height, 80, 15);
     comAddress.text = _comAddress;
-    comAddress.font = [UIFont systemFontOfSize:10];
+    comAddress.font = [UIFont systemFontOfSize:15];
     comAddress.adjustsFontSizeToFitWidth = YES;
     [self.backgroundView addSubview:comAddress];
     //    创建时间
     UILabel *createtime = [Uifactory createLabel:kselectText];
-    createtime.frame = CGRectMake(comAddress.right+scr_width, _height, 80, 10);
+    createtime.frame = CGRectMake(comAddress.right+scr_width, _height, 80, 15);
     createtime.text = _createtime;
-    createtime.font = [UIFont systemFontOfSize:10];
+    createtime.font = [UIFont systemFontOfSize:15];
     createtime.adjustsFontSizeToFitWidth = YES;
     [self.backgroundView addSubview:createtime];
-    _height+=20;
+    _height+=25;
 
 }
 //普通新闻
@@ -184,13 +192,12 @@
         //文字
         else
         {
-            UITextView *textView = [[UITextView alloc]init];
+            UITextView *textView = [Uifactory createTextView];
             textView.text = content;
             if (content.length<=2) {
                 continue;
             }
-            textView.font = [UIFont systemFontOfSize:10];
-//            textView.textAlignment = 
+//            textView.textAlignment =
             textView.scrollEnabled = NO;
             [textView setEditable:NO];
 //            CGSize size = [content sizeWithFont:textView.font constrainedToSize:CGSizeMake(300-16, 10000)];
@@ -266,19 +273,7 @@
         _imageView.clipsToBounds = YES;
         _imageView.contentMode = UIViewContentModeScaleAspectFit;
         
-//        
-//        for (int i = 0 ; i< _imageArray.count; i ++) {
-//            UIImageView  *imageView = [[UIImageView alloc]init];
-//            [self.view addSubview:imageView];
-//            imageView.frame = _imageView.frame;
-//            imageView.tag = 1300+i;
-//            imageView.userInteractionEnabled = YES;
-//            // 内容模式
-//            imageView.clipsToBounds = YES;
-//            imageView.contentMode = UIViewContentModeScaleAspectFill;
-//            [_imageViewArray addObject:imageView];
-////            [imageView release];
-//        }
+
         [self.backgroundView  addSubview:_imageView];
         [_imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImage:)]];
         
@@ -368,6 +363,9 @@
     self.contentArray = [_content componentsSeparatedByString:@"<VIEDO>"];
     UIImageView *imageView = [[UIImageView alloc]init];
     NSString *imageURL = _contentArray[0];
+    if (!self.ImageUrl) {
+        self.ImageUrl = imageURL;
+    }
     if (imageURL.length<=2) {
         [imageView setImage:[UIImage imageNamed:@"logo_280x210.png"]];
 
@@ -485,7 +483,6 @@
     if (_isImageLoad) {
         [self.navigationController popViewControllerAnimated:NO];
     }
-    _po(self.view.subviews);
 }
 //-(void)dealloc {
 //    RELEASE_SAFELY(_abnewsArray);

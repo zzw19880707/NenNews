@@ -18,7 +18,7 @@
     self = [super init];
     if (self!=nil) {
         //字体改变通知
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(FontSizeChangeNotification:) name:kFontSizeChangeNofication object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(FontSizeChangeNotification:) name:kFontSizeChangeNofication object:nil];
     }
     return self;
 }

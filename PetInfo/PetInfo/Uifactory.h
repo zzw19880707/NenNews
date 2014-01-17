@@ -23,5 +23,5 @@
 //创建scrollview，改变背景颜色
 + (NightModelScrollView *)createScrollView ;
 //创建textview，改变字体大小及背景颜色
-+ (NightModelTextView *)createTextView:(CGRect)frame;
++ (NightModelTextView *)createTextView;
 @end

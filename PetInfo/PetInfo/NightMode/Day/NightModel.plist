@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>selectText</key>
-	<string>50,1.5,1.5</string>
+	<string>114,114,114</string>
 	<key>background</key>
 	<string>240,240,240</string>
 	<key>text</key>
-	<string>21,21,21</string>
+	<string>54,54,54</string>
 </dict>
 </plist>

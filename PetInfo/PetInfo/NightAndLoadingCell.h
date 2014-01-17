@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+@class NightModelLabel;
 @class ColumnModel;
 @interface NightAndLoadingCell : UITableViewCell{
     
     UIImageView *_imageView;
-    UILabel *_titleLabel;
+    NightModelLabel *_titleLabel;
     UILabel *_contentLabel;
 }
 
@@ -19,7 +20,7 @@
 
 @property (nonatomic,retain) UILabel *titleLable;
 
-- (id)initWithshoWImage:(BOOL)showImage type:(int)type selected :(BOOL)isselected;
+- (id)initWithshoWImage:(BOOL)showImage type:(int)type ;
 @property (nonatomic,assign) BOOL isselected;
 @property (nonatomic,assign) BOOL showImage;
 @property (nonatomic,assign) int type;

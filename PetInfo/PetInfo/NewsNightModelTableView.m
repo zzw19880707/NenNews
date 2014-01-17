@@ -10,6 +10,9 @@
 #import "ThemeManager.h"
 #import "Uifactory.h"
 #import "NightAndLoadingCell.h"
+#import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
+#import "FileUrl.h"
 #import "UIImageView+WebCache.h"
 @implementation NewsNightModelTableView
 
@@ -53,6 +56,9 @@
 
 #pragma mark ----datasource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    if (_type ==2) {
+        return 3;
+    }
     if (_imageData.count>0) {
         return 2;
     }else{
@@ -60,14 +66,9 @@
     }
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-//    NSDate *nowDate = [NSDate dateWithTimeIntervalSinceNow:0];
-//    if (self.lastDate) {
-//        
-//    }
-//    NSDate *_compareDate=[self.formatter dateFromString:_compareString];
-//    NSTimeInterval time=[date timeIntervalSinceDate:_compareDate];
-//    days=((int)time)/(3600*24);
-
+    if (_type ==2) {
+        return [self.data[section] count];
+    }
     if (_imageData.count>0&&section==0) {
             return 1;
     }else{
@@ -75,10 +76,25 @@
     }
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    if (_type ==2) {
+        if (section==0) {
+            return @"今天";
+        }else if(section==1){
+            return @"昨天";
+        }else{
+            return @"更早";
+        }
+        
+    }else{
+        return @"";
+    }
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     
-    if (_type == 1) {
+    if (_type == 1)
+    {
         static NSString *pushIndentifier = @"PushIndentifier";
         UITableViewCell *Cell = [tableView dequeueReusableCellWithIdentifier:pushIndentifier];
         if (Cell == nil) {
@@ -88,7 +104,43 @@
         Cell.textLabel.text =  model.title;
         return Cell;
 
-    }else
+    }
+    else if(_type ==2 )
+    {
+        static NSString *listIndentifier=@"HomeDetailCell";
+        
+        ColumnModel *model =self.data[indexPath.section][indexPath.row ] ;
+        //            int newsId = [model.newsId intValue];
+        int column = self.columnID;
+        BOOL showImage = NO;
+        if(column !=0){
+            //            获取是否显示图片
+            NSString *path = [FileUrl getDocumentsFile];
+            NSString *columnshowName = [path stringByAppendingPathComponent:column_show_file_name];
+            NSArray *arr = [[NSArray alloc]initWithContentsOfFile:columnshowName];
+            for (int i = 0 ; arr.count ; i++) {
+                NSDictionary *dic = arr[i];
+                if ([[dic objectForKey:@"columnId"] intValue]==column) {
+                    showImage = [[dic objectForKey:@"showimage"] boolValue];
+                    break;
+                }
+            }
+
+        }
+        _po(model);
+        int type = [model.type intValue];
+        NightAndLoadingCell *cell=[tableView  dequeueReusableCellWithIdentifier:listIndentifier];
+        
+        if (cell==nil) {//nib文件名
+            cell = [[NightAndLoadingCell alloc]initWithshoWImage:showImage type:type ];
+        }
+        cell.model = model;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        return  cell;
+
+    }
+    else
     {
         static NSString *listIndentifier=@"HomeDetailCell";
         static NSString *imageIndentifier=@"imageIndentifier";
@@ -100,7 +152,8 @@
                 _csView.delegate = self;
                 _csView.datasource = self;
                 [_csView.pageControl setHidden:YES];
-                UIView *view =[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 135)];
+                UIScrollView *view =[Uifactory createScrollView];
+                view.frame  = CGRectMake(0, 0, 320, 135);
                 [view addSubview:_csView];
                 [_csView release];
                 
@@ -128,17 +181,34 @@
             imageCell.selectionStyle = UITableViewCellSelectionStyleNone;
             return imageCell;
             
-        }else{
-            
+        }
+        else
+        {
+
+            ColumnModel *model =self.data[indexPath.row ] ;
+//            int newsId = [model.newsId intValue];
+            int column = self.columnID;
+            BOOL showImage = NO;
+//            获取是否显示图片
+            NSString *path = [FileUrl getDocumentsFile];
+            NSString *columnshowName = [path stringByAppendingPathComponent:column_show_file_name];
+            NSArray *arr = [[NSArray alloc]initWithContentsOfFile:columnshowName];
+            for (int i = 0 ; arr.count ; i++) {
+                NSDictionary *dic = arr[i];
+                if ([[dic objectForKey:@"columnId"] intValue]==column) {
+                    showImage = [[dic objectForKey:@"showimage"] boolValue];
+                    break;
+                }
+            }
+            int type = [model.type intValue];
             NightAndLoadingCell *cell=[tableView  dequeueReusableCellWithIdentifier:listIndentifier];
             
             if (cell==nil) {//nib文件名
-                
-                cell = [[NightAndLoadingCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:listIndentifier];
+                cell = [[NightAndLoadingCell alloc]initWithshoWImage:showImage type:type ];
             }
-#warning 
-            ColumnModel *model =[self.data[indexPath.row ] retain];
             cell.model = model;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
             return  cell;
             
         }
@@ -153,7 +223,7 @@
             return 80;
         }
     }else{
-        return 44;
+        return 80;
     }
     
 }
