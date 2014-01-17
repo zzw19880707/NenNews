@@ -7,7 +7,7 @@
 //
 
 #import "BaseTableView.h"
-
+#import "Reachability.h"
 @implementation BaseTableView
 
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style
@@ -153,10 +153,33 @@
     }
     
 }
+//判断当前是否有网络
+-(BOOL) isConnectionAvailable{
+    BOOL isExistenceNetwork = YES;
+    Reachability *reach = [Reachability reachabilityWithHostName:BASE_URL];
+    switch ([reach currentReachabilityStatus]) {
+        case NotReachable:
+            isExistenceNetwork = NO;
+            //NSLog(@"notReachable");
+            break;
+        case ReachableViaWiFi:
+            isExistenceNetwork = YES;
+            //NSLog(@"WIFI");
+            break;
+        case ReachableViaWWAN:
+            isExistenceNetwork = YES;
+            //NSLog(@"3G");
+            break;
+    }
+    return isExistenceNetwork;
+}
+
 //拖拽时停止调用
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
 
-    
+    if (![self isConnectionAvailable]) {
+        return;
+    }
 
 	[_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
     

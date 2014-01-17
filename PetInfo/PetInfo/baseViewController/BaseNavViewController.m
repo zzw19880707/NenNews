@@ -98,9 +98,14 @@
 
 -(void)loadBackgroundImage{
     float version=[[[UIDevice currentDevice]systemVersion]floatValue];
-    if(version>5.0){
+    if(version>5.0&&version<7.0){
         UIImage *image=[UIImage imageNamed:@"navigationbar_background.png"];
         [self.navigationBar setBackgroundImage: image forBarMetrics:UIBarMetricsDefault];
+
+    }else{
+        UIImage *image=[UIImage imageNamed:@"navigationbar_background7.png"];
+        [self.navigationBar setBackgroundImage: image forBarMetrics:UIBarMetricsDefault];
+
     }
 }
 - (void)didReceiveMemoryWarning

@@ -10,14 +10,16 @@
 #import "MBProgressHUD.h"
 #import "BaseNavViewController.h"
 #import "Reachability.h"
-
-
+#import "FileUrl.h"
+#import "NightModelContentViewController.h"
 #import "BaseViewController+StatusBarStyle.h"
+#import "ColumnModel.h"
 @interface BaseViewController ()
 
 @end
 
 @implementation BaseViewController
+
 @synthesize latitude=_latitude;
 @synthesize longitude=_longitude;
 #pragma mark 适配ios7
@@ -30,8 +32,40 @@
         [[UIApplication sharedApplication] setStatusBarHidden:statusBarHidden];
     }
 }
+-(id)init{
+    self = [super init];
+ 
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushNews:) name:kPushNewsNotification object:nil];
+    }
+    return self;
+}
+-(void)pushNewswithColumn:(ColumnModel *)model {
+    NSArray *viewControllers = self.navigationController.viewControllers;
 
-
+    if (viewControllers.count > 1) {
+        [self.navigationController popToRootViewControllerAnimated:NO];
+    }
+    NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
+    
+    //插入该cell已经选中
+    NSString *newsId = model.newsId;
+    NSString *newsAbstract =model.newsAbstract;
+    NSString *img = model.img;
+    NSString *sql = [NSString stringWithFormat:@"insert into columnData(newsId,title,newsAbstract,type,img,isselected) values('%@','%@','%@',%@,'%@',1) ;",newsId,model.title,newsAbstract,model.type,img];
+    _po(sql);
+    [self.db executeUpdate:sql];
+    nightModel.newsAbstract = model.newsAbstract;
+    nightModel.type = [model.type intValue];
+    nightModel.newsId = [NSString stringWithFormat:@"%@",model.newsId];
+    nightModel.ImageUrl = model.img;
+    [self.navigationController pushViewController:nightModel animated:YES];
+}
+-(void)pushNews:(NSNotification *)notification {
+    ColumnModel *model =(ColumnModel *)notification.object;
+    [self pushNewswithColumn:model];
+   
+}
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -177,7 +211,10 @@
 }
 - (void)viewDidLoad
 {
+    self.db = [FileUrl getDB];
+    [self.db open];
     [super viewDidLoad];
+
     //设置当前网络环境
     self.network = [self getConnectionAvailable];
     //设置navegation背景颜色
@@ -230,12 +267,15 @@
     // Dispose of any resources that can be recreated.
 }
 -(void)dealloc{
+    RELEASE_SAFELY(_db);
     RELEASE_SAFELY(_request);
     RELEASE_SAFELY(_hud);
-    MARK;
+    RELEASE_SAFELY(_network);
+    DLOG(@"release :%@",[self class]);
     [super dealloc];
 }
 -(void)viewDidUnload{
+    [_db close];
     [super viewDidUnload];
 }
 -(void)viewWillDisappear:(BOOL)animated{

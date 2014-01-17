@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 #import "ASIHTTPRequest.h"
 #import <CoreLocation/CoreLocation.h>
-
+@class FMDatabase;
 @class MBProgressHUD;
 @interface BaseViewController : UIViewController <UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,CLLocationManagerDelegate>{
     UIWindow *_tipWindow;
@@ -36,6 +36,8 @@
 -(NSString *) getConnectionAvailable;
 //判断当前网络是否存在。存在则正常访问，不存在则提示当前网络不存在
 -(BOOL)getConnectionAlert;
+//根据model push新闻
+-(void)pushNewswithColumn:(ColumnModel *)model;
 //经纬度
 @property (nonatomic,assign) float longitude;
 @property (nonatomic,assign) float latitude;
@@ -47,6 +49,8 @@
 @property(nonatomic,retain)MBProgressHUD *hud;
 //当前网络状态
 @property (nonatomic,retain)NSString *network;
+//数据库
+@property (nonatomic,retain) FMDatabase *db;
 
 
 -(void)setStateBarHidden :(BOOL) statusBarHidden;
