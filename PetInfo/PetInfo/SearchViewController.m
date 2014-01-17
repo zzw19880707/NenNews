@@ -10,6 +10,7 @@
 #import "FileUrl.h"
 #import "NightModelContentViewController.h"
 #import "DataCenter.h"
+#import "ColumnModel.h"
 @interface SearchViewController (){
     UIView *_searchBGView;
 }
@@ -49,6 +50,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.resultTableView = [[UITableView alloc]init];
+    self.resultTableView.delegate = self;
+    self.resultTableView.dataSource = self;
+    self.resultTableView.delaysContentTouches = NO;
+    //    _resultTableView.backgroundColor = [UIColor redColor];
+    _resultTableView.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
+    [self.view addSubview:self.resultTableView];
+    
+    
     _searchBGView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
     _searchBGView.backgroundColor = NenNewsTextColor;
     _searchBGView.userInteractionEnabled = YES;
@@ -60,7 +70,7 @@
     _tableView = [[UITableView alloc]init];
     _tableView.tag = 1304;
 //    int tableheigh = 200;
-    _tableView.frame=CGRectMake(0, 44+20, ScreenWidth, ScreenHeight);
+    _tableView.frame=CGRectMake(0, 0, ScreenWidth, ScreenHeight);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     _tableView.delaysContentTouches = NO;
@@ -79,7 +89,7 @@
     _tableView.tableFooterView = clearButton;
 //    [self.view addSubview:_searchBGView];
 
-    _resultTableView = [[UITableView alloc]init];
+
 
 }
 
@@ -162,8 +172,8 @@
 
         label.text = _searchData[indexPath.row];
     }else{
-#warning
-        label.text = [_resultData[indexPath.row] objectForKey:@"title"];
+        ColumnModel *model = _resultData[indexPath.row];
+        label.text = model.title;
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
@@ -177,19 +187,19 @@
             //    访问数据
             DataService *service = [[DataService alloc]init];
             NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-            [params setValue:text forKey:@"name"];
+            [params setValue:text forKey:@"content"];
             service.eventDelegate = self ;
-            [service requestWithURL:URL_Search andparams:params isJoint:YES andhttpMethod:@"POST"];
+            [service requestWithURL:URL_Search andparams:params isJoint:YES andhttpMethod:@"GET"];
             [self showHUD:INFO_Searching isDim:YES];
             //    隐藏查询表
             [self.tableView setHidden:YES];
             [self bgViewhidden];
         }else{
 #warning
-            NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
-            nightModel.newsId = [self.resultData[indexPath.row] objectForKey:@"newsId"] ;
-            nightModel.type = 0;
-            [self.navigationController pushViewController:nightModel animated:YES];
+            ColumnModel *model =_resultData[indexPath.row];
+            [self pushNewswithColumn:model];
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
         }
 
     }
@@ -198,14 +208,18 @@
 
 -(void)requestFailed:(ASIHTTPRequest *)request{
     [self hideHUD];
-
-#warning
 }
 -(void)requestFinished:(id)result{
     [self hideHUD];
-    
-//    resultData
-
+    NSMutableArray *list= [[NSMutableArray alloc]init];
+    NSArray *array =[result objectForKey:@"news"];
+    for (NSDictionary *dic in array) {
+        ColumnModel *model = [[ColumnModel alloc]initWithDataDic:dic];
+        [list addObject: model];
+        [model release];
+    }
+    _resultData = list;
+    [self.resultTableView reloadData];
 }
 
 #pragma mark - UITextField Delegate
@@ -258,7 +272,7 @@
         NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
         [params setValue:textField.text forKey:@"content"];
         service.eventDelegate = self ;
-        [service requestWithURL:URL_Search andparams:params isJoint:YES andhttpMethod:@"POST"];
+        [service requestWithURL:URL_Search andparams:params isJoint:YES andhttpMethod:@"GET"];
         [self showHUD:INFO_Searching isDim:YES];
     }else{
         [textField resignFirstResponder];

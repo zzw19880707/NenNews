@@ -102,7 +102,12 @@
                 NSArray *segments = [NSArray arrayWithObjects:@"小", @"中", @"大", nil];
                 UISegmentedControl *segmented = [[UISegmentedControl alloc] initWithItems: segments];
                 [segmented addTarget: self action: @selector(fontSizeValueChanged:) forControlEvents: UIControlEventValueChanged];
-                segmented.frame = CGRectMake(cell.frame.size.width - segmented.frame.size.width-30, 5, segmented.frame.size.width+20, segmented.frame.size.height+10);
+                if (WXHLOSVersion()>=7.0) {
+                    segmented.frame = CGRectMake(cell.frame.size.width - segmented.frame.size.width-30, 5, segmented.frame.size.width+20, segmented.frame.size.height+10);
+                }else{
+                    segmented.frame = CGRectMake(cell.frame.size.width - segmented.frame.size.width-30, 5, segmented.frame.size.width, segmented.frame.size.height);
+                }
+                
                 [cell.contentView addSubview: segmented];
 
                 [segmented setSelectedSegmentIndex: [[_settingDic objectForKey: kFont_Size] intValue]];
@@ -259,8 +264,8 @@
     [_settingDic setValue: [NSNumber numberWithInt: segmented.selectedSegmentIndex] forKey: kFont_Size];
     [self saveSetting];
 
-    [[NSNotificationCenter defaultCenter]postNotificationName:kFontSizeChangeNofication object:nil];
-     
+//    [[NSNotificationCenter defaultCenter]postNotificationName:kFontSizeChangeNofication object:nil];
+    
 
 }
 
