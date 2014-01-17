@@ -10,6 +10,8 @@
 #import "FMDB/src/FMDatabase.h"
 
 @interface FileUrl : NSObject
+//返回cache缓存数据文件路径
++(NSString *)getCacheFileURL;
 //返回cache文件路径
 +(NSString *)getCacheFile ;
 //返回document文件路径
