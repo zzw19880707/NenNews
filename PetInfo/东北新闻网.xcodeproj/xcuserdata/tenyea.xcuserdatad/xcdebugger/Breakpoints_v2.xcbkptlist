@@ -57,13 +57,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "PetInfo/MWPhotoBrowser/Libraries/SDWebImage/SDWebImage/SDImageCache.m"
-            timestampString = "410499245.809882"
+            filePath = "PetInfo/NightModelViewController.m"
+            timestampString = "411562174.354998"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
-            landmarkName = "-defaultCachePathForKey:"
+            startingLineNumber = "425"
+            endingLineNumber = "425"
+            landmarkName = "-dealloc"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -73,13 +73,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "PetInfo/MWPhotoBrowser/Libraries/SDWebImage/SDWebImage/SDImageCache.m"
-            timestampString = "410508588.542658"
+            filePath = "PetInfo/RootViewController.m"
+            timestampString = "411637300.296225"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "116"
-            endingLineNumber = "116"
-            landmarkName = "-cachePathForKey:inPath:"
+            startingLineNumber = "321"
+            endingLineNumber = "321"
+            landmarkName = "-dealloc"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -89,13 +89,29 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "PetInfo/NightModelContentViewController.m"
-            timestampString = "411101116.849015"
+            filePath = "PetInfo/WeatherViewController.m"
+            timestampString = "411564362.632269"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "349"
-            endingLineNumber = "349"
-            landmarkName = "-initImage:"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "-refeshAction:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PetInfo/baseModel/BaseNavViewController+NavigationBar.m"
+            timestampString = "411566492.474752"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "20"
+            endingLineNumber = "20"
+            landmarkName = "-setBarColor:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -106,59 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PetInfo/PushNewsViewController.m"
-            timestampString = "411123519.009408"
+            timestampString = "411634686.445034"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
-            landmarkName = "-pullDown:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PetInfo/RootViewController.m"
-            timestampString = "411138731.224114"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "213"
-            endingLineNumber = "213"
-            landmarkName = "-pullDown:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PetInfo/RootViewController.m"
-            timestampString = "411138753.297681"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "172"
-            endingLineNumber = "172"
-            landmarkName = "-getData:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PetInfo/RootViewController.m"
-            timestampString = "411139417.283256"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "223"
-            endingLineNumber = "223"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
             landmarkName = "-pullUp:"
             landmarkType = "5">
          </BreakpointContent>
@@ -169,12 +137,12 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "PetInfo/RootViewController.m"
-            timestampString = "411139417.283256"
+            filePath = "PetInfo/PushNewsViewController.m"
+            timestampString = "411634847.81901"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "229"
-            endingLineNumber = "229"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
             landmarkName = "-pullUp:"
             landmarkType = "5">
          </BreakpointContent>
@@ -185,13 +153,29 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "PetInfo/EGOTableViewPullRefresh/EGORefreshTableHeaderView_old.m"
-            timestampString = "411139462.548974"
+            filePath = "PetInfo/PushNewsViewController.m"
+            timestampString = "411634970.017504"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "235"
-            endingLineNumber = "235"
-            landmarkName = "-egoRefreshScrollViewDataSourceDidFinishedLoading:"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
+            landmarkName = "-pullUp:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PetInfo/NewsNightModelTableView.m"
+            timestampString = "411635124.549668"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
+            landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
