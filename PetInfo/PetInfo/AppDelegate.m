@@ -17,10 +17,12 @@
 #import "WXApi.h"
 #import "WeiboApi.h"
 @implementation AppDelegate
+@synthesize pushModel = _pushModel;
 #pragma mark 内存管理
 - (void)dealloc
 {
     [_window release];
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
     [super dealloc];
 }
 #pragma mark 入口
@@ -32,8 +34,8 @@
      连接新浪微博开放平台应用以使用相关功能，此应用需要引用SinaWeiboConnection.framework
      http://open.weibo.com上注册新浪微博开放平台应用，并将相关信息填写到以下字段
      **/
-    [ShareSDK connectSinaWeiboWithAppKey:@"568898243"
-                               appSecret:@"38a4f8204cc784f81f9f0daaf31e02e3"
+    [ShareSDK connectSinaWeiboWithAppKey:@"1555769301"
+                               appSecret:@"afebf314f23785cd0a7b4e967b37256e"
                              redirectUri:@"http://www.sharesdk.cn"];
     /**
      连接腾讯微博开放平台应用以使用相关功能，此应用需要引用TencentWeiboConnection.framework
@@ -55,8 +57,8 @@
      
      如果需要实现SSO，需要导入TencentOpenAPI.framework,并引入QQApiInterface.h和TencentOAuth.h，将QQApiInterface和TencentOAuth的类型传入接口
      **/
-    [ShareSDK connectQZoneWithAppKey:@"100371282"
-                           appSecret:@"aed9b0303e3ed1e27bae87c33761161d"
+    [ShareSDK connectQZoneWithAppKey:@"101007496"
+                           appSecret:@"fa44d81770c1444d42a171f547fcdfc1"
                    qqApiInterfaceCls:[QQApiInterface class]
                      tencentOAuthCls:[TencentOAuth class]];
     
@@ -64,7 +66,7 @@
      连接微信应用以使用相关功能，此应用需要引用WeChatConnection.framework和微信官方SDK
      http://open.weixin.qq.com上注册应用，并将相关信息填写以下字段
      **/
-    [ShareSDK connectWeChatWithAppId:@"wx4868b35061f87885" wechatCls:[WXApi class]];
+    [ShareSDK connectWeChatWithAppId:@"wx6b665e9bc0f77e41" wechatCls:[WXApi class]];
     
 //    /**
 //     连接QQ应用以使用相关功能，此应用需要引用QQConnection.framework和QQApi.framework库
@@ -83,17 +85,12 @@
      连接人人网应用以使用相关功能，此应用需要引用RenRenConnection.framework
      http://dev.renren.com上注册人人网开放平台应用，并将相关信息填写到以下字段
      **/
-    [ShareSDK connectRenRenWithAppId:@"226427"
-                              appKey:@"fc5b8aed373c4c27a05b712acba0f8c3"
-                           appSecret:@"f29df781abdd4f49beca5a2194676ca4"
+    [ShareSDK connectRenRenWithAppId:@"246729"
+                              appKey:@"ab880b1815274cc8ba554bf1398f67f3"
+                           appSecret:@"6e7382e8f6034b158d14f0c4a165ea99"
                    renrenClientClass:[RennClient class]];
     
-    
-    
 
-    
-    
-    
     
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.backgroundColor = [UIColor whiteColor];
@@ -122,37 +119,57 @@
         NSMutableDictionary *settingDic = [[NSMutableDictionary alloc] initWithObjectsAndKeys: [NSNumber numberWithInt: 1], kFont_Size, [NSNumber numberWithBool: YES], KNews_Push, nil];
         [settingDic writeToFile: settingPath atomically: YES];
         
+
+    
+    }
     // 注册通知（声音、标记、弹出窗口）
     [application registerForRemoteNotificationTypes:
      UIRemoteNotificationTypeAlert
      | UIRemoteNotificationTypeBadge
      | UIRemoteNotificationTypeSound];
-    
-    }
+    _pushModel = [[ColumnModel alloc]init];
 
     return YES;
 }
 //注册token
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
     [BPush registerDeviceToken: deviceToken];
-
+    [BPush bindChannel];
     _po(deviceToken);
-#warning <#message#>
 }
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
 //    NSLog(@"Receive Notify: %@", [userInfo JSONString]);
     NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
     if (application.applicationState == UIApplicationStateActive) {
-        // Nothing to do if applicationState is Inactive, the iOS already displayed an alert view.
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Did receive a Remote Notification"
-                                                            message:[NSString stringWithFormat:@"The application received this remote notification while it was running:\n%@", alert]
-                                                           delegate:self
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-        [alertView show];
-    }
+        NSString *newsId = [userInfo objectForKey:@"newsId"];
+        if (newsId) {
+            // Nothing to do if applicationState is Inactive, the iOS already displayed an alert view.
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"推送新闻:"
+                                                                message:[NSString stringWithFormat:@"%@", alert]
+                                                               delegate:self
+                                                      cancelButtonTitle:@"好的"
+                                                      otherButtonTitles:@"查看",nil];
+            ColumnModel *model = [[ColumnModel alloc]init];
+            model.newsId = newsId;
+            model.title = alert;
+            model.newsAbstract = [userInfo objectForKey:@"newsAbstract"];
+            model.type = [userInfo objectForKey:@"type"];
+            model.img = [userInfo objectForKey:@"title"];
+            model.isselected = NO;
+            _pushModel = model;
+            [alertView show];
+        }else{
+            // Nothing to do if applicationState is Inactive, the iOS already displayed an alert view.
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"推送新闻:"
+                                                                message:[NSString stringWithFormat:@"%@", alert]
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+            [alertView show];
+
+        }
+}
     [application setApplicationIconBadgeNumber:0];
-    
     [BPush handleNotification:userInfo];
 
 }
@@ -237,5 +254,13 @@
         }
     }
 
+}
+#pragma mark uialertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 0) {
+        
+    }else{
+        [[NSNotificationCenter defaultCenter]postNotificationName:kPushNewsNotification object:_pushModel];
+    }
 }
 @end
