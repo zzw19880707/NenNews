@@ -139,11 +139,11 @@
 //    titleid type类型  newsAbstract描述 title标题 img主图  isselected是否选过DEFAULT 0
     [db executeUpdate:@"CREATE TABLE columnData (newsId TEXT PRIMARY KEY, title TEXT, newsAbstract  TEXT, type INTEGER,img TEXT, isselected INTEGER DEFAULT 0)"];
 //    2.contentdata表
-//    titleid title标题 content新闻内容 createtime创建时间 comAddress来源 url:新闻源地址
-    [db executeUpdate:@"CREATE TABLE contentdata (newsId TEXT PRIMARY KEY, title TEXT, content TEXT, pubtime TEXT,comeAddress TEXT, url TEXT)"];
+//    titleid title标题 content新闻内容（栏目id_news_newsId.json） createtime创建时间 comAddress来源 url:新闻源地址
+//    [db executeUpdate:@"CREATE TABLE contentdata (newsId TEXT PRIMARY KEY, title TEXT, content TEXT, pubtime TEXT,comeAddress TEXT, url TEXT)"];
 //    3.linkNews表 相关新闻
 //    abnewsid   newsid主新闻  title标题   titleid标题id  type（0代表相关，1代表专题）
-    [db executeUpdate:@"CREATE TABLE linkNews (linkNewsId TEXT PRIMARY KEY, newsId TEXT, title TEXT, titleId TEXT,type INTEGER )"];
+//    [db executeUpdate:@"CREATE TABLE linkNews (linkNewsId TEXT PRIMARY KEY, newsId TEXT, title TEXT, titleId TEXT,type INTEGER )"];
 }
 -(void)_initplist{
     NSString *plistPath1 = [FileUrl getDocumentsFile];
@@ -172,7 +172,7 @@
     NSMutableArray *showarray = [[NSMutableArray alloc]init];
     for(int i= 1 ; i<columnsshowName.count+1 ;i ++){
         
-        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsshowName[i-1],[NSNumber numberWithInt:i],[NSNumber numberWithInt:1]] forKeys:@[@"name",@"cloumID",@"showimage"]];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsshowName[i-1],[NSNumber numberWithInt:i],[NSNumber numberWithInt:1]] forKeys:@[@"name",@"columnId",@"showimage"]];
         [showarray addObject:dic];
         [dic release];
     }
@@ -181,9 +181,9 @@
     NSString *columnName = [plistPath1 stringByAppendingPathComponent:column_disshow_file_name];
     NSArray *columnsName = @[@"民生",@"英语",@"新农村建设",@"旅游",@"财经",@"体育"];
     NSMutableArray *array = [[NSMutableArray alloc]init];
-    for(int i= 0 ; i<columnsName.count ;i ++){
+    for(int i= 1 ; i<columnsName.count ;i ++){
         
-        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsName[i],[NSNumber numberWithInt:i],[NSNumber numberWithInt:0]] forKeys:@[@"name",@"cloumID",@"showimage"]];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsName[i-1],[NSNumber numberWithInt:(i+6)],[NSNumber numberWithInt:0]] forKeys:@[@"name",@"columnId",@"showimage"]];
         [array addObject:dic];
         [dic release];
     }
@@ -203,8 +203,7 @@
     if (![_userDefaults boolForKey:kisNotFirstLogin]) {
         [self _initDB];
         [self _initplist];
-        #warning 推送绑定
-        [BPush bindChannel];
+
         [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:3];
     }else{
         //图片最多加载5秒
