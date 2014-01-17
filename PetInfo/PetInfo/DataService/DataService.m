@@ -7,11 +7,13 @@
 //
 
 #import "DataService.h"
-
+#import "ASIDownloadCache.h"
+#import "Reachability.h"
+#import "FileUrl.h"
 @implementation DataService
 //发送异步请求
 + (ASIHTTPRequest *)requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params andhttpMethod: (NSString *)httpMethod completeBlock:(RequestFinishBlock) block andErrorBlock:(RequestErrorBlock) errorBlock{
-    
+
     //拼接url地址
     urlstring = [BASE_URL stringByAppendingString:urlstring];
     
@@ -69,6 +71,45 @@
      这样导致循环retain。
 
  */
+    
+    //    设置缓存--
+    ASIDownloadCache *cache = [[ASIDownloadCache alloc]init];//创建缓存对象
+    NSString *cachePath = [FileUrl getCacheFileURL]; //设置缓存目录
+    DLOG(@"cachepath:%@",cachePath);
+    [cache setStoragePath:cachePath];
+    
+    
+    BOOL isExistenceNetwork = YES;
+    Reachability *reach = [Reachability reachabilityWithHostName:BASE_URL];
+    switch ([reach currentReachabilityStatus]) {
+        case NotReachable:
+            isExistenceNetwork = NO;
+            //NSLog(@"notReachable");
+            break;
+        case ReachableViaWiFi:
+            isExistenceNetwork = YES;
+            //NSLog(@"WIFI");
+            break;
+        case ReachableViaWWAN:
+            isExistenceNetwork = YES;
+            //NSLog(@"3G");
+            break;
+    }
+
+    if ( isExistenceNetwork) {
+        cache.defaultCachePolicy =ASIAskServerIfModifiedCachePolicy; //设置缓存策略
+
+    }else{
+        cache.defaultCachePolicy =ASIAskServerIfModifiedWhenStaleCachePolicy; //设置缓存策略
+
+    }
+    cache.defaultCachePolicy =ASIAskServerIfModifiedWhenStaleCachePolicy|ASIAskServerIfModifiedCachePolicy; //设置缓存策略
+    
+    //每次请求会将上一次的请求缓存文件清除,默认策略，基于session的缓存数据存储。当下次运行或[ASIHTTPRequest clearSession]时，缓存将失效。
+//    request.cacheStoragePolicy = ASICacheForSessionDurationCacheStoragePolicy;
+    //持久缓存，一直保存在本地(是持久缓存，程序下次启动，缓存仍然还在)
+    request.cacheStoragePolicy =ASICachePermanentlyCacheStoragePolicy;
+    request.downloadCache = cache;
     _po(url);
     [request setCompletionBlock:^{
         NSData *data = request.responseData;
@@ -94,6 +135,7 @@
 
     return  request;
 }
+/*
 ////异步上传图片
 //+ (ASIHTTPRequest *)sendImageWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params  completeBlock:(RequestFinishBlock) block andErrorBlock:(RequestErrorBlock) errorBlock{
 //    //拼接url地址
@@ -182,7 +224,7 @@
 //    return  request;
 //}
 
-
+*/
 - (ASIHTTPRequest *) requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params
                             isJoint:(BOOL)isJoint    andhttpMethod: (NSString *)httpMethod {
     if (isJoint) {
@@ -245,6 +287,19 @@
      这样导致循环retain。
      
      */
+    
+    //    设置缓存--
+    ASIDownloadCache *cache = [[ASIDownloadCache alloc]init];//创建缓存对象
+    NSString *cachePath = [FileUrl getCacheFileURL]; //设置缓存目录，这里设置沙盒目录下的Documents目录作为缓存目录
+    NSLog(@"cachepath:%@",cachePath);
+    [cache setStoragePath:cachePath];
+    cache.defaultCachePolicy =ASIAskServerIfModifiedCachePolicy; //设置缓存策略
+    
+    //每次请求会将上一次的请求缓存文件清除
+    //    request.cacheStoragePolicy = ASICacheForSessionDurationCacheStoragePolicy;
+    //持久缓存，一直保存在本地(是持久缓存，程序下次启动，缓存仍然还在)
+    request.cacheStoragePolicy =ASICachePermanentlyCacheStoragePolicy;
+    request.downloadCache = cache;
     _po(url);
     [request setDelegate:self];
     [request startAsynchronous];
