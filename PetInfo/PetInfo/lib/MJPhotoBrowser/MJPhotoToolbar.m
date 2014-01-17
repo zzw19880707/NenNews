@@ -9,7 +9,7 @@
 #import "MJPhotoToolbar.h"
 #import "MJPhoto.h"
 #import "MBProgressHUD+Add.h"
-
+#import "ColumnModel.h"
 @interface MJPhotoToolbar()
 {
     // 显示页码
@@ -109,7 +109,17 @@ static const CGFloat labelPadding = 10;
 //    [_saveImageBtn addTarget:self action:@selector(saveImage) forControlEvents:UIControlEventTouchUpInside];
 //    [self addSubview:_saveImageBtn];
 }
-
+-(void)shareAction{
+    ColumnModel *model = [[ColumnModel alloc]init];
+    model.type = [NSNumber numberWithInt:2];
+    model.title = _titleLabel.text;
+    model.newsAbstract = _contentLabel.text;
+    model.isselected = 1;
+    model.newsId = @"123";
+    MJPhoto *photo =_photos[_currentPhotoIndex];
+    model.img = [photo.url absoluteString];
+    [[NSNotificationCenter defaultCenter]postNotificationName:kImageShareNotification object:model];
+}
 - (void)saveImage
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -149,8 +159,9 @@ static const CGFloat labelPadding = 10;
     
     _titleLabel.text = photo.title;
     _contentLabel.text = photo.content;
-    [_contentLabel sizeToFit];
-    float heigh =  _contentLabel.height;
+    CGSize size = [_contentLabel sizeThatFits:CGSizeMake(ScreenWidth-labelPadding*2, 1000)];
+    _contentLabel.height = size.height;
+    float heigh =  size.height;
     _bgcontentScroll.contentSize = CGSizeMake(ScreenWidth - 70, heigh);
 }
 
