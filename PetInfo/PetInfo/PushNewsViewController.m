@@ -113,13 +113,17 @@
 
 //上拉刷新
 -(void)pullDown:(NewsNightModelTableView *)tableView{
-    
+    if ([self getConnectionAlert]) {
+        return;
+    }
     [self getData:tableView];
     
 }
 //下拉加载
 -(void)pullUp:(NewsNightModelTableView *)tableView{
-    
+    if ([self getConnectionAlert]) {
+        return;
+    }
     //    参数
     NSMutableDictionary *params  = [[NSMutableDictionary alloc]init];
     int count = [[NSUserDefaults standardUserDefaults]integerForKey:kpageCount];
