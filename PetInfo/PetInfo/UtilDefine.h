@@ -43,7 +43,7 @@
 
 #define DOBJ(obj)  DLOG(@"%s: %@", #obj, [(obj) description])
 //当前方法和行数
-#define MARK    NSLog(@"********\nMARK: %s, %d", __PRETTY_FUNCTION__, __LINE__)
+#define MARK    NSLog(@"********%@\nMARK: %s, %d",[self class] , __PRETTY_FUNCTION__, __LINE__)
 //输出日志
 #define _po(o) DLOG(@"%@", (o))
 #define _pn(o) DLOG(@"%d", (o))

@@ -10,6 +10,10 @@
 #define PetInfo_kPetInfo_h
 
 #pragma mark NSNotificationCenter
+//图片新闻分享通知
+#define kImageShareNotification @"kImageShareNotification"
+//推送通知
+#define kPushNewsNotification @"kPushNewsNotification"
 //图片浏览器返回通知
 #define kImageReturnNofication @"kImageReturnNofication"
 
@@ -23,7 +27,7 @@
 #define kofflineBeginNofication @"kofflineBeginNofication"
 
 //字体大小改变
-#define kFontSizeChangeNofication @"kFontSizeChangeNofication"
+//#define kFontSizeChangeNofication @"kFontSizeChangeNofication"
 
 #pragma mark DIC_KEY
 #define kFont_Size @"kFontSize"

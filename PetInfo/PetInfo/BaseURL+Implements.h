@@ -8,8 +8,10 @@
 
 #ifndef PetInfo_BaseURL_Implements_h
 #define PetInfo_BaseURL_Implements_h
-
+//#define BASE_URL @"http://192.168.1.126:8080/nen/"
 #define BASE_URL @"http://192.168.1.145:8080/nen/"
+//#define BASE_URL @"http://app.nen.com.cn/"
+
 //获取普通新闻内容及视频新闻
 #define URL_getNews_content @"getNewscontent"
 //获取图片新闻内容
@@ -19,12 +21,12 @@
 //获取栏目下新闻列表
 #define URL_getColumn_List @"getColumnList"
 //获取推送新闻
-#define URL_getPush_List @"getPushList"
+#define URL_getPush_List @"PushHistoryServlet"
 //获取首页大图
 #define URL_AO @"Ao"
 
 //传入查询内容 返回查询结果。 post请求
-#define URL_Search @"SearchNewsServlet"
+#define URL_Search @"SearchNews"
 
 #pragma mark 天气预报
 #define Weather_URL @"http://m.weather.com.cn/data/"
