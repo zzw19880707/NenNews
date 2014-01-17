@@ -100,7 +100,7 @@
     return  cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 80;
+    return 60;
 }
 #pragma mark uitabledelegate
 //选中修改mainviewcontroller 显示内容
@@ -119,6 +119,7 @@
     self.appDelegate.menuCtrl.rootViewController = navViewController;
     [self.appDelegate.menuCtrl showRootController:YES];
 
+    [baseView release];
 }
 
 #pragma mark 内存管理
