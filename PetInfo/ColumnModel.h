@@ -15,5 +15,5 @@
 @property (nonatomic,copy) NSString *newsAbstract;
 @property (nonatomic,copy) NSString *title;
 @property (nonatomic,copy) NSString *img;
-
+@property (nonatomic,assign) BOOL isselected;
 @end
