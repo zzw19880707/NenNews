@@ -96,13 +96,13 @@
     search.isCancelButton = YES;
     WeatherViewController *weather =[[[WeatherViewController alloc]init]autorelease];
     weather.isCancelButton = YES;
-    LoginViewController *login = [[[LoginViewController alloc]init]autorelease];
-    login.isCancelButton = YES;
+//    LoginViewController *login = [[[LoginViewController alloc]init]autorelease];
+//    login.isCancelButton = YES;
 
     NSUserDefaults *userdefaults = [NSUserDefaults standardUserDefaults];
     switch (sender.tag) {
         case 1000://登陆
-            [self.appDelegate.menuCtrl presentModalViewController:[[[BaseNavViewController alloc]initWithRootViewController: login]autorelease] animated:YES];
+//            [self.appDelegate.menuCtrl presentModalViewController:[[[BaseNavViewController alloc]initWithRootViewController: login]autorelease] animated:YES];
             
             break;
         case 1001:
