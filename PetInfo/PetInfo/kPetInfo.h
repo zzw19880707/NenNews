@@ -59,8 +59,8 @@
 #define kdownloadContentSize @"kdownloadContentSize"
 //用户当前位置编码,用于天气预报
 #define kLocationCityCode @"kLocationCityCode"
-
-
+//显示新手知道图
+#define kDescriptionImage @"kDescriptionImage"
 
 //首页加载广告的大图
 #define main_adImage_url @"main_adImage_url"
