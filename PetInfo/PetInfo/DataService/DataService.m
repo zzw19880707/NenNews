@@ -96,14 +96,14 @@
             break;
     }
 
-//    if ( isExistenceNetwork) {
+    if ( isExistenceNetwork) {
         cache.defaultCachePolicy =ASIAskServerIfModifiedCachePolicy|ASIFallbackToCacheIfLoadFailsCachePolicy; //设置缓存策略
 
-//    }else{
-//        cache.defaultCachePolicy =ASIAskServerIfModifiedWhenStaleCachePolicy; //设置缓存策略
-//
-//    }
-    cache.defaultCachePolicy =ASIAskServerIfModifiedWhenStaleCachePolicy|ASIAskServerIfModifiedCachePolicy; //设置缓存策略
+    }else{
+        cache.defaultCachePolicy =ASIOnlyLoadIfNotCachedCachePolicy; //设置缓存策略
+
+    }
+//    cache.defaultCachePolicy =ASIAskServerIfModifiedWhenStaleCachePolicy|ASIAskServerIfModifiedCachePolicy; //设置缓存策略
     
     //每次请求会将上一次的请求缓存文件清除,默认策略，基于session的缓存数据存储。当下次运行或[ASIHTTPRequest clearSession]时，缓存将失效。
 //    request.cacheStoragePolicy = ASICacheForSessionDurationCacheStoragePolicy;
