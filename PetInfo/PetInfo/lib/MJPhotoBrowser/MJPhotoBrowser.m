@@ -61,13 +61,13 @@
 
 -(void) createNavigationBar{
     _navigationView = [[UIView alloc] init];
-    _navigationView.frame = CGRectMake(0, 0, ScreenWidth, 44);
+    _navigationView.frame = CGRectMake(0, 0, ScreenWidth, 44+20);
     _navigationView.backgroundColor = [UIColor grayColor];
     _navigationView.alpha = .8;
     UIButton *button = [[UIButton alloc]init];
     button.backgroundColor = CLEARCOLOR;
     [button setImage:[UIImage imageNamed:@"navagiton_back.png"] forState:UIControlStateNormal];
-    button.frame = CGRectMake(20 , 2, 40, 30);
+    button.frame = CGRectMake(10 , 2, 40, 30+20);
     [button addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
     [_navigationView addSubview:button];
     [self.view addSubview:_navigationView];
