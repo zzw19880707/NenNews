@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "ASIHTTPRequest.h"
 #import "ADVPercentProgressBar.h"
+#import "ASINetworkQueue.h"
+
 @class Reachability;
 @protocol ProgressDelegate <NSObject>
 //可选事件
@@ -20,6 +22,7 @@
 @interface ProgressView : UIView{
     ADVPercentProgressBar *_progressView;
     ASIHTTPRequest *_request;
+    ASINetworkQueue *_queue;
 }
 @property(nonatomic,retain)Reachability *reachability;
 @property(nonatomic,retain) NSString *path;

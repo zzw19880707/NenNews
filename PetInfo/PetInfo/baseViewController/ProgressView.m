@@ -12,6 +12,8 @@
 #import "DataCenter.h"
 #import "FileUrl.h"
 #import "ADVPercentProgressBar.h"
+#import "ASIDownloadCache.h"
+#import "ColumnModel.h"
 @implementation ProgressView
 
 -(id)init{
@@ -26,6 +28,9 @@
         NetworkStatus status = self.reachability.currentReachabilityStatus;
         [self checkNetWork:status];
         self.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
+        if (!_queue) {
+            _queue = [[ASINetworkQueue alloc]init];
+        }
     }
     return self;
 }
@@ -70,43 +75,66 @@
     
     //通过kvo监听progress值，达到监听进度的目的
     [progressView addObserver:self forKeyPath:@"progress" options:NSKeyValueObservingOptionNew context:nil];
-    
-    
 
-    NSString *path = [[FileUrl getDocumentsFile] stringByAppendingPathComponent:kDownloadOffline_file_name];
     
-    _request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:_path]];
-    [_request setHeadersReceivedBlock:^(NSDictionary *responseHeaders){
-        //响应头
-        //        NSDictionary *responseHeaders = request.responseHeaders;
-        NSLog(@"%@",responseHeaders);
+    // 使得每一次下载都是重新来过的
+    [_queue reset];
+//    NSArray *array = @[@"http://192.168.1.145:8080/nen/getNewscontent?titleId=011759708",@"http://192.168.1.145:8080/nen/getNewscontent?titleId=011759707"];
+    
+    ASIHTTPRequest *columnrequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:@"http://192.168.1.145:8080/nen/getColumnList?count=20&columnID=2"]];
+    [columnrequest setCompletionBlock:^{
+        NSData *data = columnrequest.responseData;
+        id result = nil ;
+            result =[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+
+        _po(result);
+        NSArray *array = [result objectForKey:@"data"];
+        for (NSDictionary *dic in array) {
+            ColumnModel *model = [[ColumnModel alloc]initWithDataDic:dic ];
+            NSString *str = [NSString stringWithFormat:@"http://192.168.1.145:8080/nen/getNewscontent?titleId=%@",model.newsId];
+            _path = str;
+            _request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:_path]];
+            ASIDownloadCache *cache = [[ASIDownloadCache alloc]init];//创建缓存对象
+            NSString *cachePath = [FileUrl getCacheFileURL]; //设置缓存目录
+            DLOG(@"cachepath:%@",cachePath);
+            [cache setStoragePath:cachePath];
+            cache.defaultCachePolicy =ASIUseDefaultCachePolicy; //设置缓存策略
+            _request.cacheStoragePolicy =ASICachePermanentlyCacheStoragePolicy;
+            _request.downloadCache = cache;
+            [_queue addOperation:_request];
+            
+        }
+        _queue.downloadProgressDelegate = progressView;
+        // 设置queue完成后需要实现的UI方法，根据头文件里面定义，这个UI方法需要一个ASIHTTPRequest 的参数
+        _queue.requestDidFinishSelector = @selector(queueDidFinish:);
+        [_queue setRequestDidFailSelector:@selector(queueError:)];
+        // 如果要实现SEL的方法则根据头文件定义需要把delegate定为self
+        _queue.delegate = self;
         
-        //获取下载文件大小
-        NSNumber *contentSize = [responseHeaders objectForKey:@"Content-Length"];
-//        [userDefaluts setValue:contentSize forKey:kdownloadContentSize];
-//        [userDefaluts synchronize];
-        
+        //    [_request startAsynchronous];
+        [_queue go];
+
     }];
+    [columnrequest startSynchronous];
     
-    //设置文件下载存放的路径
-    [_request setDownloadDestinationPath:path];
-    //设置进度条
-    _request.downloadProgressDelegate = progressView;
-    
-    //------------------------断点续传-----------------------
-    //设置是否支持断点续传
-    [_request setAllowResumeForFileDownloads:YES];
-    NSString *tempPath = [NSTemporaryDirectory() stringByAppendingString:kDownloadCache_file_name];
-    //设置下载过程中暂存的文件路径
-    [_request setTemporaryFileDownloadPath:tempPath];
-    [_request startAsynchronous];
+}
 
+- (void)queueDidFinish:(ASIHTTPRequest *)request
+
+{
+    [self.eventDelegate finishDownload];
+    
+}
+- (void)queueError:(ASIHTTPRequest *)request
+
+{
+    _po([[request error] localizedDescription]);
+    [self.eventDelegate finishDownload];
 }
 #pragma mark Action
 -(void)cencelAction{
     [_request clearDelegatesAndCancel];
     [self.eventDelegate finishDownload];
-
 }
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object

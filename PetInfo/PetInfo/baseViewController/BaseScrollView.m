@@ -81,6 +81,27 @@
         [self addSubview:_contentBgView];
         
         self.buttonsNameArray =buttonsName;
+        
+        
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:kDescriptionImage]) {
+            UIView *backview = [[UIView alloc]init];
+            backview.tag = 8063;
+            backview.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
+            backview.backgroundColor = [UIColor grayColor];
+            backview.alpha = 0.7;
+            [self addSubview:backview];
+            [backview release];
+            UIImageView *background = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"description.png"]];
+            background.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
+            [backview addSubview:background];
+            [background release];
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dismisdesc:)];
+            tap.delaysTouchesBegan = YES;
+            [backview addGestureRecognizer:tap];
+            [tap release];
+        }
+       
+
     }
     return self;
 }
@@ -130,6 +151,13 @@
     [self reloadButtonsAndViews];
 }
 #pragma mark 按钮事件
+-(void)dismisdesc:(UIGestureRecognizer *)tap{
+    UIView *back =(UIView *) [self viewWithTag:8063];
+    [back removeFromSuperview];
+    back = nil;
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kDescriptionImage];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
 -(void)selectAction:(UIButton *)button{
     int page = button.tag -1000;
     [UIView animateWithDuration:0.5 animations:^{
