@@ -145,8 +145,9 @@
 		EB5D4748187BB0B60051A609 /* MJPhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = EB5D471C187BB0B60051A609 /* MJPhotoView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		EB5D475B187BCCF00051A609 /* photo_down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB5D4759187BCCF00051A609 /* photo_down@2x.png */; };
 		EB5D475C187BCCF00051A609 /* photo_down.png in Resources */ = {isa = PBXBuildFile; fileRef = EB5D475A187BCCF00051A609 /* photo_down.png */; };
-		EB70495D186FB5BD00E94C56 /* navagiton_back.png in Resources */ = {isa = PBXBuildFile; fileRef = EB70495B186FB5BD00E94C56 /* navagiton_back.png */; };
-		EB70495E186FB5BD00E94C56 /* navagiton_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB70495C186FB5BD00E94C56 /* navagiton_back@2x.png */; };
+		EB6103B5188A234800E2332B /* description.png in Resources */ = {isa = PBXBuildFile; fileRef = EB6103B4188A234800E2332B /* description.png */; };
+		EB6103B8188A268A00E2332B /* navagiton_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB6103B6188A268A00E2332B /* navagiton_back@2x.png */; };
+		EB6103B9188A268A00E2332B /* navagiton_back.png in Resources */ = {isa = PBXBuildFile; fileRef = EB6103B7188A268A00E2332B /* navagiton_back.png */; };
 		EB704963186FB61200E94C56 /* content_collection.png in Resources */ = {isa = PBXBuildFile; fileRef = EB70495F186FB61200E94C56 /* content_collection.png */; };
 		EB704964186FB61200E94C56 /* content_collection@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB704960186FB61200E94C56 /* content_collection@2x.png */; };
 		EB704965186FB61200E94C56 /* content_share.png in Resources */ = {isa = PBXBuildFile; fileRef = EB704961186FB61200E94C56 /* content_share.png */; };
@@ -522,8 +523,9 @@
 		EB5D471C187BB0B60051A609 /* MJPhotoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPhotoView.m; sourceTree = "<group>"; };
 		EB5D4759187BCCF00051A609 /* photo_down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photo_down@2x.png"; sourceTree = "<group>"; };
 		EB5D475A187BCCF00051A609 /* photo_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_down.png; sourceTree = "<group>"; };
-		EB70495B186FB5BD00E94C56 /* navagiton_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navagiton_back.png; sourceTree = "<group>"; };
-		EB70495C186FB5BD00E94C56 /* navagiton_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navagiton_back@2x.png"; sourceTree = "<group>"; };
+		EB6103B4188A234800E2332B /* description.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = description.png; sourceTree = "<group>"; };
+		EB6103B6188A268A00E2332B /* navagiton_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navagiton_back@2x.png"; sourceTree = "<group>"; };
+		EB6103B7188A268A00E2332B /* navagiton_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navagiton_back.png; sourceTree = "<group>"; };
 		EB70495F186FB61200E94C56 /* content_collection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = content_collection.png; sourceTree = "<group>"; };
 		EB704960186FB61200E94C56 /* content_collection@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "content_collection@2x.png"; sourceTree = "<group>"; };
 		EB704961186FB61200E94C56 /* content_share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = content_share.png; sourceTree = "<group>"; };
@@ -907,8 +909,8 @@
 			children = (
 				EBC3A79E187E39B4008D4259 /* title_button_add@2x.png */,
 				EBC3A79F187E39B4008D4259 /* title_button_add.png */,
-				EB70495B186FB5BD00E94C56 /* navagiton_back.png */,
-				EB70495C186FB5BD00E94C56 /* navagiton_back@2x.png */,
+				EB6103B6188A268A00E2332B /* navagiton_back@2x.png */,
+				EB6103B7188A268A00E2332B /* navagiton_back.png */,
 				EB32ACED186A7C220014DFA5 /* progress_button_cencel.png */,
 				EB32ACEE186A7C220014DFA5 /* progress_button_cencel@2x.png */,
 				EBB9C37C188923E5009DE352 /* navigationbar_background7.png */,
@@ -1312,6 +1314,7 @@
 		EBEE853A18616CC200EC96EB /* mainViewController */ = {
 			isa = PBXGroup;
 			children = (
+				EB6103B4188A234800E2332B /* description.png */,
 				EB93B5381876AD6E0054B9D5 /* main_background_logo.png */,
 				EB93B5391876AD6E0054B9D5 /* main_background_logo@2x.png */,
 				EB01021E1862DF270021D998 /* right_login_button.png */,
@@ -1845,6 +1848,7 @@
 				EB4DC732186E961F00610D11 /* b30@2x.png in Resources */,
 				EB93B52A1876993E0054B9D5 /* ShareSDKiPhoneSimpleShareViewUI.bundle in Resources */,
 				EB4DC727186E961F00610D11 /* b19@2x.png in Resources */,
+				EB6103B5188A234800E2332B /* description.png in Resources */,
 				EB4DC719186E961F00610D11 /* b5@2x.png in Resources */,
 				EB93B51E1876993E0054B9D5 /* WeiboSDK.bundle in Resources */,
 				FE8777E5185A10EB0070CF74 /* StringValue.h in Resources */,
@@ -1874,7 +1878,7 @@
 				EB31FC2A1883BC4100614DC8 /* app_icon@2x.png in Resources */,
 				EB822CDD186D777600B99CAC /* Login_logo@2x.png in Resources */,
 				EB01022F1862DF270021D998 /* right_off_line_button@2x.png in Resources */,
-				EB70495E186FB5BD00E94C56 /* navagiton_back@2x.png in Resources */,
+				EB6103B8188A268A00E2332B /* navagiton_back@2x.png in Resources */,
 				EB01022B1862DF270021D998 /* right_login_button@2x.png in Resources */,
 				EB5D475B187BCCF00051A609 /* photo_down@2x.png in Resources */,
 				EB0102341862DF270021D998 /* right_weather_button.png in Resources */,
@@ -1896,7 +1900,6 @@
 				EB4DC720186E961F00610D11 /* b12@2x.png in Resources */,
 				EB32AD12186A8F2A0014DFA5 /* progress-fill-red@2x.png in Resources */,
 				EB822D4A186D8F3E00B99CAC /* b18.png in Resources */,
-				EB70495D186FB5BD00E94C56 /* navagiton_back.png in Resources */,
 				EB4DC71A186E961F00610D11 /* b6@2x.png in Resources */,
 				EB4DC714186E961F00610D11 /* b0@2x1.png in Resources */,
 				EB32ACF8186A86F00014DFA5 /* main_guide_page_first.png in Resources */,
@@ -2008,6 +2011,7 @@
 				EB26423D1867C9780004D1D9 /* AboutViewController.xib in Resources */,
 				EB822D55186D8F3E00B99CAC /* b28.png in Resources */,
 				EB822D5E186D8F3E00B99CAC /* b8.png in Resources */,
+				EB6103B9188A268A00E2332B /* navagiton_back.png in Resources */,
 				FEBAEE9F1867227D00CBC711 /* NightMode in Resources */,
 				EB2642361867C51A0004D1D9 /* SettingViewController.xib in Resources */,
 				EBC3A79A187E3890008D4259 /* right_item_button.png in Resources */,
