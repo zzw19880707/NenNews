@@ -38,7 +38,14 @@
 -(void)viewWillAppear:(BOOL)animated{
     self.tableView.data = [self getData:@""];
     [_tableView reloadData];
+    [self.appDelegate.menuCtrl setEnableGesture:YES];
+
     [super viewWillAppear:animated];
+    
+}
+-(void)viewWillDisappear:(BOOL)animated{
+    [self.appDelegate.menuCtrl setEnableGesture:NO];
+    [super viewWillDisappear:animated];
 }
 -(NSArray *)getData:(NSString *)lastId {
     NSArray *data =[[NSArray alloc]init];

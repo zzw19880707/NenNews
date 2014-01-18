@@ -215,10 +215,13 @@
             [listData addObject:model];
         }
         
-        [listData addObjectsFromArray:tableView.data];
+//        [listData addObjectsFromArray:tableView.data];
         tableView.data =listData;
         tableView.imageData = [result objectForKey:@"picture"];
         [tableView reloadData];
+        if (tableView.imageData.count >0) {
+            [tableView.csView reloadData];
+        }
         [tableView doneLoadingTableViewData];
         
     } andErrorBlock:^(NSError *error) {
@@ -229,7 +232,9 @@
 
 //上拉刷新
 -(void)pullDown:(NewsNightModelTableView *)tableView{
-    if ([self getConnectionAlert]) {
+    if (![self getConnectionAlert]) {
+        [tableView doneLoadingTableViewData];
+
         return;
     }
     [self getData:tableView];
@@ -237,7 +242,9 @@
 }
 //下拉加载
 -(void)pullUp:(NewsNightModelTableView *)tableView{
-    if ([self getConnectionAlert]) {
+    if (![self getConnectionAlert]) {
+        [tableView doneLoadingTableViewData];
+
         return;
     }
     //    参数

@@ -15,6 +15,7 @@
 #import <TencentOpenAPI/TencentOAuth.h>
 #import <ShareSDK/ShareSDK.h>
 #import "WXApi.h"
+#import "WeiboSDK.h"
 #import "WeiboApi.h"
 @implementation AppDelegate
 @synthesize pushModel = _pushModel;
@@ -34,9 +35,9 @@
      连接新浪微博开放平台应用以使用相关功能，此应用需要引用SinaWeiboConnection.framework
      http://open.weibo.com上注册新浪微博开放平台应用，并将相关信息填写到以下字段
      **/
-    [ShareSDK connectSinaWeiboWithAppKey:@"1555769301"
-                               appSecret:@"afebf314f23785cd0a7b4e967b37256e"
-                             redirectUri:@"http://www.sharesdk.cn"];
+    [ShareSDK connectSinaWeiboWithAppKey:@"246405418"
+                               appSecret:@"3dac8f882665f6270ecffa5a5c90eed5"
+                             redirectUri:@"http://www.daoyoudao.com" weiboSDKCls:[WeiboSDK class]] ;
     /**
      连接腾讯微博开放平台应用以使用相关功能，此应用需要引用TencentWeiboConnection.framework
      http://dev.t.qq.com上注册腾讯微博开放平台应用，并将相关信息填写到以下字段

@@ -113,7 +113,9 @@
 
 //上拉刷新
 -(void)pullDown:(NewsNightModelTableView *)tableView{
-    if ([self getConnectionAlert]) {
+    if (![self getConnectionAlert]) {
+        [tableView doneLoadingTableViewData];
+
         return;
     }
     [self getData:tableView];
@@ -121,7 +123,9 @@
 }
 //下拉加载
 -(void)pullUp:(NewsNightModelTableView *)tableView{
-    if ([self getConnectionAlert]) {
+    if (![self getConnectionAlert]) {
+        [tableView doneLoadingTableViewData];
+
         return;
     }
     //    参数
