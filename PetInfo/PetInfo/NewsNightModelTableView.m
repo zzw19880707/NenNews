@@ -148,10 +148,10 @@
             UITableViewCell *imageCell = [tableView dequeueReusableCellWithIdentifier:@"imageIndentifier"];
             if (imageCell == nil) {
                 imageCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:imageIndentifier];
-                _csView = [[XLCycleScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 120)];
-                _csView.delegate = self;
-                _csView.datasource = self;
-                [_csView.pageControl setHidden:YES];
+                self.csView = [[XLCycleScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 120)];
+                self.csView.delegate = self;
+                self.csView.datasource = self;
+                [self.csView.pageControl setHidden:YES];
                 UIScrollView *view =[Uifactory createScrollView];
                 view.frame  = CGRectMake(0, 0, 320, 135);
                 [view addSubview:_csView];
@@ -162,7 +162,6 @@
                 self.label.text = [_imageData[0] objectForKey:@"pictureTitle"];
                 self.label.font = [UIFont systemFontOfSize:12];
                 [view addSubview:self.label];
-                [self.label release];
                 
                 self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(320 - 12*_imageData.count-5, 120, 12*_imageData.count, 15)];
                 _pageControl.backgroundColor = [UIColor clearColor];
@@ -176,7 +175,6 @@
                 [view addSubview:self.pageControl];
                 
                 [imageCell.contentView addSubview:view];
-                [view release];
             }
             imageCell.selectionStyle = UITableViewCellSelectionStyleNone;
             return imageCell;
@@ -254,9 +252,9 @@
 
 -(void)reloadData{
     [super reloadData];
-    if (_csView !=nil) {
-        [_csView reloadData];
-    }
+//    if (_csView !=nil) {
+//        [_csView reloadData];
+//    }
 
 }
 @end

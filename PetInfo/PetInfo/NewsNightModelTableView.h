@@ -15,7 +15,7 @@
 
 @end
 @interface NewsNightModelTableView : BaseTableView <XLCycleScrollViewDatasource,XLCycleScrollViewDelegate>{
-    XLCycleScrollView *_csView ;
+    
 }
 
 -(id)initWithData:(NSArray *)data type:(int)type;
@@ -26,6 +26,6 @@
 @property (nonatomic,assign) int lastDate;
 @property (nonatomic,retain) NSArray *imageData;
 @property (nonatomic,retain) UILabel *label ;
-
+@property (nonatomic,retain) XLCycleScrollView *csView ;
 @property (nonatomic,assign) id<NewsNigthTabelViewDelegate> changeDelegate;
 @end
