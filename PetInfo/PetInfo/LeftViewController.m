@@ -52,8 +52,12 @@
     _tableView.backgroundColor = CLEARCOLOR;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
-    self.nameArray = @[@"  新  闻  ",@"推送资讯",@"我的收藏"];
-    self.imageArray = @[@"left_news.png",@"left_push_news.png",@"left_ collect_news.png"];
+    self.nameArray = @[@"  新  闻  ",
+//                       @"推送资讯",
+                       @"我的收藏"];
+    self.imageArray = @[@"left_news.png",
+//                        @"left_push_news.png",
+                        @"left_ collect_news.png"];
     
     
 }
@@ -109,8 +113,8 @@
     BaseViewController *baseView ;
     if (indexPath.row==0) {
         baseView = [[RootViewController alloc]init];
-    } else if( indexPath.row ==1){
-        baseView = [[PushNewsViewController alloc]init];
+//    } else if( indexPath.row ==1){
+//        baseView = [[PushNewsViewController alloc]init];
     }else {
         baseView = [[CollectionViewController alloc]init];
     }
