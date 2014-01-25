@@ -67,7 +67,7 @@
     UIButton *button = [[UIButton alloc]init];
     button.backgroundColor = CLEARCOLOR;
     [button setImage:[UIImage imageNamed:@"navagiton_back.png"] forState:UIControlStateNormal];
-    button.frame = CGRectMake(10 , 2, 40, 30+20);
+    button.frame = CGRectMake(16 , 22, 40, 40);
     [button addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
     [_navigationView addSubview:button];
     [self.view addSubview:_navigationView];
