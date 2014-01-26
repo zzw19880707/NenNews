@@ -9,6 +9,7 @@
 #import "RootViewController.h"
 #import "Uifactory.h"
 #import "FileUrl.h"
+#import "DataCenter.h"
 #import "WebViewController.h"
 #import "NightModelContentViewController.h"
 #import "ThemeManager.h"
@@ -30,11 +31,8 @@
 //初始化按钮
 -(NSArray *)_initButton {
     
-    //读取全部显示菜单
-    
-    NSString *pathName = [[FileUrl getDocumentsFile] stringByAppendingPathComponent:column_show_file_name];
     //栏目数组
-    NSMutableArray *nameArrays = [[NSMutableArray alloc]initWithContentsOfFile:pathName];
+    NSMutableArray *nameArrays = [[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:show_column]];
     //    用于存放按钮
     NSMutableArray *buttonArrays = [[NSMutableArray alloc]init];
     
@@ -80,28 +78,7 @@
     return arrays;
 }
 
--(void)_initNavagationbarButton {
-    //添加状态栏按钮
-    UIButton *leftButton = [[UIButton alloc]init];
-    leftButton.backgroundColor=CLEARCOLOR;
-    leftButton.frame=CGRectMake(0, 0, 35, 35);
-    [leftButton setImage:[UIImage imageNamed:@"left_item_button.png"] forState:UIControlStateNormal];
-    [leftButton addTarget:self action:@selector(leftAction) forControlEvents:UIControlEventTouchUpInside];
-    [leftButton setShowsTouchWhenHighlighted:YES];
-    
-    UIButton *rightButton = [[UIButton alloc]init];
-    rightButton.backgroundColor=CLEARCOLOR;
-    rightButton.frame=CGRectMake(0, 0, 35, 35);
-    [rightButton setImage:[UIImage imageNamed:@"right_item_button.png"] forState:UIControlStateNormal];
-    [rightButton addTarget:self action:@selector(rightAction) forControlEvents:UIControlEventTouchUpInside];
-    [rightButton setShowsTouchWhenHighlighted:YES];
-    UIBarButtonItem *leftitem = [[UIBarButtonItem alloc]initWithCustomView:leftButton];
-    self.navigationItem.leftBarButtonItem= [leftitem autorelease];
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithCustomView:rightButton];
-    self.navigationItem.rightBarButtonItem= [rightItem autorelease];
-    
-    
-}
+
 #pragma mark UIScrollViewEventDelegate
 -(void)addButtonAction{
     ColumnTabelViewController *columnVC = [[ColumnTabelViewController alloc]init];
@@ -130,7 +107,6 @@
 {
     
     [super viewDidLoad];
-    [self _initNavagationbarButton];
     
     _sc = [[BaseScrollView alloc]initwithButtons:[self _initButton] WithFrame:CGRectMake(0, 0, 320, ScreenHeight)];
     _sc.eventDelegate = self;
@@ -302,14 +278,7 @@
     
 }
 
-#pragma mark 按钮事件
-- (void)leftAction {
-    [self.appDelegate.menuCtrl showLeftController:YES];
-}
-- (void)rightAction {
-    [self.appDelegate.menuCtrl showRightController:YES];
-    
-}
+
 
 
 #pragma mark columnchangeDelegate
