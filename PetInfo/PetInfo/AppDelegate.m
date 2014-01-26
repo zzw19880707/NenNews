@@ -155,7 +155,7 @@
             model.title = alert;
             model.newsAbstract = [userInfo objectForKey:@"newsAbstract"];
             model.type = [userInfo objectForKey:@"type"];
-            model.img = [userInfo objectForKey:@"title"];
+            model.img = [userInfo objectForKey:@"img"];
             model.isselected = NO;
             _pushModel = model;
             [alertView show];
