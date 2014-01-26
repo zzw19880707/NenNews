@@ -84,13 +84,14 @@
         
         
         if (![[NSUserDefaults standardUserDefaults] boolForKey:kDescriptionImage]) {
+            
             UIView *backview = [[UIView alloc]init];
             backview.tag = 8063;
-            backview.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
+            backview.frame = CGRectMake(0, -15, ScreenWidth, ScreenHeight+15);
             backview.backgroundColor = [UIColor grayColor];
-            backview.alpha = 0.7;
+            backview.alpha = 0.9;
             [self addSubview:backview];
-            [backview release];
+//            [backview release];
             UIImageView *background = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"description.png"]];
             background.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
             [backview addSubview:background];
@@ -99,6 +100,9 @@
             tap.delaysTouchesBegan = YES;
             [backview addGestureRecognizer:tap];
             [tap release];
+            AppDelegate *appDelegate=(AppDelegate *)[UIApplication sharedApplication].delegate;
+
+            [appDelegate.window addSubview:backview];
         }
        
 
@@ -129,7 +133,6 @@
         [button release];
         
         NewsNightModelTableView *newsTableView = _contentsArray[i];
-        newsTableView.backgroundColor = [[ThemeManager shareInstance]getBackgroundColor];
         newsTableView.tag = 1300+i;
         [_contentBgView addSubview:newsTableView];
         [newsTableView release];
@@ -152,7 +155,10 @@
 }
 #pragma mark 按钮事件
 -(void)dismisdesc:(UIGestureRecognizer *)tap{
-    UIView *back =(UIView *) [self viewWithTag:8063];
+    AppDelegate *appDelegate=(AppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    
+    UIView *back =(UIView *) [appDelegate.window viewWithTag:8063];
     [back removeFromSuperview];
     back = nil;
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kDescriptionImage];
@@ -168,14 +174,41 @@
     CGPoint point = _contentBgView.contentOffset;
     point.x = page *340;
     _contentBgView.contentOffset = point;
-}
+    [self showData];
 
+    
+}
+//显示数据。根据时间来判断是否刷新
+-(void)showData {
+    NewsNightModelTableView *table= (NewsNightModelTableView *)VIEWWITHTAG(_contentBgView, 1300+_contentBgView.contentOffset.x /340);
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyMMddHHmm"];
+    _po([formatter stringFromDate:[NSDate date]]);
+    int data =[[formatter stringFromDate:[NSDate date]] intValue];
+    if (table.lastDate) {
+        int lastDate = table.lastDate;
+        if ((data - lastDate)>10) {
+            [table autoRefreshData];
+            [self.eventDelegate autoRefreshData:table];
+            table.lastDate = data;
+            
+        }
+    }else{
+        [self.eventDelegate autoRefreshData:table];
+        table.lastDate = data;
+        
+    }
+}
 -(void)addcolumn{
     [self.eventDelegate addButtonAction];
 }
 
 #pragma mark ScrollDelegate
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    if (_contentBgView.contentSize.width/340<4) {
+        [self showData];
+        return ;
+    }
     int page = _contentBgView.contentOffset.x/340;
     
     CGPoint point = [_sliderImageView convertPoint:CGPointMake(0, 0) fromView:[UIApplication sharedApplication].keyWindow ];
@@ -213,26 +246,7 @@
             [_buttonBgView setContentOffset:CGPointMake(0, 0) animated:YES];
         }
     }
-    
-    NewsNightModelTableView *table= (NewsNightModelTableView *)VIEWWITHTAG(scrollView, 1300+scrollView.contentOffset.x /340);
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyMMddHHmm"];
-    _po([formatter stringFromDate:[NSDate date]]);
-    int data =[[formatter stringFromDate:[NSDate date]] intValue];
-    if (table.lastDate) {
-        int lastDate = table.lastDate;
-        if ((data - lastDate)>10) {
-            [table autoRefreshData];
-            [self.eventDelegate autoRefreshData:table];
-            table.lastDate = data;
-            
-        }
-    }else{
-        [self.eventDelegate autoRefreshData:table];
-        table.lastDate = data;
-        
-    }
-    _pn(data);
+    [self showData];
     
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
