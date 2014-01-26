@@ -33,6 +33,8 @@
         self.refreshHeader = NO;
 
     }
+    [self setBackgroundColor];
+
     return self;
 }
 -(id)initwithColumnID:(int)columnID{
@@ -41,6 +43,8 @@
         self.columnID = columnID;
         self.refreshHeader = YES;
     }
+    [self setBackgroundColor];
+
     return self;
 }
 -(void)setBackgroundColor{
@@ -158,7 +162,7 @@
                 [_csView release];
                 
                 self.label = [Uifactory createLabel:ktext];
-                self.label.frame = CGRectMake(0, 120, 200, 15 );
+                self.label.frame = CGRectMake(10, 120, 200, 15 );
                 self.label.text = [_imageData[0] objectForKey:@"pictureTitle"];
                 self.label.font = [UIFont systemFontOfSize:12];
                 [view addSubview:self.label];
@@ -188,9 +192,7 @@
             int column = self.columnID;
             BOOL showImage = NO;
 //            获取是否显示图片
-            NSString *path = [FileUrl getDocumentsFile];
-            NSString *columnshowName = [path stringByAppendingPathComponent:column_show_file_name];
-            NSArray *arr = [[NSArray alloc]initWithContentsOfFile:columnshowName];
+            NSArray *arr = [[NSUserDefaults standardUserDefaults] objectForKey:show_column];
             for (int i = 0 ; arr.count ; i++) {
                 NSDictionary *dic = arr[i];
                 if ([[dic objectForKey:@"columnId"] intValue]==column) {
@@ -206,7 +208,7 @@
             }
             cell.model = model;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
+            cell.showImage = showImage;
             return  cell;
             
         }
@@ -218,6 +220,10 @@
         if (_imageData.count >0&&indexPath.section==0) {
             return 135;
         }else{
+            ColumnModel *model = self.data[indexPath.row];
+            if (model.img1.length>2&&model.img2.length>2&&model.img3.length>2) {
+                return 110;
+            }
             return 80;
         }
     }else{
