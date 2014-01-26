@@ -30,7 +30,7 @@
 //程序入口
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [ShareSDK registerApp:@"1084a0c07656"];
+    [ShareSDK registerApp:@"12446798b956"];
     /**
      连接新浪微博开放平台应用以使用相关功能，此应用需要引用SinaWeiboConnection.framework
      http://open.weibo.com上注册新浪微博开放平台应用，并将相关信息填写到以下字段
