@@ -21,4 +21,7 @@
 +(void) deleteAllFilesInDir:(NSString*)path;
 //获取路径下文件大小
 +(float)fileSizeForDir:(NSString*)path;
+//获取显示/隐藏的栏目
++(NSArray *)getShowColumn:(int)show;
+
 @end

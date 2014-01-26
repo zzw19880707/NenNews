@@ -78,7 +78,27 @@ static DataCenter *sigleton = nil;
 
 
 
+//获取显示的栏目
++(NSArray *)getShowColumn:(int)show{
+    FMDatabase *db = [FileUrl getDB];
+    if (![db open]) {
+        NSLog(@"Could not open db.");
+        return nil;
+    }
+    //                    更新userdefaults中的显示栏目
+    FMResultSet *rs = [db executeQuery:[NSString stringWithFormat:@"select * from columnList where isshow = %d",show]];
+    NSMutableArray *showcolumn = [[NSMutableArray alloc]init];
+    while (rs.next) {
+        NSString *appPartName = [rs stringForColumn:@"columnName"];
+        NSString *columnId = [NSString stringWithFormat:@"%d",[rs intForColumn:@"column"]];
+        NSString *showimage = [NSString stringWithFormat:@"%d",[rs intForColumn:@"isImage"]];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[appPartName,columnId,showimage] forKeys:@[@"name",@"columnId",@"showimage"]];
+        [showcolumn addObject:dic];
+        [dic release];
+    }
+    return showcolumn;
 
+}
 
 
 
