@@ -8,5 +8,7 @@
 	<string>240,240,240</string>
 	<key>text</key>
 	<string>54,54,54</string>
+	<key>textViewStrong</key>
+	<string>15,15,15</string>
 </dict>
 </plist>
