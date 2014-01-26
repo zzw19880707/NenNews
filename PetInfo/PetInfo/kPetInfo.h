@@ -10,8 +10,7 @@
 #define PetInfo_kPetInfo_h
 
 #pragma mark NSNotificationCenter
-//图片新闻分享通知
-#define kImageShareNotification @"kImageShareNotification"
+
 //推送通知
 #define kPushNewsNotification @"kPushNewsNotification"
 //图片浏览器返回通知
@@ -22,7 +21,7 @@
 #define kbackground @"background"
 #define kselectText @"selectText"
 #define ktext @"text"
-
+#define ktextViewStrong @"textViewStrong"
 //开始离线缓存
 #define kofflineBeginNofication @"kofflineBeginNofication"
 
@@ -64,6 +63,10 @@
 
 //首页加载广告的大图
 #define main_adImage_url @"main_adImage_url"
+//当前栏目版本号
+#define column_version @"column_version"
+//当前显示的栏目
+#define show_column @"show_column"
 #pragma mark Nen_News_Color
 #define NenNewsgroundColor COLOR(29, 32, 136)
 #define NenNewsTextColor COLOR(247, 247, 247)
