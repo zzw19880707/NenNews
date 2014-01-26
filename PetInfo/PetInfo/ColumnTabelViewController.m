@@ -8,6 +8,8 @@
 
 #import "ColumnTabelViewController.h"
 #import "FileUrl.h"
+#import "DataCenter.h"
+#import "FMDB/src/FMDatabase.h"
 @interface ColumnTabelViewController ()
 
 @end
@@ -25,10 +27,8 @@
 -(void)_initcolumnname {
     //写入初始化文件
     
-    NSString *pathName = [[FileUrl getDocumentsFile] stringByAppendingPathComponent:column_show_file_name];
-    _showNameArray = [[NSMutableArray alloc]initWithContentsOfFile:pathName];
-    NSString *Name = [[FileUrl getDocumentsFile] stringByAppendingPathComponent:column_disshow_file_name];
-    _addNameArray = [[NSMutableArray alloc]initWithContentsOfFile:Name];
+    _showNameArray = [[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:show_column]];
+    _addNameArray = [[NSMutableArray alloc]initWithArray:[DataCenter getShowColumn:0]];
 }
 
 - (void)viewDidLoad
@@ -65,11 +65,8 @@
 //     self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 -(void)viewWillDisappear:(BOOL)animated{
-    NSString *pathName = [[FileUrl getDocumentsFile] stringByAppendingPathComponent:column_show_file_name];
-    [_showNameArray writeToFile:pathName atomically:YES];
-    NSString *Name = [[FileUrl getDocumentsFile] stringByAppendingPathComponent:column_disshow_file_name];
-    [_addNameArray writeToFile:Name atomically:YES];
-    
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    [user setValue:_showNameArray forKey:show_column];
     [self.eventDelegate columnChanged:_showNameArray];
     [super viewWillDisappear:animated];
 }
@@ -168,22 +165,27 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
         NSDictionary *dic = [[_showNameArray objectAtIndex:indexPath.row] retain];
         [_showNameArray removeObject:dic];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         [_addNameArray addObject:dic];
         
+        FMDatabase *db = [FileUrl getDB];
+        [db open];
+        [db executeUpdate:[NSString stringWithFormat:@"update columnList set isshow = 0 where column=%@",[dic objectForKey:@"columnId"]]];
+        [db close];
         NSIndexPath *index = [NSIndexPath indexPathForRow:_addNameArray.count-1 inSection:1];
         [tableView insertRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationFade];
     }   
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         NSDictionary *dic = [[_addNameArray objectAtIndex:indexPath.row] retain];
         [_addNameArray removeObject:dic];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         [_showNameArray addObject:dic];
-        
+        FMDatabase *db = [FileUrl getDB];
+        [db open];
+        [db executeUpdate:[NSString stringWithFormat:@"update columnList set isshow = 1 where column=%@",[dic objectForKey:@"columnId"]]];
+        [db close];
         NSIndexPath *index = [NSIndexPath indexPathForRow:_showNameArray.count-1 inSection:0];
         [tableView insertRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationFade];
     }   
