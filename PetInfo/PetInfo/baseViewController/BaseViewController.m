@@ -209,6 +209,30 @@
     [_tipWindow release];
     _tipWindow=nil;
 }
+
+
+-(void)_initNavagationbarButton {
+    //添加状态栏按钮
+    UIButton *leftButton = [[UIButton alloc]init];
+    leftButton.backgroundColor=CLEARCOLOR;
+    leftButton.frame=CGRectMake(0, 0, 35, 35);
+    [leftButton setImage:[UIImage imageNamed:@"left_item_button.png"] forState:UIControlStateNormal];
+    [leftButton addTarget:self action:@selector(leftAction) forControlEvents:UIControlEventTouchUpInside];
+    [leftButton setShowsTouchWhenHighlighted:YES];
+    
+    UIButton *rightButton = [[UIButton alloc]init];
+    rightButton.backgroundColor=CLEARCOLOR;
+    rightButton.frame=CGRectMake(0, 0, 35, 35);
+    [rightButton setImage:[UIImage imageNamed:@"right_item_button.png"] forState:UIControlStateNormal];
+    [rightButton addTarget:self action:@selector(rightAction) forControlEvents:UIControlEventTouchUpInside];
+    [rightButton setShowsTouchWhenHighlighted:YES];
+    UIBarButtonItem *leftitem = [[UIBarButtonItem alloc]initWithCustomView:leftButton];
+    self.navigationItem.leftBarButtonItem= [leftitem autorelease];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithCustomView:rightButton];
+    self.navigationItem.rightBarButtonItem= [rightItem autorelease];
+    
+    
+}
 - (void)viewDidLoad
 {
     self.db = [FileUrl getDB];
@@ -248,11 +272,22 @@
             [button addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
             UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
             self.navigationItem.leftBarButtonItem = [backItem autorelease];
+        }else{
+            [self _initNavagationbarButton];
+
         }
     }
 
 }
 #pragma mark ----按钮事件
+- (void)leftAction {
+    [self.appDelegate.menuCtrl showLeftController:YES];
+}
+- (void)rightAction {
+    [self.appDelegate.menuCtrl showRightController:YES];
+    
+}
+
 -(void)cencel{
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
