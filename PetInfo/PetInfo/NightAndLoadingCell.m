@@ -186,7 +186,7 @@
         _imageView2.hidden = YES;
         _imageView3.hidden = YES;
         //    判断图片是否显示。确定titlelabel的point
-        if (_model.img.length>1) {
+        if (_model.img.length<2) {
             [self hiddenImage];
         }else{
             int brose = [[ThemeManager shareInstance]getBroseModel];
