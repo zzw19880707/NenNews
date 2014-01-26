@@ -195,7 +195,6 @@
             [self.tableView setHidden:YES];
             [self bgViewhidden];
         }else{
-#warning
             ColumnModel *model =_resultData[indexPath.row];
             [self pushNewswithColumn:model];
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
