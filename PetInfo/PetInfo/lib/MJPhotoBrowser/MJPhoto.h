@@ -16,7 +16,7 @@
 
 @property (nonatomic, assign) BOOL firstShow;
 
-
+@property (nonatomic,strong ) NSString *newsUrl;//新闻url
 @property (nonatomic, strong) NSString *title;//标题
 @property (nonatomic, strong) NSString *content;//内容
 // 是否已经保存到相册
