@@ -231,7 +231,7 @@
     [_userDefaults setBool:YES forKey:kisNightModel];
     [_userDefaults setInteger:1 forKey:kpageCount];
     //初始化菜单 写到userdefaults里
-    NSArray *columnsshowName = @[@"辽媒头条",@"国内",@"国际",@"文娱",@"视频"];
+    NSArray *columnsshowName = @[@"头条",@"国内",@"国际",@"文娱",@"视频"];
     NSMutableArray *showarray = [[NSMutableArray alloc]init];
     for(int i= 1 ; i<columnsshowName.count+1 ;i ++){
         
