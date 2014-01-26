@@ -16,6 +16,7 @@
 #import "ThemeManager.h"
 #import "FileUrl.h"
 #import "FMDB/src/FMDatabase.h"
+#import "DataCenter.h"
 #define firstimage @"http://a.hiphotos.baidu.com/image/w%3D2048/sign=9f5289ba0b55b3199cf9857577918326/4d086e061d950a7b32998b7f0bd162d9f3d3c9d9.jpg"
 @interface MainViewController ()
 
@@ -68,14 +69,16 @@
     [_backgroundView addSubview:view];
     
     //load背景logo图图片
-    UIImage *backImage= [[UIImage imageNamed:@"main_background_logo.png"] autorelease];    UIImageView *backImageView =[[UIImageView alloc]initWithImage:backImage];
+    UIImage *backImage= [[UIImage imageNamed:@"main_background_logo.png"] autorelease];
+    UIImageView *backImageView =[[UIImageView alloc]initWithImage:backImage];
     backImageView.frame = CGRectMake(0, ScreenHeight-100, ScreenWidth, 88);
     [_backgroundView addSubview:backImageView];
     [backImageView release];
     //广告图片
-    UIImageView *topImageView = [[UIImageView alloc]init];
+    UIImageView *topImageView = [[[UIImageView alloc]init] autorelease];
     topImageView.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight-100);
     NSString *url = [[NSString alloc]init];
+    [self.view  addSubview: _backgroundView];
     if (![_userDefaults boolForKey:kisNotFirstLogin]) {
         url = firstimage;
         [_userDefaults setValue:firstimage forKey:main_adImage_url];
@@ -86,27 +89,91 @@
             url = [_userDefaults stringForKey:main_adImage_url];
             [topImageView setImageWithURL:[NSURL URLWithString:url]];
             [_backgroundView addSubview:topImageView];
-            [topImageView release];
             [self.view  addSubview: _backgroundView];
         }else{//有网络，访问ao接口 获取图片地址
-            [DataService requestWithURL:URL_AO andparams:nil andhttpMethod:@"GET" completeBlock:^(id result) {
-                NSDictionary *dic = [result objectForKey:@"AoPicture"];
-                if (dic==nil) {
-                    NSString  *Aourl = [dic objectForKey:@"pictureUrl"];
+            NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+            [params setValue:[NSNumber numberWithInteger:[_userDefaults integerForKey:column_version] ] forKey:@"columnversions"];
+            [DataService requestWithURL:URL_AO andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
+                NSString *newVersion = [result objectForKey:@"columnversions"];
+                NSString  *Aourl = [result objectForKey:@"pictureUrl"];
+                if (Aourl==nil||[Aourl isEqualToString:@""]) {
+                    NSString *Aourl = [_userDefaults stringForKey:main_adImage_url];
+                    [topImageView setImageWithURL:[NSURL URLWithString:Aourl]];
+                    if (self.view.subviews.count>0) {
+                        [_backgroundView addSubview:topImageView];
+                    }
+                }else{
+                    //                        设置图片
                     [topImageView setImageWithURL:[NSURL URLWithString:Aourl]];
                     [_userDefaults setValue:Aourl forKey:main_adImage_url];
                     [_userDefaults synchronize];
-                    [_backgroundView addSubview:topImageView];
-                    [topImageView release];
-                }else{
-                    NSString *Aourl = [_userDefaults stringForKey:main_adImage_url];
-                    [topImageView setImageWithURL:[NSURL URLWithString:Aourl]];
-                    [_backgroundView addSubview:topImageView];
-                    [topImageView release];
+                    if (self.view.subviews.count>0) {
+                        [_backgroundView addSubview:topImageView];
+                    }
 
                 }
-                
-                [self.view  addSubview: _backgroundView];
+                int oldVersion =[_userDefaults integerForKey:column_version];
+                //                当前版本不一致
+
+                if (oldVersion<[newVersion intValue]) {
+                    NSArray *array = [result objectForKey:@"column"];
+                    FMDatabase *db = [FileUrl getDB];
+                    if (![db open]) {
+                        NSLog(@"Could not open db.");
+                        return ;
+                    }
+                    //                    更新栏目
+                    for (int index = 0 ;index <array.count ;index++ )
+                    {
+                        NSDictionary *dic = array[index] ;
+                        NSString *partId = [dic objectForKey:@"partId"];
+                        NSString *appPartName = [dic objectForKey:@"appPartName"];
+                        NSString *hidden = [dic objectForKey:@"hidden"];
+                        NSString *takePart = [dic objectForKey:@"takePart"];
+                        NSString *isPic = [dic objectForKey:@"isPic"];
+                        //                        插入的默认不显示
+                        if (![db executeUpdate:[NSString stringWithFormat:@"insert into columnList VALUES (%@,'%@',%@,%d,%@,%@);",partId,appPartName,isPic,0,hidden,takePart]]) {
+//                            查询该栏目 如果未修改前，isshow=1、hidden=0，新的hidden=1，则在队尾加入
+                            FMResultSet *fmrs = [db executeQuery:[NSString stringWithFormat:@"select isshow,hidden from columnList where column = %@",partId]];
+                            if(fmrs.next){
+                                NSString *sql = [NSString stringWithFormat:@" update columnList set columnName = '%@',isImage = '%@',hidden='%@',takepart = '%@' where column ='%@';",appPartName,isPic,hidden,takePart,partId];
+                                [db executeUpdate:sql];
+                                //                            更新的 需要更新当前userdefaults中显示的数据
+                                NSMutableArray *columnArray  = [[[NSMutableArray alloc]initWithArray: [_userDefaults objectForKey:show_column ]] autorelease];
+                                for (int i = 0 ; i<columnArray.count; i++) {
+                                    NSDictionary *columnDic = columnArray[i];
+                                    NSString *columnID =[columnDic objectForKey:@"columnId"];
+//                                    如果满足条件 在队尾增加一个栏目。防止栏目丢失
+                                    if ([fmrs intForColumn:@"isshow"]==1&&[fmrs intForColumn:@"hidden"]==0&&[hidden intValue]==1) {
+                                        NSDictionary *dic1 = @{@"columnId": partId,@"name":appPartName,@"showimage":isPic};
+                                        [columnArray addObject:dic1];
+                                        break;
+                                    }else{
+                                        if (![[NSString stringWithFormat:@"%@",columnID] isEqualToString:[NSString stringWithFormat:@"%@",partId]]) {
+                                            continue;
+                                        }
+                                        [columnArray removeObjectAtIndex:i];
+                                        if ([hidden intValue]==0) {
+                                            
+                                        }else{
+                                            NSDictionary *dic1 = @{@"columnId": partId,@"name":appPartName,@"showimage":isPic};
+                                            [columnArray insertObject:dic1 atIndex:i];
+                                            break;
+                                        }
+                                    }
+                                    
+                                }
+                                [_userDefaults setValue:columnArray forKey:show_column];
+                                [_userDefaults synchronize];
+                            }
+                        }
+                    }[db close];
+//                    跟新版本
+                    [_userDefaults setInteger:[newVersion integerValue] forKey:column_version];
+                    [_userDefaults synchronize];
+                    
+                    
+                }
             } andErrorBlock:^(NSError *error) {
                 
             }];
@@ -114,6 +181,7 @@
     }
     
 }
+
 -(void)_initDB{
     //初始化数据库
     FMDatabase *db = [FileUrl getDB];
@@ -121,15 +189,15 @@
         NSLog(@"Could not open db.");
         return ;
     }
-////    栏目表
-////    栏目id   栏目名称  是否有主图  是否显示
-//    [db executeUpdate:@"CREATE TABLE columnList (column INTEGER PRIMARY KEY, columnName TEXT, isImage INTEGER, isshow INTEGER)"];
-//    NSArray *columnsName = @[@"头条",@"辽宁",@"文娱",@"社会",@"时尚",@"教育",@"民生",@"英语",@"新农村建设",@"旅游",@"财经",@"体育"];
-//    for (int i = 0 ; i <columnsName.count; i++) {
-////        NSString *sql = ;
-//        [db executeUpdate:[NSString stringWithFormat:@"insert into columnList VALUES (%d,'%@',%d,%d);",i+1,columnsName[i],0,(i<7?1:0)]];
-//    }
-    
+//    栏目表
+//    栏目id   栏目名称  是否有主图(0隐藏1显示)  是否显示(0隐藏1显示)  后台隐藏(0隐藏1显示)  订阅（takepart）
+    [db executeUpdate:@"CREATE TABLE columnList (column INTEGER PRIMARY KEY, columnName TEXT, isImage INTEGER, isshow INTEGER,hidden INTEGER,takepart INTEGER)"];
+    NSArray *columnsName = @[@"辽媒头条",@"国内",@"国际",@"文娱",@"视频"];
+    for (int i = 0 ; i <columnsName.count; i++) {
+        [db executeUpdate:[NSString stringWithFormat:@"insert into columnList VALUES (%d,'%@',%d,%d,%d,%d);",i+1,columnsName[i],1,1,1,0]];
+    }
+    [_userDefaults setInteger:0 forKey:column_version];
+    [_userDefaults synchronize];
 //    收藏表
 //    titleid  标题  type类型
     [db executeUpdate:@"CREATE TABLE collectionList (newsId TEXT PRIMARY KEY, title TEXT, type INTEGER)"];
@@ -164,30 +232,17 @@
     //设置夜间模式
     [_userDefaults setBool:YES forKey:kisNightModel];
     [_userDefaults setInteger:1 forKey:kpageCount];
-    [_userDefaults synchronize];
-    
-    //初始化菜单
-    NSString *columnshowName = [plistPath1 stringByAppendingPathComponent:column_show_file_name];
-    NSArray *columnsshowName = @[@"头条",@"辽宁",@"文娱",@"社会",@"时尚",@"教育"];
+    //初始化菜单 写到userdefaults里
+    NSArray *columnsshowName = @[@"辽媒头条",@"国内",@"国际",@"文娱",@"视频"];
     NSMutableArray *showarray = [[NSMutableArray alloc]init];
     for(int i= 1 ; i<columnsshowName.count+1 ;i ++){
         
-        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsshowName[i-1],[NSNumber numberWithInt:i],[NSNumber numberWithInt:1]] forKeys:@[@"name",@"columnId",@"showimage"]];
+        NSDictionary *dic = [[NSDictionary dictionaryWithObjects:@[columnsshowName[i-1],[NSNumber numberWithInt:i],[NSNumber numberWithInt:1]] forKeys:@[@"name",@"columnId",@"showimage"]] autorelease];
         [showarray addObject:dic];
-        [dic release];
     }
-    [showarray writeToFile:columnshowName atomically:YES];
-    
-    NSString *columnName = [plistPath1 stringByAppendingPathComponent:column_disshow_file_name];
-    NSArray *columnsName = @[@"民生",@"英语",@"新农村建设",@"旅游",@"财经",@"体育"];
-    NSMutableArray *array = [[NSMutableArray alloc]init];
-    for(int i= 1 ; i<columnsName.count ;i ++){
-        
-        NSDictionary *dic = [NSDictionary dictionaryWithObjects:@[columnsName[i-1],[NSNumber numberWithInt:(i+6)],[NSNumber numberWithInt:0]] forKeys:@[@"name",@"columnId",@"showimage"]];
-        [array addObject:dic];
-        [dic release];
-    }
-    [array writeToFile:columnName atomically:YES];
+    [_userDefaults setObject:showarray forKey:show_column];
+    [_userDefaults synchronize];
+
     
 }
 #pragma mark UI
@@ -198,17 +253,18 @@
     [self _initLocation];
     [self Location];
     //加载进入应用后大图
-    [self _initBackgroundView];
     //第一次登陆
     if (![_userDefaults boolForKey:kisNotFirstLogin]) {
         [self _initDB];
         [self _initplist];
-
-        [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:3];
+        [_userDefaults setValue:firstimage forKey:main_adImage_url];
+        [_userDefaults synchronize];
+        [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:.1];
     }else{
+        [self _initBackgroundView];
+
         //图片最多加载5秒
         [self performSelector:@selector(_removeBackground) withObject:nil afterDelay:5];
-//        [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:1];
 
     }
     //设置夜间模式
@@ -227,7 +283,6 @@
         
     } completion:^(BOOL finished) {
         [_backgroundView removeFromSuperview];
-        RELEASE_SAFELY(_backgroundView);
         //隐藏状态
         [self setStateBarHidden:NO];
         [self _initViewController];
@@ -397,6 +452,10 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+-(void)viewDidUnload{
+    RELEASE_SAFELY(_backgroundView);
+    [super viewDidUnload];
 }
 -(void)dealloc{
     RELEASE_SAFELY(_backgroundView);
