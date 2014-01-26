@@ -53,11 +53,11 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
     self.nameArray = @[@"  新  闻  ",
-//                       @"推送资讯",
-                       @"我的收藏"];
+                       @"推送资讯",
+                       @"我的收藏",@"  订  阅  "];
     self.imageArray = @[@"left_news.png",
-//                        @"left_push_news.png",
-                        @"left_ collect_news.png"];
+                        @"left_push_news.png",
+                        @"left_ collect_news.png",@"left_ subscription.png"];
     
     
 }
@@ -113,19 +113,20 @@
     BaseViewController *baseView ;
     if (indexPath.row==0) {
         baseView = [[RootViewController alloc]init];
-//    } else if( indexPath.row ==1){
-//        baseView = [[PushNewsViewController alloc]init];
+    } else if( indexPath.row ==1){
+        baseView = [[PushNewsViewController alloc]init];
     }else {
         baseView = [[CollectionViewController alloc]init];
     }
     
     BaseNavViewController *navViewController = [[BaseNavViewController alloc]initWithRootViewController:baseView];
     self.appDelegate.menuCtrl.rootViewController = navViewController;
-    [self.appDelegate.menuCtrl showRootController:YES];
-
+//    [self performSelector:@selector(showRootController) withObject:nil afterDelay:10];
     [baseView release];
 }
-
+//-(void)showRootController{
+//    [self.appDelegate.menuCtrl showRootController:YES];
+//}
 #pragma mark 内存管理
 - (void)didReceiveMemoryWarning
 {
