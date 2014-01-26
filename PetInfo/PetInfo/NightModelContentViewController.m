@@ -17,6 +17,7 @@
 #import "MJPhoto.h"
 #import "ThemeManager.h"
 #import "MBProgressHUD.h"
+#import "NightModelTextView.h"
 @interface NightModelContentViewController (){
     UIImageView *_imageView;
     BOOL _isImageLoad;
@@ -134,7 +135,7 @@
     self.backgroundView.frame = CGRectMake(0,0, ScreenWidth, ScreenHeight);
     _height = 0.0;
     //    标题
-    UILabel *titleLabel = [Uifactory createLabel:ktext];
+    UILabel *titleLabel = [Uifactory createLabel:ktextViewStrong];
     titleLabel.frame = CGRectMake(scr_width, _height, ScreenWidth-20, 20);
     titleLabel.text = self.titleLabel;
     titleLabel.font = [UIFont boldSystemFontOfSize:20];
@@ -192,24 +193,74 @@
         //文字
         else
         {
-            UITextView *textView = [Uifactory createTextView];
-            textView.text = content;
-            if (content.length<=2) {
-                continue;
+            NSArray *contentArray  = [content componentsSeparatedByString:@"<strong>"];
+            
+            if (contentArray.count>2) {
+                for (int index = 0; index <contentArray.count; index++) {
+                    if (index%2==0) {
+                        UITextView *textView = [Uifactory createTextView];
+                        NSString *contentstr =contentArray[index];
+                        //过滤两端的空格换行
+                        NSCharacterSet *whitespaces = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+                        NSPredicate *noEmptyStrings = [NSPredicate predicateWithFormat:@"SELF != ''"];
+                        NSArray *parts = [contentstr componentsSeparatedByCharactersInSet:whitespaces];
+                        NSArray *filteredArray = [parts filteredArrayUsingPredicate:noEmptyStrings];
+                        contentstr = [filteredArray componentsJoinedByString:@"\n\t"];
+
+                        if (contentstr.length<=2) {
+                            continue;
+                        }
+                        textView.text = [NSString stringWithFormat:@"\t%@",contentstr];
+                        textView.scrollEnabled = NO;
+                        [textView setEditable:NO];
+                        textView.frame = CGRectMake(scr_width, _height, ScreenWidth-scr_width*2, 0);
+                        [textView sizeToFit];
+                        [_backgroundView addSubview:textView];
+                        _height+=textView.height;
+                    }else{
+                        NightModelTextView *textView = [Uifactory createTextView];
+                        NSString *contentstr =contentArray[index];
+                        textView.text = contentstr;
+                        if (contentstr.length<=2) {
+                            continue;
+                        }
+                        textView.isStrong = YES;
+                        textView.scrollEnabled = NO;
+                        [textView setEditable:NO];
+                        textView.frame = CGRectMake(scr_width, _height, ScreenWidth-scr_width*2, 0);
+                        [textView sizeToFit];
+                        [_backgroundView addSubview:textView];
+                        _height+=textView.height;
+                    }
+                }
+            }else{
+                UITextView *textView = [Uifactory createTextView];
+                if (content.length<=2) {
+                    continue;
+                }
+                //过滤两端的空格换行
+                NSCharacterSet *whitespaces = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+                NSPredicate *noEmptyStrings = [NSPredicate predicateWithFormat:@"SELF != ''"];
+                NSArray *parts = [content componentsSeparatedByCharactersInSet:whitespaces];
+                NSArray *filteredArray = [parts filteredArrayUsingPredicate:noEmptyStrings];
+                content = [filteredArray componentsJoinedByString:@"\n\t"];
+                
+                textView.text = [NSString stringWithFormat:@"\t%@",content];
+                textView.scrollEnabled = NO;
+                [textView setEditable:NO];
+                textView.frame = CGRectMake(scr_width, _height, ScreenWidth-scr_width*2, 0);
+                [textView sizeToFit];
+                [_backgroundView addSubview:textView];
+                _height+=textView.height;
             }
-//            textView.textAlignment =
-            textView.scrollEnabled = NO;
-            [textView setEditable:NO];
-//            CGSize size = [content sizeWithFont:textView.font constrainedToSize:CGSizeMake(300-16, 10000)];
-            textView.frame = CGRectMake(scr_width, _height, ScreenWidth-scr_width*2, 0);
-            [textView sizeToFit];
-            [_backgroundView addSubview:textView];
-            _height+=textView.height;
+        
+            
+            
         }
     }
 //有相关新闻
     if (_abnewsArray.count>0) {
-        UILabel *abnewslabel = [Uifactory createLabel:ktext];
+        UILabel *abnewslabel = [Uifactory createLabel:ktextViewStrong];
         abnewslabel.text= @"相关新闻";
         abnewslabel.font = [UIFont systemFontOfSize:13];
         abnewslabel.frame = CGRectMake(10, _height, 100, 15);
@@ -321,6 +372,7 @@
         NSString *url = [[_imageArray[i] objectForKey:@"pictureUrl"] stringByReplacingOccurrencesOfString:@"thumbnail" withString:@"bmiddle"];
         MJPhoto *photo = [[MJPhoto alloc] init];
         photo.url = [NSURL URLWithString:url]; // 图片路径
+        photo.newsUrl = self.url;
 //        UIImageView *view = (UIImageView *)VIEWWITHTAG(self.view, 1300+i);
         UIImageView *view;
         _po(self.view.subviews);
@@ -360,7 +412,7 @@
 //    [view release];
     
 //    数据  第一个为图片地址  第二个为视频地址  第三个为文字描述
-    self.contentArray = [_content componentsSeparatedByString:@"<VIEDO>"];
+    self.contentArray = [_content componentsSeparatedByString:@"<VIDEO>"];
     UIImageView *imageView = [[UIImageView alloc]init];
     NSString *imageURL = _contentArray[0];
     if (!self.ImageUrl) {
