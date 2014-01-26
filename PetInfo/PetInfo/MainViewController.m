@@ -216,9 +216,7 @@
 -(void)_initplist{
     NSString *plistPath1 = [FileUrl getDocumentsFile];
     //写入初始化数据文件
-    NSString *pathName = [plistPath1 stringByAppendingPathComponent:data_file_name];
     NSDictionary *dica = [[NSDictionary alloc]init];
-    [dica writeToFile:pathName atomically:YES];
 
 //    搜藏列表
     NSString *collectionName = [plistPath1 stringByAppendingPathComponent:kCollection_file_name];
