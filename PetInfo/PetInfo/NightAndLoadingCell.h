@@ -7,13 +7,23 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaseNightModelCell.h"
 @class NightModelLabel;
 @class ColumnModel;
-@interface NightAndLoadingCell : UITableViewCell{
+@interface NightAndLoadingCell : BaseNightModelCell{
     
     UIImageView *_imageView;
     NightModelLabel *_titleLabel;
     UILabel *_contentLabel;
+    UILabel *_typeLabel;
+    UILabel *_typeUpLabel;
+//    图片视图
+    UIImageView *_imageView1;
+    UIImageView *_imageView2;
+    UIImageView *_imageView3;
+    NightModelLabel *_imageTitleLabel;
+
+
 }
 
 @property (nonatomic,retain) ColumnModel *model;

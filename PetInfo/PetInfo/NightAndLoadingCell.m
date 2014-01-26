@@ -13,7 +13,6 @@
 #import "ThemeManager.h"
 #import "FMDatabase.h"
 #import "FileUrl.h"
-#import "Reachability.h"
 @implementation NightAndLoadingCell
 
 
@@ -21,19 +20,15 @@
 -(id)init{
     self = [super init];
     if(self){
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(NightModeChangeNotification:) name:kNightModeChangeNofication object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(BrownModelChangeNotification) name:kBrownModelChangeNofication object:nil];
         
     }
     return self;
 }
-
-
 - (id)initWithshoWImage:(BOOL)showImage type:(int)type 
 {
-    self = [self initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"HomeDetailCell"];
+    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"HomeDetailCell"];
     if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(NightModeChangeNotification:) name:kNightModeChangeNofication object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(BrownModelChangeNotification) name:kBrownModelChangeNofication object:nil];
         self.showImage = showImage;
         self.type = type;
@@ -44,16 +39,6 @@
 }
 #define mark Notification
 #pragma mark - NSNotification actions
-
-//夜间模式
--(void)NightModeChangeNotification:(NSNotification *)nsnotification{
-    [self setcolor];
-//    [self setNeedsLayout];
-}
--(void)setcolor{
-    self.backgroundColor = [[ThemeManager shareInstance]getBackgroundColor];
-
-}
 //打开模式
 -(void)BrownModelChangeNotification{
     [self setBrown];
@@ -65,7 +50,7 @@
     if (_showImage) {
         int brose = [[ThemeManager shareInstance]getBroseModel];
         if (brose == 0) {//智能模式
-            if ([[self getConnectionAvailable] isEqualToString:@"wifi"]) {
+            if ([[super getConnectionAvailable] isEqualToString:@"wifi"]) {
                 [self addImage];
             }else{
                 [self hiddenImage];
@@ -85,45 +70,20 @@
     [_imageView setHidden:NO];
 }
 -(void)hiddenImage{
-    _titleLabel.frame = CGRectMake(10, 10, 300, 20);
+    _titleLabel.frame = CGRectMake(10, 10, 300-50, 20);
     _contentLabel.frame = CGRectMake(10, 40, 300, 30);
     [_imageView setHidden:YES];
 
-}
-
-//判断当前是否有网络
--(NSString *) getConnectionAvailable{
-    NSString *isExistenceNetwork = @"none";
-    Reachability *reach = [Reachability reachabilityWithHostName:BASE_URL];
-    switch ([reach currentReachabilityStatus]) {
-        case NotReachable:
-            isExistenceNetwork = @"none";
-            //NSLog(@"notReachable");
-            break;
-        case ReachableViaWiFi:
-            isExistenceNetwork = @"wifi";
-            //NSLog(@"WIFI");
-            break;
-        case ReachableViaWWAN:
-            isExistenceNetwork = @"3g";
-            //NSLog(@"3G");
-            break;
-    }
-    return isExistenceNetwork;
 }
 
 
 -(void)_initCell {
     
     //    标题
-//    if (_isselected) {
-//        _titleLabel = [Uifactory createLabel:kselectText];
-//    }
-//    else{
-        _titleLabel = [Uifactory createLabel:ktext];
-//    }
+
+    _titleLabel = [Uifactory createLabel:ktext];
     _titleLabel.frame = CGRectMake(100, 10, 320-100-20, 20);
-    _titleLabel.numberOfLines = 1;
+    _titleLabel.numberOfLines = 0;
     [_titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
     [self.contentView addSubview:_titleLabel];
     //     摘要
@@ -137,59 +97,161 @@
     _imageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 80, 60)];
     _imageView.backgroundColor = CLEARCOLOR;
     [self.contentView addSubview:_imageView];
-    UILabel *typeLabel = [[UILabel alloc]init];
-    typeLabel.frame = CGRectMake(320 - 40, 60, 40, 20);
-    typeLabel.font = [UIFont systemFontOfSize:12];
-    typeLabel.textColor = NenNewsTextColor;
-    typeLabel.backgroundColor = NenNewsgroundColor;
-    typeLabel.textAlignment = NSTextAlignmentCenter;
-    if (_type ==0 ) {
-        typeLabel.backgroundColor = CLEARCOLOR;
-        typeLabel.text = @"";
-        [typeLabel setHidden:YES];
-    }else if (_type ==1) {//专题
-        typeLabel.text = @"专题";
-    }else if (_type==2){ //图片
-        typeLabel.text = @"图集";
-    }else if (_type==3){//视频
-        typeLabel.text = @"视频";
-    }
-    [self.contentView addSubview:typeLabel];
-    [typeLabel release];
-
+    _typeLabel = [[UILabel alloc]initWithFrame:CGRectMake(320 - 40, 55, 40, 15)];
+    _typeLabel.font = [UIFont systemFontOfSize:10];
+    _typeLabel.textColor = NenNewsTextColor;
+    _typeLabel.backgroundColor = NenNewsgroundColor;
+    _typeLabel.textAlignment = NSTextAlignmentCenter;
+    [self.contentView addSubview:_typeLabel];
+    _typeUpLabel= [[UILabel alloc]initWithFrame:CGRectMake(320 - 40, 5, 40, 13)];
+    _typeUpLabel.font = [UIFont systemFontOfSize:10];
+    _typeUpLabel.textColor = NenNewsTextColor;
+    _typeUpLabel.backgroundColor = NenNewsgroundColor;
+    _typeUpLabel.textAlignment = NSTextAlignmentCenter;
+    [self.contentView addSubview:_typeUpLabel];
     [self setBrown];
+    
+//    三张图的图片视图
+    
+    //图片视图
+    _imageView1 = [[UIImageView alloc]initWithFrame:CGRectMake(20, 40, 80, 60)];
+    _imageView1.backgroundColor = CLEARCOLOR;
+    _imageView1.hidden = YES;
+    [self.contentView addSubview:_imageView1];
+    _imageView2 = [[UIImageView alloc]initWithFrame:CGRectMake(120, 40, 80, 60)];
+    _imageView2.backgroundColor = CLEARCOLOR;
+    _imageView2.hidden = YES;
+    [self.contentView addSubview:_imageView2];
+    _imageView3 = [[UIImageView alloc]initWithFrame:CGRectMake(220, 40, 80, 60)];
+    _imageView3.backgroundColor = CLEARCOLOR;
+    _imageView3.hidden = YES;
+    [self.contentView addSubview:_imageView3];
+    _imageTitleLabel = [Uifactory createLabel:ktext];
+    _imageTitleLabel.frame = CGRectMake(20, 10, 320-20-50, 20);
+    _imageTitleLabel.numberOfLines = 0;
+    _imageTitleLabel.hidden = YES;
+    [_imageTitleLabel setFont:[UIFont boldSystemFontOfSize:13]];
+    [self.contentView addSubview:_imageTitleLabel];
 }
 -(void)_initView {
 //    设置布局
     [self _initCell];
-//    设置背景颜色
-    [self setcolor];
+
 }
 
 //layoutSubviews展示数据，子视图布局
 -(void)layoutSubviews{
     [super layoutSubviews];
-    //图片视图
-//    if (!_imageView.hidden) {
-//        [_imageView setImageWithURL:[NSURL URLWithString:_model.img] placeholderImage:[UIImage imageNamed:@"logo_80x60.png"]];
-//    }
-//    标题
-    _titleLabel.text = _model.title;
-//    内容
-    _contentLabel.text = _model.newsAbstract;
-//    _pn(_model.isselected);
-    if (_model.isselected==YES) {
-        _titleLabel.colorName = kselectText;
-    }else{
-        _titleLabel.colorName = ktext;
-    }
-    //图片视图
+    if (_model.img1.length>2&&_model.img2.length>2&&_model.img3.length>2) {
+        _titleLabel.hidden=YES;
+        _contentLabel.hidden=YES;
+        _typeLabel.hidden= YES;
+        _typeUpLabel.hidden = YES;
+        _imageView.hidden = YES;
+        
+        _imageTitleLabel.hidden= NO;
+        _imageView1.hidden = NO;
+        _imageView2.hidden = NO;
+        _imageView3.hidden = NO;
+        
+        _imageTitleLabel.text = _model.title;
 
-    if (_model.img.length==0) {
-        [self hiddenImage];
+        [_imageView1 setImageWithURL:[NSURL URLWithString:_model.img1] placeholderImage:[UIImage imageNamed:@"logo_80x60.png"]];
+        [_imageView2 setImageWithURL:[NSURL URLWithString:_model.img2] placeholderImage:[UIImage imageNamed:@"logo_80x60.png"]];
+        [_imageView3 setImageWithURL:[NSURL URLWithString:_model.img3] placeholderImage:[UIImage imageNamed:@"logo_80x60.png"]];
+        
+        //    //右上标(0:无 1：独家 2：原创 3：推荐)
+        if ([_model.typeUp intValue] ==0 ) {
+            _typeUpLabel.text = @"";
+            [_typeUpLabel setHidden:YES];
+        }else if ([_model.typeUp intValue]==1) {//专题
+            [_typeUpLabel setHidden:NO];
+            _typeUpLabel.text = @"独家";
+        }else if ([_model.typeUp intValue]==2){ //图片
+            [_typeUpLabel setHidden:NO];
+            _typeUpLabel.text = @"原创";
+        }else if ([_model.typeUp intValue]==3){//视频
+            [_typeUpLabel setHidden:NO];
+            _typeUpLabel.text = @"推荐";
+        }
+
     }else{
-        [self addImage];
-        [_imageView setImageWithURL:[NSURL URLWithString:_model.img] placeholderImage:[UIImage imageNamed:@"logo_80x60.png"]];
+        _titleLabel.hidden=NO;
+        _contentLabel.hidden=NO;
+        _typeLabel.hidden= NO;
+        _typeUpLabel.hidden = NO;
+        _imageView.hidden = NO;
+        _imageTitleLabel.hidden = YES;
+        _imageView1.hidden = YES;
+        _imageView2.hidden = YES;
+        _imageView3.hidden = YES;
+        //    判断图片是否显示。确定titlelabel的point
+        if (_model.img.length>1) {
+            [self hiddenImage];
+        }else{
+            int brose = [[ThemeManager shareInstance]getBroseModel];
+            if (brose ==1) {
+                [self hiddenImage];
+            }else{
+                [self addImage];
+                [_imageView setImageWithURL:[NSURL URLWithString:_model.img] placeholderImage:[UIImage imageNamed:@"logo_80x60.png"]];
+            }
+        }
+        //    标题
+        _titleLabel.text = _model.title;
+        //    标题自动换行，行数为2则隐藏简介
+        [_titleLabel sizeToFit];
+        _pf(_titleLabel.height);
+        if (_titleLabel.height>20) {
+            if (_titleLabel.height>40) {
+                _titleLabel.height = 60;
+            }else{
+                _titleLabel.height = 40;
+            }
+            [_contentLabel setHidden:YES];
+        }else{
+            _titleLabel.height = 20;
+            [_contentLabel setHidden:NO];
+            //    内容
+            _contentLabel.text = _model.newsAbstract;
+            
+        }
+        
+        if (_model.isselected==YES) {
+            _titleLabel.colorName = kselectText;
+        }else{
+            _titleLabel.colorName = ktext;
+        }
+        //图片视图
+        
+        
+        if ([_model.type intValue] ==0 ) {
+            _typeLabel.text = @"";
+            [_typeLabel setHidden:YES];
+        }else if ([_model.type intValue]==1) {//专题
+            [_typeLabel setHidden:NO];
+            _typeLabel.text = @"专题";
+        }else if ([_model.type intValue]==2){ //图片
+            [_typeLabel setHidden:NO];
+            _typeLabel.text = @"图集";
+        }else if ([_model.type intValue]==3){//视频
+            [_typeLabel setHidden:NO];
+            _typeLabel.text = @"视频";
+        }
+        //    //右上标(0:无 1：独家 2：原创 3：推荐)
+        if ([_model.typeUp intValue] ==0 ) {
+            _typeUpLabel.text = @"";
+            [_typeUpLabel setHidden:YES];
+        }else if ([_model.typeUp intValue]==1) {//专题
+            [_typeUpLabel setHidden:NO];
+            _typeUpLabel.text = @"独家";
+        }else if ([_model.typeUp intValue]==2){ //图片
+            [_typeUpLabel setHidden:NO];
+            _typeUpLabel.text = @"原创";
+        }else if ([_model.typeUp intValue]==3){//视频
+            [_typeUpLabel setHidden:NO];
+            _typeUpLabel.text = @"推荐";
+        }
     }
 }
 
@@ -211,7 +273,6 @@
 
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [_imageView release];
     [super dealloc];
 }
 
