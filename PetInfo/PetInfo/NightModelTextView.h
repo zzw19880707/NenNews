@@ -10,4 +10,6 @@
 
 @interface NightModelTextView : UITextView
 
+@property (nonatomic,assign) bool isStrong;
+
 @end

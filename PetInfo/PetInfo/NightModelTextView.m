@@ -32,7 +32,12 @@
     [self setColor];
 }
 -(void)setColor{
-    UIColor *textColor = [[ThemeManager shareInstance] getColorWithName:ktext];
+    UIColor *textColor ;
+    if (_isStrong) {
+        textColor = [[ThemeManager shareInstance] getColorWithName:ktextViewStrong];
+    }else {
+        textColor =[[ThemeManager shareInstance] getColorWithName:ktext];
+    }
     self.textColor = textColor;
     self.backgroundColor = [[ThemeManager shareInstance] getBackgroundColor];
 }
@@ -55,8 +60,18 @@
             mul = 16.0f;
             break;
     }
-    self.font = [UIFont systemFontOfSize:mul];
+    if (_isStrong) {
+        self.font = [UIFont boldSystemFontOfSize:mul];
+    }else{
+        self.font = [UIFont systemFontOfSize:mul];
+    }
 }
-
+-(void)setIsStrong:(bool)isStrong{
+    if (_isStrong !=isStrong) {
+        _isStrong =isStrong;
+    }
+    [self setTextSize];
+    [self setColor];
+}
 
 @end
