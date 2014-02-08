@@ -11,6 +11,7 @@
 #import "PushNewsViewController.h"
 #import "CollectionViewController.h"
 #import "BaseNavViewController.h"
+#import "SubscribeViewController.h"
 @interface LeftViewController ()
 
 @end
@@ -115,18 +116,17 @@
         baseView = [[RootViewController alloc]init];
     } else if( indexPath.row ==1){
         baseView = [[PushNewsViewController alloc]init];
-    }else {
+    } else if( indexPath.row ==2){
         baseView = [[CollectionViewController alloc]init];
+    } else{
+        baseView = [[SubscribeViewController alloc]init];
     }
     
     BaseNavViewController *navViewController = [[BaseNavViewController alloc]initWithRootViewController:baseView];
     self.appDelegate.menuCtrl.rootViewController = navViewController;
-//    [self performSelector:@selector(showRootController) withObject:nil afterDelay:10];
     [baseView release];
 }
-//-(void)showRootController{
-//    [self.appDelegate.menuCtrl showRootController:YES];
-//}
+
 #pragma mark 内存管理
 - (void)didReceiveMemoryWarning
 {
