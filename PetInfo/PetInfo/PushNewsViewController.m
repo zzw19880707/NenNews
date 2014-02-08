@@ -156,8 +156,6 @@
         }else{
             listData= [[NSMutableArray alloc]initWithCapacity:3];
         }
-        NSMutableArray *arr =listData;
-
         
         NSArray *array = @[todayarray,yesterdayarray,earlierarray];
         for (int i = 0 ; i<array.count ; i++) {
@@ -170,11 +168,11 @@
             }
             if (middel.count>0) {
                 [listData[i] addObjectsFromArray:middel];
-                [arr[i] addObjectsFromArray:listData];
+//                [arr[i] addObjectsFromArray:listData[i]];
             }
             [middel release];
         }
-        tableView.data =arr;
+        tableView.data =listData;
         
 
         [tableView doneLoadingTableViewData];
