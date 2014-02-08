@@ -201,7 +201,6 @@
         _titleLabel.text = _model.title;
         //    标题自动换行，行数为2则隐藏简介
         [_titleLabel sizeToFit];
-        _pf(_titleLabel.height);
         if (_titleLabel.height>20) {
             if (_titleLabel.height>40) {
                 _titleLabel.height = 60;
