@@ -39,6 +39,9 @@
 #define kisNightModel @"isNightModel"
 //判断是否是第一次登陆
 #define kisNotFirstLogin @"isFirstLogin"
+//版本号
+#define kbundleVersion @"kbundleVersion"
+
 //百度推送绑定信息
 #define BPushchannelid @"BPushchannelid"
 #define BPushappid @"BPushappid"
@@ -65,8 +68,14 @@
 #define main_adImage_url @"main_adImage_url"
 //当前栏目版本号
 #define column_version @"column_version"
+
+
 //当前显示的栏目
 #define show_column @"show_column"
+
+//订阅视频
+#define subscribe_column @"subscribe_column"
+
 #pragma mark Nen_News_Color
 #define NenNewsgroundColor COLOR(29, 32, 136)
 #define NenNewsTextColor COLOR(247, 247, 247)
@@ -88,4 +97,6 @@
 #define kWeatherData_file_name @"weatherData.plist"
 #define kCollection_file_name @"collection.plist"
 
+
+#define itunesappid 802739994
 #endif

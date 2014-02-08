@@ -24,6 +24,8 @@
 #define URL_getPush_List @"PushHistoryServlet"
 //获取首页大图
 #define URL_AO @"Ao"
+//获取订阅信息
+#define URL_getsubscribe_List @"takePart"
 
 //传入查询内容 返回查询结果。 post请求
 #define URL_Search @"SearchNews"
