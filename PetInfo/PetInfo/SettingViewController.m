@@ -82,6 +82,9 @@
     if (section ==0) {
         return 3;
     }
+    if (section ==3) {
+        return 2;
+    }
     return 1;
 }
 
@@ -197,9 +200,15 @@
             break;
             
         case 3:
-            switch (0)
+         
+            switch (row)
         {
             case 0:
+                cell.textLabel.text = @"给我评分";
+                
+                [cell setAccessoryType: UITableViewCellAccessoryDisclosureIndicator];
+                break;
+            case 1:
                 cell.textLabel.text = @"关于";
                 
                 [cell setAccessoryType: UITableViewCellAccessoryDisclosureIndicator];
@@ -249,9 +258,20 @@
     }
     if ([indexPath section] == 3)
     {
-        AboutViewController *aboutViewController = [[AboutViewController alloc] init];
-        [self.navigationController pushViewController: aboutViewController animated: YES];
-        [aboutViewController release];
+        if (indexPath.row ==0) {
+            //跳转到应用页面
+            NSString* urlStr1 = [NSString stringWithFormat:@"http://itunes.apple.com/cn/app/id%d",itunesappid];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr1]];
+            
+            //跳转到评价页面
+//            NSString *urlStr2 = [NSString stringWithFormat: @"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id;=%d", itunesappid ];
+//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr2]];
+        }else if(indexPath.row==1){
+            AboutViewController *aboutViewController = [[AboutViewController alloc] init];
+            [self.navigationController pushViewController: aboutViewController animated: YES];
+            [aboutViewController release];
+        }
+
     }
 }
 
