@@ -79,7 +79,7 @@
     topImageView.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight-100);
     NSString *url = [[NSString alloc]init];
     [self.view  addSubview: _backgroundView];
-    if (![_userDefaults boolForKey:kisNotFirstLogin]) {
+    if (![_userDefaults boolForKey:kbundleVersion]) {
         url = firstimage;
         [_userDefaults setValue:firstimage forKey:main_adImage_url];
         [_userDefaults synchronize];
@@ -138,8 +138,16 @@
                             if(fmrs.next){
                                 NSString *sql = [NSString stringWithFormat:@" update columnList set columnName = '%@',isImage = '%@',hidden='%@',takepart = '%@' where column ='%@';",appPartName,isPic,hidden,takePart,partId];
                                 [db executeUpdate:sql];
+                                
                                 //                            更新的 需要更新当前userdefaults中显示的数据
-                                NSMutableArray *columnArray  = [[[NSMutableArray alloc]initWithArray: [_userDefaults objectForKey:show_column ]] autorelease];
+                                NSMutableArray *columnArray ;
+//                                非订阅
+                                if (takePart ==0) {
+                                    columnArray  = [[[NSMutableArray alloc]initWithArray: [_userDefaults objectForKey:show_column ]] autorelease];
+                                }else{
+                                     columnArray  = [[[NSMutableArray alloc]initWithArray: [_userDefaults objectForKey:subscribe_column ]] autorelease];
+                                }
+
                                 for (int i = 0 ; i<columnArray.count; i++) {
                                     NSDictionary *columnDic = columnArray[i];
                                     NSString *columnID =[columnDic objectForKey:@"columnId"];
@@ -163,11 +171,18 @@
                                     }
                                     
                                 }
-                                [_userDefaults setValue:columnArray forKey:show_column];
+                                
+                                //                                非订阅
+                                if (takePart ==0) {
+                                    [_userDefaults setValue:columnArray forKey:show_column];
+                                }else{
+                                    [_userDefaults setValue:columnArray forKey:subscribe_column];
+                                }
                                 [_userDefaults synchronize];
                             }
                         }
-                    }[db close];
+                    }
+                    [db close];
 //                    跟新版本
                     [_userDefaults setInteger:[newVersion integerValue] forKey:column_version];
                     [_userDefaults synchronize];
@@ -231,7 +246,7 @@
     [_userDefaults setBool:YES forKey:kisNightModel];
     [_userDefaults setInteger:1 forKey:kpageCount];
     //初始化菜单 写到userdefaults里
-    NSArray *columnsshowName = @[@"头条",@"国内",@"国际",@"文娱",@"视频"];
+    NSArray *columnsshowName = @[@"辽媒头条",@"国内",@"国际",@"文娱",@"视频"];
     NSMutableArray *showarray = [[NSMutableArray alloc]init];
     for(int i= 1 ; i<columnsshowName.count+1 ;i ++){
         
@@ -243,6 +258,21 @@
 
     
 }
+-(void)_updataDB{
+    FMDatabase *db = [FileUrl getDB];
+    NSMutableArray *showarray = [[NSMutableArray alloc]init];
+
+//    订阅栏目
+    NSArray *columnsName = @[@"今日网谈",@"一言堂",@"网事知多少"];
+    for (int i = 0 ; i <columnsName.count; i++) {
+        [db executeUpdate:[NSString stringWithFormat:@"insert into columnList VALUES (%d,'%@',%d,%d,%d,%d);",i+6,columnsName[i],1,1,1,i]];
+//初始化菜单 写到userdefaults里
+        NSDictionary *dic = [[NSDictionary dictionaryWithObjects:@[columnsName[i],[NSNumber numberWithInt:i+6]] forKeys:@[@"name",@"columnId"]] autorelease];
+        [showarray addObject:dic];
+    }
+    [_userDefaults setObject:showarray forKey:subscribe_column];
+    [_userDefaults synchronize];
+}
 #pragma mark UI
 - (void)viewDidLoad
 {
@@ -250,21 +280,37 @@
     _userDefaults=[NSUserDefaults standardUserDefaults];
     [self _initLocation];
     [self Location];
-    //加载进入应用后大图
-    //第一次登陆
-    if (![_userDefaults boolForKey:kisNotFirstLogin]) {
-        [self _initDB];
-        [self _initplist];
-        [_userDefaults setValue:firstimage forKey:main_adImage_url];
-        [_userDefaults synchronize];
-        [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:.1];
+    NSString *curversion = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
+    NSString *oldVersion = [_userDefaults stringForKey:kbundleVersion];
+//    
+    if (![oldVersion isEqualToString:curversion]) {
+//        第一次进入。 直接初始化  出引导图
+        if (oldVersion == nil) {
+            [self _initDB];
+            [self _initplist];
+            [_userDefaults setValue:firstimage forKey:main_adImage_url];
+            [_userDefaults synchronize];
+            [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:.1];
+        }
+//        else{//更新内容
+            [self _updataDB];
+//        }
+        
     }else{
         [self _initBackgroundView];
-
+        
         //图片最多加载5秒
         [self performSelector:@selector(_removeBackground) withObject:nil afterDelay:5];
 
     }
+
+//    //加载进入应用后大图
+//    //第一次登陆
+//    if (![_userDefaults boolForKey:kisNotFirstLogin]) {
+//       
+//    }else{
+//        
+//    }
     //设置夜间模式
     bool  nightModel=[_userDefaults boolForKey:kisNightModel];
     if (nightModel) {
@@ -339,13 +385,6 @@
 
 //引导图
 -(void)viewDidEnd{
-    [UIView animateWithDuration:0.5 animations:^{
-        _backgroundView.alpha = 0;
-        
-    } completion:^(BOOL finished) {
-        [_backgroundView removeFromSuperview];
-        RELEASE_SAFELY(_backgroundView);
-    }];
     [self _addGuidePageView];
 }
 
@@ -366,7 +405,9 @@
     } completion:^(BOOL finished) {
         //隐藏状态
         [self setStateBarHidden:NO];
-        [_userDefaults setBool:YES forKey:kisNotFirstLogin];
+//        [_userDefaults setBool:YES forKey:kisNotFirstLogin];
+        NSString *curversion = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
+        [_userDefaults setObject:curversion forKey:kbundleVersion];
         [_userDefaults synchronize];
         [pageControl removeFromSuperview];
         [self _initViewController];
