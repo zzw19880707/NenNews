@@ -22,7 +22,11 @@ typedef void (^RequestErrorBlock)(NSError *error);
 @interface DataService : NSObject <ASIHTTPRequestDelegate>
 
 @property (nonatomic,assign) id<ASIRequest> eventDelegate;
-
+//异步获取
++(ASIHTTPRequest *)requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params andhttpMethod:(NSString *) httpMethod andCache :(ASICachePolicy)ASIcache  completeBlock:(RequestFinishBlock)block andErrorBlock:(RequestErrorBlock)errorBlock;
+//只读本地的异步获取
++(ASIHTTPRequest *)nocacheWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params  completeBlock:(RequestFinishBlock) block andErrorBlock:(RequestErrorBlock) errorBlock;
+//访问网络，机型对比的异步获取
 + (ASIHTTPRequest *)requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params andhttpMethod: (NSString *)httpMethod completeBlock:(RequestFinishBlock) block andErrorBlock:(RequestErrorBlock) errorBlock;
 
 - (ASIHTTPRequest *) requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params
