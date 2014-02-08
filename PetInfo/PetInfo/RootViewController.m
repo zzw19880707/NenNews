@@ -42,7 +42,7 @@
         int columnId = [[nameArrays[i] objectForKey:@"columnId"] intValue];
         UIButton *button = [Uifactory createButton:[nameArrays[i] objectForKey:@"name"]];
         button.frame = CGRectMake(10 + 70*i, 0, 60, 30);
-        
+        button.titleLabel.font = [UIFont systemFontOfSize:13];
         button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         button.tag = 1000+ i;
         [buttonArrays addObject:button];
@@ -54,7 +54,8 @@
         newsTableView.changeDelegate = self;
         newsTableView.type = 0;
         NSMutableDictionary *d = [[NSMutableDictionary alloc]initWithContentsOfFile:[[FileUrl getDocumentsFile]stringByAppendingPathComponent:data_file_name]];
-        
+//        设置数据
+        [self getData:newsTableView cache:1];
         NSMutableDictionary *dic = [d objectForKey:[NSString stringWithFormat:@"%d",columnId]];
         if (dic.count>0) {
             NSMutableArray *data = [[NSMutableArray alloc]init];
@@ -99,7 +100,10 @@
     [self.appDelegate.menuCtrl setEnableGesture:b];
 }
 -(void)autoRefreshData:(NewsNightModelTableView *)tableView{
-    [self getData:tableView];
+    [self getData:tableView cache:0];
+}
+-(void)autoRefreshDatawithCache:(NewsNightModelTableView *)tableView{
+    [self getData:tableView cache:1];
 }
 #pragma mark
 #pragma mark UI
@@ -114,12 +118,12 @@
     
     
     NewsNightModelTableView *table  = (NewsNightModelTableView *) VIEWWITHTAG( VIEWWITHTAG(_sc, 10001), 1300);
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyMMddHHmm"];
-    _po([formatter stringFromDate:[NSDate date]]);
-    int data =[[formatter stringFromDate:[NSDate date]] intValue];
-    table.lastDate = data;
-    [self getData:table];
+//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//    [formatter setDateFormat:@"yyMMddHHmm"];
+//    _po([formatter stringFromDate:[NSDate date]]);
+//    int data =[[formatter stringFromDate:[NSDate date]] intValue];
+//    table.lastDate = data;
+    [self getData:table cache:1];
 }
 -(void)viewWillAppear:(BOOL)animated{
     
@@ -139,8 +143,9 @@
 
 #pragma mark UIScrollViewEventDelegate
 -(void)ImageViewDidSelected:(NSInteger)index andData:(NSArray *)imageData{
-    if (index>0) {
-        WebViewController *webView = [[WebViewController alloc]initWithUrl:[imageData[index] objectForKey:@"url"]];
+    NSString *url = [imageData[index] objectForKey:@"url"];
+    if (url!=nil&&![url isEqualToString:@""]) {
+        WebViewController *webView = [[WebViewController alloc]initWithUrl:url];
         [self.navigationController pushViewController:webView animated:YES];
     }else{
         NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
@@ -162,7 +167,8 @@
     return model;
 }
 #pragma mark UItableviewEventDelegate
--(void)getData :(NewsNightModelTableView *)tableView{
+//cache 0:正常缓存 1代表只读本地
+-(void)getData :(NewsNightModelTableView *)tableView cache:(int)cache{
     [self getConnectionAlert];
     //    参数
     NSMutableDictionary *params  = [[NSMutableDictionary alloc]init];
@@ -171,38 +177,100 @@
     [params setValue:number forKey:@"count"];
     int columnID=tableView.columnID;
     [params setValue:[NSNumber numberWithInt:columnID] forKey:@"columnID"];
-    if (tableView.data.count>0) {
-        ColumnModel *model = tableView.data[0];
-        NSString *sinceID = model.newsId;
-        [params setValue:sinceID forKey:@"maxId"];
-    }
-    [DataService requestWithURL:URL_getColumn_List andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
-        tableView.isMore = true;
-        NSArray *array =  [result objectForKey:@"data"];
-        if (array.count ==0) {
+//    if (tableView.data.count>0) {
+//        ColumnModel *model = tableView.data[0];
+//        NSString *sinceID = model.newsId;
+//        [params setValue:sinceID forKey:@"maxId"];
+//    }
+    [params setValue:[[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"columnid=%d",tableView.columnID]] objectForKey:@"maxId"] forKey:@"maxId"];
+//    正常访问网络
+    if (cache ==0) {
+        [DataService requestWithURL:URL_getColumn_List andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:@"yyMMddHHmm"];
+            _po([formatter stringFromDate:[NSDate date]]);
+            int date =[[formatter stringFromDate:[NSDate date]] intValue];
+            tableView.lastDate = date;
+            tableView.isMore = true;
+            NSArray *array =  [result objectForKey:@"data"];
+            if (array.count ==0) {
+                [tableView doneLoadingTableViewData];
+                return ;
+            }
+            NSMutableArray *listData = [[NSMutableArray alloc]init];
+            
+            for (NSDictionary *dic  in array) {
+                ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
+                model = [self addisselected:model];
+                [listData addObject:model];
+            }
+            
+            //        [listData addObjectsFromArray:tableView.data];
+            tableView.data =listData;
+            tableView.imageData = [result objectForKey:@"picture"];
+            [tableView reloadData];
+            if (tableView.imageData.count >0) {
+                [tableView.csView reloadData];
+            }
             [tableView doneLoadingTableViewData];
-            return ;
-        }
-        NSMutableArray *listData = [[NSMutableArray alloc]init];
-        
-        for (NSDictionary *dic  in array) {
-            ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
-            model = [self addisselected:model];
-            [listData addObject:model];
-        }
-        
-//        [listData addObjectsFromArray:tableView.data];
-        tableView.data =listData;
-        tableView.imageData = [result objectForKey:@"picture"];
-        [tableView reloadData];
-        if (tableView.imageData.count >0) {
-            [tableView.csView reloadData];
-        }
-        [tableView doneLoadingTableViewData];
-        
-    } andErrorBlock:^(NSError *error) {
-        [tableView doneLoadingTableViewData];
-    }];
+            
+            NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+            ColumnModel *model = tableView.data[0];
+            NSString *sinceID = model.newsId;
+            
+            NSDictionary *columnDIC = @{@"maxId":sinceID,@"lastDate":[NSNumber numberWithInt:date]};
+            
+            [userDefault setValue:columnDIC forKey:[NSString stringWithFormat:@"columnid=%d",tableView.columnID]];
+            [userDefault synchronize];
+            
+        } andErrorBlock:^(NSError *error) {
+            [tableView doneLoadingTableViewData];
+        }];
+    }else{
+//        只读本地
+        [DataService nocacheWithURL:URL_getColumn_List andparams:params completeBlock:^(id result) {
+            tableView.isMore = true;
+            NSArray *array =  [result objectForKey:@"data"];
+            if (array.count ==0) {
+                [tableView doneLoadingTableViewData];
+                return ;
+            }
+            NSMutableArray *listData = [[NSMutableArray alloc]init];
+            
+            for (NSDictionary *dic  in array) {
+                ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
+                model = [self addisselected:model];
+                [listData addObject:model];
+            }
+            
+            //        [listData addObjectsFromArray:tableView.data];
+            tableView.data =listData;
+            tableView.imageData = [result objectForKey:@"picture"];
+            [tableView reloadData];
+            if (tableView.imageData.count >0) {
+                [tableView.csView reloadData];
+            }
+            [tableView doneLoadingTableViewData];
+//            设置tableview的最后更新时间
+            
+            int date = [[[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"columnid=%d",tableView.columnID]] objectForKey:@"lastDate"] intValue];
+            if (date==0) {
+                
+            }else{
+                tableView.lastDate =date;
+
+            }
+            
+        } andErrorBlock:^(NSError *error) {
+            [tableView doneLoadingTableViewData];
+        }];
+    }
+    
+
+    
+    
+    
+    
     
 }
 
@@ -213,7 +281,7 @@
 
         return;
     }
-    [self getData:tableView];
+    [self getData:tableView cache:0];
     
 }
 //下拉加载
@@ -240,7 +308,7 @@
         NSArray *array =  [result objectForKey:@"data"];
         NSArray *imageArray = [result objectForKey:@"picture"];
         NSMutableArray *listData = [[NSMutableArray alloc]init];
-        
+
         for (NSDictionary *dic  in array) {
             ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
             model = [self addisselected:model];
@@ -285,12 +353,12 @@
 -(void)columnChanged:(NSArray *)array{
     _sc.buttonsNameArray = [self _initButton];
     NewsNightModelTableView *table  = (NewsNightModelTableView *) VIEWWITHTAG( VIEWWITHTAG(_sc, 10001), 1300);
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyMMddHHmm"];
-    _po([formatter stringFromDate:[NSDate date]]);
-    int data =[[formatter stringFromDate:[NSDate date]] intValue];
-    table.lastDate = data;
-    [self getData:table];
+//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//    [formatter setDateFormat:@"yyMMddHHmm"];
+//    _po([formatter stringFromDate:[NSDate date]]);
+//    int data =[[formatter stringFromDate:[NSDate date]] intValue];
+//    table.lastDate = data;
+    [self getData:table cache:1];
 }
 #pragma mark 内存管理
 - (void)didReceiveMemoryWarning
