@@ -17,6 +17,7 @@
 -(void)showRightMenu;
 -(void)setEnableGesture:(BOOL)b;
 -(void)autoRefreshData:(NewsNightModelTableView *)tableView;
+-(void)autoRefreshDatawithCache:(NewsNightModelTableView *)tableView;
 //-(void)pushViewController:(BaseViewController *)baseViewController;
 @end
 @interface BaseScrollView : UIScrollView <UIScrollViewDelegate>{

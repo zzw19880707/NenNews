@@ -131,11 +131,13 @@
         [button addTarget: self  action:@selector(selectAction:) forControlEvents:UIControlEventTouchUpInside];
         [_buttonBgView addSubview:button];
         [button release];
+        if ([_contentsArray[i] isKindOfClass:[NewsNightModelTableView class]]) {
+            NewsNightModelTableView *newsTableView = _contentsArray[i];
+            newsTableView.tag = 1300+i;
+            [_contentBgView addSubview:newsTableView];
+            [newsTableView release];
+        }
         
-        NewsNightModelTableView *newsTableView = _contentsArray[i];
-        newsTableView.tag = 1300+i;
-        [_contentBgView addSubview:newsTableView];
-        [newsTableView release];
     }
     
     //滑动条返回至第一个
@@ -191,11 +193,10 @@
             [table autoRefreshData];
             [self.eventDelegate autoRefreshData:table];
             table.lastDate = data;
-            
         }
     }else{
-        [self.eventDelegate autoRefreshData:table];
-        table.lastDate = data;
+        [self.eventDelegate autoRefreshDatawithCache:table];
+//        table.lastDate = data;
         
     }
 }
