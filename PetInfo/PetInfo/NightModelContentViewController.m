@@ -179,7 +179,7 @@
             [_imageArray addObject:dic];
             UIImageView *imageView = [[UIImageView alloc]init];
             [imageView setImageWithURL:[NSURL URLWithString:content]  placeholderImage:[UIImage imageNamed:@"logo_280x210.png"]];
-            imageView.frame = CGRectMake(scr_width,_height, 280, 210);
+            imageView.frame = CGRectMake((ScreenWidth - 280)/2,_height, 280, 210);
             imageView.tag = 1300+ i/2;
             imageView.userInteractionEnabled =  YES;
             // 内容模式
@@ -235,6 +235,7 @@
                 }
             }else{
                 UITextView *textView = [Uifactory createTextView];
+                _po(content);
                 if (content.length<=2) {
                     continue;
                 }
@@ -244,8 +245,12 @@
                 NSArray *parts = [content componentsSeparatedByCharactersInSet:whitespaces];
                 NSArray *filteredArray = [parts filteredArrayUsingPredicate:noEmptyStrings];
                 content = [filteredArray componentsJoinedByString:@"\n\t"];
-                
-                textView.text = [NSString stringWithFormat:@"\t%@",content];
+                NSString *str = [NSString stringWithFormat:@"\t%@",content];
+                _po(str);
+                if (str.length<=2) {
+                    continue;
+                }
+                textView.text = str;
                 textView.scrollEnabled = NO;
                 [textView setEditable:NO];
                 textView.frame = CGRectMake(scr_width, _height, ScreenWidth-scr_width*2, 0);
@@ -375,7 +380,7 @@
         photo.newsUrl = self.url;
 //        UIImageView *view = (UIImageView *)VIEWWITHTAG(self.view, 1300+i);
         UIImageView *view;
-        _po(self.view.subviews);
+//        _po(self.view.subviews);
         if (_Contenttype != 0) {//有文字图片新闻
 //            view = self.view.subviews[i+1];
 //        }else if (_Contenttype == 2){//无文字的图片新闻
