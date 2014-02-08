@@ -26,10 +26,7 @@
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     [super dealloc];
 }
-#pragma mark 入口
-//程序入口
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+-(void)shareSDK{
     [ShareSDK registerApp:@"12446798b956"];
     /**
      连接新浪微博开放平台应用以使用相关功能，此应用需要引用SinaWeiboConnection.framework
@@ -69,18 +66,18 @@
      **/
     [ShareSDK connectWeChatWithAppId:@"wx6b665e9bc0f77e41" wechatCls:[WXApi class]];
     
-//    /**
-//     连接QQ应用以使用相关功能，此应用需要引用QQConnection.framework和QQApi.framework库
-//     http://mobile.qq.com/api/上注册应用，并将相关信息填写到以下字段
-//     **/
-//    //旧版中申请的AppId（如：QQxxxxxx类型），可以通过下面方法进行初始化
-//    //    [ShareSDK connectQQWithAppId:@"QQ075BCD15" qqApiCls:[QQApi class]];
-//    
-//    [ShareSDK connectQQWithQZoneAppKey:@"100371282"
-//                     qqApiInterfaceCls:[QQApiInterface class]
-//                       tencentOAuthCls:[TencentOAuth class]];
+    //    /**
+    //     连接QQ应用以使用相关功能，此应用需要引用QQConnection.framework和QQApi.framework库
+    //     http://mobile.qq.com/api/上注册应用，并将相关信息填写到以下字段
+    //     **/
+    //    //旧版中申请的AppId（如：QQxxxxxx类型），可以通过下面方法进行初始化
+    //    //    [ShareSDK connectQQWithAppId:@"QQ075BCD15" qqApiCls:[QQApi class]];
+    //
+    //    [ShareSDK connectQQWithQZoneAppKey:@"100371282"
+    //                     qqApiInterfaceCls:[QQApiInterface class]
+    //                       tencentOAuthCls:[TencentOAuth class]];
     
-
+    
     
     /**
      连接人人网应用以使用相关功能，此应用需要引用RenRenConnection.framework
@@ -90,28 +87,26 @@
                               appKey:@"ab880b1815274cc8ba554bf1398f67f3"
                            appSecret:@"6e7382e8f6034b158d14f0c4a165ea99"
                    renrenClientClass:[RennClient class]];
-    
-
-    
+}
+#pragma mark 入口
+//程序入口
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    [self shareSDK];
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.backgroundColor = [UIColor whiteColor];
-    
     //初始化MainViewController
     _mainCtrl = [[MainViewController alloc] init];
-    
-    
-    
     self.window.rootViewController=_mainCtrl;
     [self.window makeKeyAndVisible];
-
     //设置百度推送代理
     [BPush setupChannel:launchOptions];
     [BPush setDelegate:self];
     //设置角标为0
     [application setApplicationIconBadgeNumber:0];
     
-
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:kisNotFirstLogin]) {
+//已经使用过的用户
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:kbundleVersion]) {
         
         //设置文件初始化
         NSString *settingPath = [[FileUrl getDocumentsFile] stringByAppendingPathComponent: kSetting_file_name];
@@ -119,12 +114,9 @@
         //设置文件信息
         NSMutableDictionary *settingDic = [[NSMutableDictionary alloc] initWithObjectsAndKeys: [NSNumber numberWithInt: 1], kFont_Size, [NSNumber numberWithBool: YES], KNews_Push, nil];
         [settingDic writeToFile: settingPath atomically: YES];
-        
-
-    
     }
     // 注册通知（声音、标记、弹出窗口）
-    [application registerForRemoteNotificationTypes:
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
      UIRemoteNotificationTypeAlert
      | UIRemoteNotificationTypeBadge
      | UIRemoteNotificationTypeSound];
