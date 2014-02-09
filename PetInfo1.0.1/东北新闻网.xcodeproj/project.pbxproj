@@ -353,6 +353,7 @@
 		FEBAEEA21867260B00CBC711 /* NightModelUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBAEEA11867260B00CBC711 /* NightModelUIButton.m */; };
 		FEBAEEA51867262500CBC711 /* NightModelUIImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBAEEA41867262500CBC711 /* NightModelUIImage.m */; };
 		FEBAEEA818672D3A00CBC711 /* Uifactory.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBAEEA718672D3A00CBC711 /* Uifactory.m */; };
+		FEBDEB5F18A7B1BA0046F4DF /* VedioNightCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBDEB5E18A7B1BA0046F4DF /* VedioNightCell.m */; };
 		FEE623D81842E173002ABDAB /* BPushConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = FEE623D71842E173002ABDAB /* BPushConfig.plist */; };
 		FEE623DB1842F01C002ABDAB /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = FEE623DA1842F01C002ABDAB /* JSONKit.m */; };
 		FEFFC70518375336001605C5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEFFC70418375336001605C5 /* UIKit.framework */; };
@@ -826,6 +827,8 @@
 		FEBAEEA41867262500CBC711 /* NightModelUIImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightModelUIImage.m; sourceTree = "<group>"; };
 		FEBAEEA618672D3A00CBC711 /* Uifactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Uifactory.h; sourceTree = "<group>"; };
 		FEBAEEA718672D3A00CBC711 /* Uifactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Uifactory.m; sourceTree = "<group>"; };
+		FEBDEB5D18A7B1BA0046F4DF /* VedioNightCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VedioNightCell.h; sourceTree = "<group>"; };
+		FEBDEB5E18A7B1BA0046F4DF /* VedioNightCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VedioNightCell.m; sourceTree = "<group>"; };
 		FEC80BE018516A5F00467EA2 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		FEE623D71842E173002ABDAB /* BPushConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BPushConfig.plist; sourceTree = "<group>"; };
 		FEE623D91842F01C002ABDAB /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
@@ -1664,6 +1667,8 @@
 				EB70496B186FD02700E94C56 /* NewsNightModelTableView.m */,
 				EBB09D1218A63E1F00553380 /* VedioNightModelView.h */,
 				EBB09D1318A63E2000553380 /* VedioNightModelView.m */,
+				FEBDEB5D18A7B1BA0046F4DF /* VedioNightCell.h */,
+				FEBDEB5E18A7B1BA0046F4DF /* VedioNightCell.m */,
 				EBB2B8831894A3B3005F270A /* BaseNightModelCell.h */,
 				EBB2B8841894A3B3005F270A /* BaseNightModelCell.m */,
 				EB70496D186FD42000E94C56 /* NightAndLoadingCell.h */,
@@ -2118,6 +2123,7 @@
 				EBE756411878028500851B4D /* UIImage+GIF.m in Sources */,
 				FE82536B18687C530070AAB0 /* NightModelScrollView.m in Sources */,
 				FE02E3C2184036F500E2B468 /* BaseTableView.m in Sources */,
+				FEBDEB5F18A7B1BA0046F4DF /* VedioNightCell.m in Sources */,
 				EBFC1156186C3F980094DC05 /* CityCodeViewController.m in Sources */,
 				FE02E3C3184036F500E2B468 /* BaseViewController.m in Sources */,
 				EB0102091862A6E20021D998 /* RootViewController.m in Sources */,
