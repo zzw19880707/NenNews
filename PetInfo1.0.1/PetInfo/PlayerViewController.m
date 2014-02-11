@@ -28,7 +28,10 @@
     [super viewDidLoad];
 //    self shouldAutorotate
 }
-
+-(void)dealloc{
+//    _po(@"视频内容施放");
+    [super dealloc];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -41,7 +44,7 @@
 }
 
 - (NSUInteger)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskLandscapeRight | UIInterfaceOrientationMaskLandscapeLeft;
+    return UIInterfaceOrientationMaskPortrait|UIInterfaceOrientationMaskLandscapeRight | UIInterfaceOrientationMaskLandscapeLeft;
 }
 
 
