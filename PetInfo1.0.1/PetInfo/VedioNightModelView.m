@@ -9,14 +9,17 @@
 #import "VedioNightModelView.h"
 #import "VedioAndImageModel.h"
 #import "ThemeManager.h"
+#import "VedioNightCell.h"
 @implementation VedioNightModelView
-@synthesize data = _data;
+//@synthesize data = _data;
 -(id)init{
     self = [super init];
     if(self){
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(NightModeChangeNotification:) name:kNightModeChangeNofication object:nil];
         self.isMore = YES;
-        
+        self.refreshHeader = YES;
+        [self setBackgroundColor];
+
     }
     return self;
 }
@@ -24,7 +27,6 @@
     self = [self init];
     if (self) {
         self.data = data;
-        [self setBackgroundColor];
     }
     return self;
 }
@@ -45,19 +47,53 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
     if (self.data.count%3 ==0) {
-        return _data.count/3;
+        return self.data.count/3;
     }else{
-        return _data.count/3+1;
+        return self.data.count/3+1;
     }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *vedioandImageCellIdentifier = @"vedioandImageCell";
+    VedioNightCell *cell = [tableView dequeueReusableCellWithIdentifier:vedioandImageCellIdentifier];
+    if (cell == nil) {
+        NSArray *array = nil ;
+//        = @[self.data[indexPath.row*3],self.data[indexPath.row*3+1],self.data[indexPath.row*3+2]];
+        switch (self.data.count -indexPath.row*3) {
+            case 0:
+                array = @[self.data[indexPath.row*3],self.data[indexPath.row*3+1],self.data[indexPath.row*3+2]];
+                break;
+            case 1:
+                array = @[self.data[indexPath.row*3]];
+                break;
+            case 2:
+                array = @[self.data[indexPath.row*3],self.data[indexPath.row*3+1]];
+                break;
+            default:
+                array = @[self.data[indexPath.row*3],self.data[indexPath.row*3+1],self.data[indexPath.row*3+2]];
+
+                break;
+        }
+        cell = [[VedioNightCell alloc]initwithType:_type andData:array andIndex:indexPath.row];
+        cell.eventDelegate =  self;
+    }
     
-    
-    return  nil;
+    return  cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 70;
+    int index = indexPath.row*3;
+    VedioAndImageModel *model = self.data[index];
+    if (model.videoTitle) {
+        return 95;
+    }else{
+        return 70;
+    }
 }
 
+#pragma mark VedioandImageDelegate
+-(void)selectedAction:(int)i andIndex:(int)index{
+    int count = index*3 +i;
+    VedioAndImageModel *model = self.data[count];
+    [self.VedioDelegate selectedAction:model];
+}
 @end
