@@ -53,24 +53,8 @@
         newsTableView.eventDelegate = self;
         newsTableView.changeDelegate = self;
         newsTableView.type = 0;
-        NSMutableDictionary *d = [[NSMutableDictionary alloc]initWithContentsOfFile:[[FileUrl getDocumentsFile]stringByAppendingPathComponent:data_file_name]];
 //        设置数据
         [self getData:newsTableView cache:1];
-        NSMutableDictionary *dic = [d objectForKey:[NSString stringWithFormat:@"%d",columnId]];
-        if (dic.count>0) {
-            NSMutableArray *data = [[NSMutableArray alloc]init];
-            NSArray *array=[dic objectForKey:@"data"];
-            for (NSDictionary *dictionary in array) {
-                ColumnModel *model = [[ColumnModel alloc]initWithDataDic:dictionary];
-                [data addObject:model];
-            }
-            newsTableView.data = data;
-            [data release];
-            newsTableView.imageData = [dic objectForKey:@"picture"];
-        }else{
-            newsTableView.data = [[NSArray alloc]init];
-            newsTableView.imageData = [[NSArray alloc]init];
-        }
         [tableArrays addObject:newsTableView];
         
     }
@@ -82,7 +66,7 @@
 
 #pragma mark UIScrollViewEventDelegate
 -(void)addButtonAction{
-    ColumnTabelViewController *columnVC = [[ColumnTabelViewController alloc]init];
+    ColumnTabelViewController *columnVC = [[ColumnTabelViewController alloc]initWithType:0];
     columnVC.eventDelegate = self;
     _po(self.navigationController);
     [self.navigationController pushViewController:columnVC animated:YES];
@@ -188,7 +172,6 @@
         [DataService requestWithURL:URL_getColumn_List andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateFormat:@"yyMMddHHmm"];
-            _po([formatter stringFromDate:[NSDate date]]);
             int date =[[formatter stringFromDate:[NSDate date]] intValue];
             tableView.lastDate = date;
             tableView.isMore = true;
@@ -322,7 +305,7 @@
         if (imageArray.count !=0) {
             tableView.imageData = imageArray;
         }
-        if (listData.count < count*10) {
+        if (listData.count < (count+1)*10) {
             tableView.isMore = false;
         }
         [tableView reloadData];
@@ -352,13 +335,8 @@
 #pragma mark columnchangeDelegate
 -(void)columnChanged:(NSArray *)array{
     _sc.buttonsNameArray = [self _initButton];
-    NewsNightModelTableView *table  = (NewsNightModelTableView *) VIEWWITHTAG( VIEWWITHTAG(_sc, 10001), 1300);
-//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//    [formatter setDateFormat:@"yyMMddHHmm"];
-//    _po([formatter stringFromDate:[NSDate date]]);
-//    int data =[[formatter stringFromDate:[NSDate date]] intValue];
-//    table.lastDate = data;
-    [self getData:table cache:1];
+//    NewsNightModelTableView *table  = (NewsNightModelTableView *) VIEWWITHTAG( VIEWWITHTAG(_sc, 10001), 1300);
+//    [self getData:table cache:1];
 }
 #pragma mark 内存管理
 - (void)didReceiveMemoryWarning
