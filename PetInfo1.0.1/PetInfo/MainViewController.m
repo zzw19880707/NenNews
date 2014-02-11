@@ -260,18 +260,20 @@
 }
 -(void)_updataDB{
     FMDatabase *db = [FileUrl getDB];
+    [db open];
     NSMutableArray *showarray = [[NSMutableArray alloc]init];
 
 //    订阅栏目
-    NSArray *columnsName = @[@"今日网谈",@"一言堂",@"网事知多少"];
+    NSArray *columnsName = @[@"今日网谈",@"网事知多少",@"一言堂"];
     for (int i = 0 ; i <columnsName.count; i++) {
-        [db executeUpdate:[NSString stringWithFormat:@"insert into columnList VALUES (%d,'%@',%d,%d,%d,%d);",i+6,columnsName[i],1,1,1,i]];
+        [db executeUpdate:[NSString stringWithFormat:@"insert into columnList VALUES (%d,'%@',%d,%d,%d,%d);",i+6,columnsName[i],1,1,1,1]];
 //初始化菜单 写到userdefaults里
         NSDictionary *dic = [[NSDictionary dictionaryWithObjects:@[columnsName[i],[NSNumber numberWithInt:i+6]] forKeys:@[@"name",@"columnId"]] autorelease];
         [showarray addObject:dic];
     }
     [_userDefaults setObject:showarray forKey:subscribe_column];
     [_userDefaults synchronize];
+    [db close];
 }
 #pragma mark UI
 - (void)viewDidLoad
