@@ -20,5 +20,7 @@
     NSMutableArray *_addNameArray;
 
 }
+-(id)initWithType :(int)type;
 @property (nonatomic ,assign) id<ColumnChangedDelegate> eventDelegate;
+@property (nonatomic,assign) int type ;//0 新闻 1订阅
 @end

@@ -10,6 +10,7 @@
 #import "FileUrl.h"
 #import "DataCenter.h"
 #import "FMDB/src/FMDatabase.h"
+#import "ColumnModel.h"
 @interface ColumnTabelViewController ()
 
 @end
@@ -24,11 +25,24 @@
     }
     return self;
 }
+-(id)initWithType :(int)type{
+    self = [super init];
+    if (self) {
+        self.type = type;
+    }
+    return self;
+}
 -(void)_initcolumnname {
     //写入初始化文件
+    if (_type ==0) {
+        _showNameArray = [[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:show_column]];
+        _addNameArray = [[NSMutableArray alloc]initWithArray:[DataCenter getShowColumn:0 andSubscribe:NO]];
+    }else{
+        _showNameArray = [[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:subscribe_column]];
+        _addNameArray = [[NSMutableArray alloc]initWithArray:[DataCenter getShowColumn:0 andSubscribe:YES]];
+
+    }
     
-    _showNameArray = [[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:show_column]];
-    _addNameArray = [[NSMutableArray alloc]initWithArray:[DataCenter getShowColumn:0]];
 }
 
 - (void)viewDidLoad
@@ -65,9 +79,18 @@
 //     self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 -(void)viewWillDisappear:(BOOL)animated{
-    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-    [user setValue:_showNameArray forKey:show_column];
-    [self.eventDelegate columnChanged:_showNameArray];
+    if (_type == 0) {
+        NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+        [user setValue:_showNameArray forKey:show_column];
+        [self.eventDelegate columnChanged:_showNameArray];
+        [user synchronize];
+    }else{
+        NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+        [user setValue:_showNameArray forKey:subscribe_column];
+        [self.eventDelegate columnChanged:_showNameArray];
+        [user synchronize];
+
+    }
     [super viewWillDisappear:animated];
 }
 
@@ -174,9 +197,12 @@
         [db open];
         [db executeUpdate:[NSString stringWithFormat:@"update columnList set isshow = 0 where column=%@",[dic objectForKey:@"columnId"]]];
         [db close];
+        
         NSIndexPath *index = [NSIndexPath indexPathForRow:_addNameArray.count-1 inSection:1];
         [tableView insertRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationFade];
-    }   
+        [dic release];
+
+    }
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         NSDictionary *dic = [[_addNameArray objectAtIndex:indexPath.row] retain];
         [_addNameArray removeObject:dic];
@@ -188,7 +214,8 @@
         [db close];
         NSIndexPath *index = [NSIndexPath indexPathForRow:_showNameArray.count-1 inSection:0];
         [tableView insertRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationFade];
-    }   
+        [dic release];
+    }
 }
 
 
@@ -201,26 +228,33 @@
 
          return;
      }
-     NSMutableArray *array = fromIndexPath.section ==0? _showNameArray:_addNameArray;
-     NSDictionary *column = [[array objectAtIndex:fromIndexPath.row] retain];
-     [array removeObject:column];
+     FMDatabase *db = [FileUrl getDB];
+     [db open];
      
-     array = toIndexPath.section ==0 ?_showNameArray :_addNameArray;
-     [array insertObject:column atIndex:toIndexPath.row];
-     
-//     for (id text in _fontsArray) {
-//         NSLog(@"font : %@", text);
-//     }
-//     NSLog(@"___________");
-//     
-//     NSString *text = [[_fontsArray objectAtIndex:fromIndexPath.row] retain]; // 2
-//     [ removeObject:text]; // 0
-//     [_fontsArray insertObject:text atIndex:toIndexPath.row];
-//     [text release];
-//     
-//     for (id text in _fontsArray) {
-//         NSLog(@"change font : %@", text);
-//     }
+     if (fromIndexPath.section>toIndexPath.section) {
+         NSDictionary *dic = [[_addNameArray objectAtIndex:fromIndexPath.row] retain] ;
+         [db executeUpdate:[NSString stringWithFormat:@"update columnList set isshow = 1 where column=%@",[dic objectForKey:@"columnId"]]];
+         [_addNameArray removeObject:dic];
+         [_showNameArray insertObject:dic atIndex:toIndexPath.row];
+         [dic release];
+
+     }
+     if (toIndexPath.section>fromIndexPath.section) {
+         NSDictionary *dic = [[_showNameArray objectAtIndex:fromIndexPath.row] retain] ;
+         [db executeUpdate:[NSString stringWithFormat:@"update columnList set isshow = 0 where column=%@",[dic objectForKey:@"columnId"]]];
+         [_showNameArray removeObject:dic];
+         [_addNameArray insertObject:dic atIndex:toIndexPath.row];
+         [dic release];
+         _pn(dic.retainCount);
+     }
+     if (toIndexPath.section == fromIndexPath.section) {
+         if (fromIndexPath.section==0) {
+             [_showNameArray exchangeObjectAtIndex:toIndexPath.row withObjectAtIndex:fromIndexPath.row ];
+         }else{
+             [_addNameArray exchangeObjectAtIndex:toIndexPath.row withObjectAtIndex:fromIndexPath.row];
+         }
+     }
+     [db close];
      [self.tableView reloadData];
  } // 移动结束调用
 
