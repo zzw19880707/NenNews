@@ -465,7 +465,36 @@
 
 
     _backgroundView.contentSize = CGSizeMake(ScreenWidth, _height+40);
-    
+    //有相关新闻
+    if (_abnewsArray.count>0) {
+        UILabel *abnewslabel = [Uifactory createLabel:ktextViewStrong];
+        abnewslabel.text= @"相关新闻";
+        abnewslabel.font = [UIFont systemFontOfSize:13];
+        abnewslabel.frame = CGRectMake(10, _height, 100, 15);
+        [_backgroundView addSubview:abnewslabel];
+        _height+=20;
+        for (int i = 0 ; i< _abnewsArray.count ; i++) {
+            int tag = i;
+            NSString *title = [_abnewsArray[i] objectForKey:@"title"];
+            //相关新闻图标
+            UIImageView *icon = [[UIImageView alloc]init];
+            icon.image = [UIImage imageNamed:@"point.png"];
+            icon.frame = CGRectMake(20, _height+5, 20, 20);
+            [_backgroundView addSubview:icon];
+            //            [icon release];
+            //            相关新闻按钮
+            UIButton *button = [[UIButton alloc]init];
+            button.frame = CGRectMake(45, _height, ScreenWidth - 40 -20, 30);
+            [button setTitle:title forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [button addTarget:self action:@selector(pushAction:) forControlEvents:UIControlEventTouchUpInside];
+            button.tag = tag;
+            [_backgroundView addSubview:button];
+            //            [button release];
+            _height +=35;
+        }
+        
+    }
     [self.view addSubview:_backgroundView];
 
 }
@@ -485,7 +514,7 @@
 -(void)pushAction :(UIButton *) button {
     int tag = button.tag;
     NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
-    nightModel.type = 0;//model.type;
+    nightModel.type = self.type;//model.type;
     nightModel.newsId = [NSString stringWithFormat:@"%@", [_abnewsArray[tag] objectForKey:@"titleId"]];
     [self.navigationController pushViewController:nightModel animated:YES];
 }
@@ -518,7 +547,7 @@
     }
     NSURL *url = [NSURL URLWithString:urlstring];
     MPMoviePlayerViewController *playerViewController = [[PlayerViewController alloc] initWithContentURL:url];
-    [self presentViewController:playerViewController animated:YES completion:NULL];
+    [self.appDelegate.menuCtrl presentMoviePlayerViewControllerAnimated:playerViewController];
 
 }
 #pragma mark UIAlertViewDelegate
