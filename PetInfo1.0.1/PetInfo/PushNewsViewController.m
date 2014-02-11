@@ -36,6 +36,7 @@
     [self getData:table];
     
 }
+//判断是否选中
 -(ColumnModel *)addisselected :(ColumnModel *)model {
     NSString *newsId = model.newsId;
     FMResultSet *rs =[self.db executeQuery:@"select * from columnData where newsId = ?",newsId];
