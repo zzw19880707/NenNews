@@ -22,6 +22,6 @@
 //获取路径下文件大小
 +(float)fileSizeForDir:(NSString*)path;
 //获取显示/隐藏的栏目
-+(NSArray *)getShowColumn:(int)show;
++(NSArray *)getShowColumn:(int)show andSubscribe:(BOOL)issubscribe;
 
 @end
