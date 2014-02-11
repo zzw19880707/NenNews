@@ -14,6 +14,7 @@
 #import "NightModelContentViewController.h"
 #import "BaseViewController+StatusBarStyle.h"
 #import "ColumnModel.h"
+#import "ThemeManager.h"
 @interface BaseViewController ()
 
 @end
@@ -243,7 +244,7 @@
     self.network = [self getConnectionAvailable];
     //设置navegation背景颜色
     self.navigationController.navigationBar.tintColor = NenNewsgroundColor;
-	[self.view setBackgroundColor:CLEARCOLOR];
+	[self.view setBackgroundColor:[[ThemeManager shareInstance]getBackgroundColor]];
 
 
     NSArray *viewControllers = self.navigationController.viewControllers;
