@@ -8,7 +8,10 @@
 
 #import "BaseViewController.h"
 #import "BaseScrollView.h"
-@interface SubscribeViewController : BaseViewController{
+#import "VedioNightModelView.h"
+#import "ColumnTabelViewController.h"
+
+@interface SubscribeViewController : BaseViewController <UItableviewEventDelegate,VedioNightModelViewDelegate,UIScrollViewEventDelegate,ColumnChangedDelegate>{
     BaseScrollView *_sc;
 }
 
