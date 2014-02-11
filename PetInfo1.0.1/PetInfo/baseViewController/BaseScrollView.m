@@ -14,6 +14,7 @@
 #import "WebViewController.h"
 #import "NightModelContentViewController.h"
 #import "ThemeManager.h"
+#import "BaseTableView.h"
 @implementation BaseScrollView
 
 - (id)initWithFrame:(CGRect)frame
@@ -131,12 +132,12 @@
         [button addTarget: self  action:@selector(selectAction:) forControlEvents:UIControlEventTouchUpInside];
         [_buttonBgView addSubview:button];
         [button release];
-        if ([_contentsArray[i] isKindOfClass:[NewsNightModelTableView class]]) {
-            NewsNightModelTableView *newsTableView = _contentsArray[i];
+//        if ([_contentsArray[i] isKindOfClass:[NewsNightModelTableView class]]) {
+            BaseTableView *newsTableView = _contentsArray[i];
             newsTableView.tag = 1300+i;
             [_contentBgView addSubview:newsTableView];
             [newsTableView release];
-        }
+//        }
         
     }
     
@@ -176,7 +177,12 @@
     CGPoint point = _contentBgView.contentOffset;
     point.x = page *340;
     _contentBgView.contentOffset = point;
-    [self showData];
+    
+        if ([_contentsArray[0] isKindOfClass:[NewsNightModelTableView class]]) {
+            [self showData];
+
+        }
+    
 
     
 }
@@ -207,7 +213,10 @@
 #pragma mark ScrollDelegate
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     if (_contentBgView.contentSize.width/340<4) {
+        if ([_contentsArray[0] isKindOfClass:[NewsNightModelTableView class]]) {
+
         [self showData];
+        }
         return ;
     }
     int page = _contentBgView.contentOffset.x/340;
@@ -247,8 +256,10 @@
             [_buttonBgView setContentOffset:CGPointMake(0, 0) animated:YES];
         }
     }
+    if ([_contentsArray[0] isKindOfClass:[NewsNightModelTableView class]]) {
+
     [self showData];
-    
+    }
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
