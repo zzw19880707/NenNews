@@ -83,7 +83,7 @@
     //    NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"" ofType:@""];
     
     //构造分享内容
-    id<ISSContent> publishContent = [ShareSDK content:_newsAbstract==nil?_titleLabel:_newsAbstract
+    id<ISSContent> publishContent = [ShareSDK content: _newsAbstract==nil ? _titleLabel:_newsAbstract
                                        defaultContent:@"东北新闻网"
                                                 image:[ShareSDK imageWithUrl:_ImageUrl]
                                                 title:_titleLabel
