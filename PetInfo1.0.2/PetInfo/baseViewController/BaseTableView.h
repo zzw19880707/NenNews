@@ -35,6 +35,7 @@
 @property (nonatomic,assign)BOOL refreshHeader;//是否需要下拉
 
 @property (nonatomic,assign)BOOL isMore;//是否还有更多(下一页)
+@property (nonatomic,assign)BOOL HidenMore;//隐藏到底了
 @property (nonatomic,assign) id<UItableviewEventDelegate> eventDelegate;
 - (void)doneLoadingTableViewData;
 

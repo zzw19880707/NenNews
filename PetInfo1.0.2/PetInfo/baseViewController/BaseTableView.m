@@ -31,6 +31,7 @@
     self.dataSource=self;
     self.delegate=self;
 //    self.refreshHeader=YES;
+    self.HidenMore = NO;
     _moreButton=[[UIButton buttonWithType:UIButtonTypeCustom]retain];
     _moreButton.backgroundColor=[UIColor clearColor];
     _moreButton.frame=CGRectMake(0, 0, ScreenWidth, 40);
@@ -105,17 +106,20 @@
 
 -(void)_stopLoadMore{
     if (self.data.count>0) {
-        _moreButton.hidden = NO;
-        [_moreButton setTitle:@"上拉加载更多..." forState:UIControlStateNormal];
-        _moreButton.enabled=YES;
-        UIActivityIndicatorView *activityView=(UIActivityIndicatorView *)[_moreButton viewWithTag:1000];
-        [activityView stopAnimating];
-//        if(self.isMore!=NO){
-//            [_moreButton setTitle:@"加载完成" forState:UIControlStateNormal];
-//        }
-        if (!self.isMore) {
-            [_moreButton setTitle:@"到底啦" forState:UIControlStateNormal];
-            _moreButton.enabled = NO;
+        if (!_HidenMore) {
+            _moreButton.hidden = NO;
+            [_moreButton setTitle:@"上拉加载更多..." forState:UIControlStateNormal];
+            _moreButton.enabled=YES;
+            UIActivityIndicatorView *activityView=(UIActivityIndicatorView *)[_moreButton viewWithTag:1000];
+            [activityView stopAnimating];
+            //        if(self.isMore!=NO){
+            //            [_moreButton setTitle:@"加载完成" forState:UIControlStateNormal];
+            //        }
+            if (!self.isMore) {
+                [_moreButton setTitle:@"到底啦" forState:UIControlStateNormal];
+                _moreButton.enabled = NO;
+            }
+
         }
     }else{
         _moreButton.hidden=YES;
