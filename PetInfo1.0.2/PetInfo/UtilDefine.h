@@ -114,3 +114,7 @@ otherButtonTitles:nil];  \
 
 //清除背景色
 #define CLEARCOLOR [UIColor clearColor]
+
+//logo图片
+#define LogoImage [UIImage imageNamed:@"logo_80x60.png"]
+#define LogoImage_280x210 [UIImage imageNamed:@"logo_280x210.png"]
