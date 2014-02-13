@@ -7,7 +7,10 @@
 //
 
 #import "BaseViewController.h"
+#import "BaseTableView.h"
+@class SpecialNightModelTableView;
+@interface SpecialNightViewController : BaseViewController<UItableviewEventDelegate>
+@property (nonatomic,retain) NSString *newsId;
 
-@interface SpecialNightViewController : BaseViewController
-
+@property (nonatomic,retain) SpecialNightModelTableView *SpecialTableView;
 @end

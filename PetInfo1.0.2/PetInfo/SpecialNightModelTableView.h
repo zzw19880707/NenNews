@@ -7,7 +7,9 @@
 //
 
 #import "BaseTableView.h"
-
 @interface SpecialNightModelTableView : BaseTableView
+
+@property (nonatomic,retain) NSDictionary *ImgData;
+@property (nonatomic,retain) NSString *abstract;
 
 @end
