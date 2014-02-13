@@ -21,6 +21,6 @@
 -(id)initwithData:(NSArray *)data;
 @property (nonatomic,assign) int columnID;
 
-@property (nonatomic,assign) int type;//类型 0:视频 1:图片
+@property (nonatomic,assign) int type;//类型 3:视频 2:图片
 @property (nonatomic,assign) id<VedioNightModelViewDelegate> VedioDelegate;
 @end

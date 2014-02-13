@@ -13,7 +13,7 @@
 @end
 #import "BaseNightModelCell.h"
 @interface VedioNightCell : BaseNightModelCell
--(id)initwithType :(int) type andData :(NSArray *)data andIndex :(int )index;//0 视频 1 图片
+-(id)initwithType :(int) type andData :(NSArray *)data andIndex :(int )index;//3 视频 2 图片
 @property (nonatomic,assign) id<VedioandImageDelegate> eventDelegate;
 @property (nonatomic,retain) NSArray *data;
 @property (nonatomic,assign) int type ;

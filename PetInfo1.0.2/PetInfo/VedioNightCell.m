@@ -26,9 +26,9 @@
             [self.contentView addSubview:button];
             [button release];
             NSString *text ;
-            if (type==0) {
+            if (type==3) {
                 text = @"视频";
-            }else if (type ==1){
+            }else if (type ==2){
                 text = @"图片";
             } else{
                 text = @"";
@@ -70,7 +70,7 @@
             UIButton *button = (UIButton *)VIEWWITHTAG(self.contentView, 1200+i );
             button.hidden = NO;
             VedioAndImageModel *model = _data[i];
-            [button setImageWithURL:[NSURL URLWithString:model.videoPic] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"logo_80x60.png"]];
+            [button setImageWithURL:[NSURL URLWithString:model.videoPic] forState:UIControlStateNormal placeholderImage:LogoImage];
             UILabel *label = (UILabel *)VIEWWITHTAG(self.contentView, 100+i);
             label.hidden = NO;
             label.text = model.videoTitle;
