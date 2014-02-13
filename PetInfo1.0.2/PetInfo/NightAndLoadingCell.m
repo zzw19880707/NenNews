@@ -156,9 +156,9 @@
         
         _imageTitleLabel.text = _model.title;
 
-        [_imageView1 setImageWithURL:[NSURL URLWithString:_model.img1] placeholderImage:[UIImage imageNamed:@"logo_80x60.png"]];
-        [_imageView2 setImageWithURL:[NSURL URLWithString:_model.img2] placeholderImage:[UIImage imageNamed:@"logo_80x60.png"]];
-        [_imageView3 setImageWithURL:[NSURL URLWithString:_model.img3] placeholderImage:[UIImage imageNamed:@"logo_80x60.png"]];
+        [_imageView1 setImageWithURL:[NSURL URLWithString:_model.img1] placeholderImage:LogoImage];
+        [_imageView2 setImageWithURL:[NSURL URLWithString:_model.img2] placeholderImage:LogoImage];
+        [_imageView3 setImageWithURL:[NSURL URLWithString:_model.img3] placeholderImage:LogoImage];
         
         //    //右上标(0:无 1：独家 2：原创 3：推荐)
         if ([_model.typeUp intValue] ==0 ) {
@@ -194,7 +194,7 @@
                 [self hiddenImage];
             }else{
                 [self addImage];
-                [_imageView setImageWithURL:[NSURL URLWithString:_model.img] placeholderImage:[UIImage imageNamed:@"logo_80x60.png"]];
+                [_imageView setImageWithURL:[NSURL URLWithString:_model.img] placeholderImage:LogoImage];
             }
         }
         //    标题

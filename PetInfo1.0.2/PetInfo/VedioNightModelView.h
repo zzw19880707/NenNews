@@ -9,7 +9,6 @@
 
 @protocol VedioNightModelViewDelegate <NSObject>
 -(void)selectedAction:(VedioAndImageModel *)model;
-
 @end
 #import "BaseTableView.h"
 #import "VedioNightCell.h"

@@ -178,7 +178,7 @@
             NSDictionary *dic = @{@"pictureUrl": content,@"pictureContent":@""};
             [_imageArray addObject:dic];
             UIImageView *imageView = [[UIImageView alloc]init];
-            [imageView setImageWithURL:[NSURL URLWithString:content]  placeholderImage:[UIImage imageNamed:@"logo_280x210.png"]];
+            [imageView setImageWithURL:[NSURL URLWithString:content]  placeholderImage:LogoImage_280x210];
             imageView.frame = CGRectMake((ScreenWidth - 280)/2,_height, 280, 210);
             imageView.tag = 1300+ i/2;
             imageView.userInteractionEnabled =  YES;
@@ -235,7 +235,6 @@
                 }
             }else{
                 UITextView *textView = [Uifactory createTextView];
-                _po(content);
                 if (content.length<=2) {
                     continue;
                 }
@@ -246,7 +245,6 @@
                 NSArray *filteredArray = [parts filteredArrayUsingPredicate:noEmptyStrings];
                 content = [filteredArray componentsJoinedByString:@"\n\t"];
                 NSString *str = [NSString stringWithFormat:@"\t%@",content];
-                _po(str);
                 if (str.length<=2) {
                     continue;
                 }
@@ -323,7 +321,7 @@
         NSDictionary *dic = _imageArray[0];
         _imageView = [[UIImageView alloc]init];
         _imageView.frame = CGRectMake(20, _height, 280, 210);
-        [_imageView setImageWithURL:[dic objectForKey:@"pictureUrl"] placeholderImage:[UIImage imageNamed:@"logo_280x210.png"]];
+        [_imageView setImageWithURL:[dic objectForKey:@"pictureUrl"] placeholderImage:LogoImage_280x210];
         _imageView.userInteractionEnabled = YES;
         // 内容模式
         _imageView.clipsToBounds = YES;
@@ -424,10 +422,10 @@
         self.ImageUrl = imageURL;
     }
     if (imageURL.length<=2) {
-        [imageView setImage:[UIImage imageNamed:@"logo_280x210.png"]];
+        [imageView setImage:LogoImage_280x210];
 
     }else{
-        [imageView setImageWithURL:[NSURL URLWithString:imageURL] placeholderImage:[UIImage imageNamed:@"logo_280x210.png"]];
+        [imageView setImageWithURL:[NSURL URLWithString:imageURL] placeholderImage:LogoImage_280x210];
     }
     imageView.frame = CGRectMake(0, 0, 280, 210);
     imageView.alpha = .8;
