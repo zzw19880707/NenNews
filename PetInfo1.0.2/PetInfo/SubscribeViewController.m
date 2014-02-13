@@ -54,6 +54,7 @@
         vedio.frame = CGRectMake(340 *i, 0, ScreenWidth, ScreenHeight -44-20);
         vedio.columnID = columnId;
         vedio.VedioDelegate = self;
+        vedio.type = 3;//视频
         vedio.separatorStyle = UITableViewCellSeparatorStyleNone;
         [self getData:vedio cache:1];
         [tableArrays addObject:vedio];
