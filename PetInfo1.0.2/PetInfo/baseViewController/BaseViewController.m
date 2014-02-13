@@ -15,6 +15,7 @@
 #import "BaseViewController+StatusBarStyle.h"
 #import "ColumnModel.h"
 #import "ThemeManager.h"
+#import "SpecialNightViewController.h"
 @interface BaseViewController ()
 
 @end
@@ -47,7 +48,6 @@
     if (viewControllers.count > 1) {
         [self.navigationController popToRootViewControllerAnimated:NO];
     }
-    NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
     
     //插入该cell已经选中
     NSString *newsId = model.newsId;
@@ -55,12 +55,21 @@
     NSString *img = model.img;
     NSString *sql = [NSString stringWithFormat:@"insert into columnData(newsId,title,newsAbstract,type,img,isselected) values('%@','%@','%@',%@,'%@',1) ;",newsId,model.title,newsAbstract,model.type,img];
     _po(sql);
-    [self.db executeUpdate:sql];
-    nightModel.newsAbstract = model.newsAbstract;
-    nightModel.type = [model.type intValue];
-    nightModel.newsId = [NSString stringWithFormat:@"%@",model.newsId];
-    nightModel.ImageUrl = model.img;
-    [self.navigationController pushViewController:nightModel animated:YES];
+
+    if([model.type intValue] ==1){//专题新闻
+        SpecialNightViewController *special = [[SpecialNightViewController alloc]init];
+        special.newsId = [NSString stringWithFormat:@"%@",model.newsId];
+        [self.navigationController pushViewController:special animated:YES];
+    }else{//普通新闻
+        NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
+        [self.db executeUpdate:sql];
+        nightModel.newsAbstract = model.newsAbstract;
+        nightModel.type = [model.type intValue];
+        nightModel.newsId = [NSString stringWithFormat:@"%@",model.newsId];
+        nightModel.ImageUrl = model.img;
+        [self.navigationController pushViewController:nightModel animated:YES];
+
+    }
 }
 -(void)pushNews:(NSNotification *)notification {
     ColumnModel *model =(ColumnModel *)notification.object;
