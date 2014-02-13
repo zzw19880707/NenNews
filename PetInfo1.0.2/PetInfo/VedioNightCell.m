@@ -20,7 +20,6 @@
         self.index = index;
         for (int i = 0 ; i <3; i++) {
             UIButton *button =  [[UIButton alloc]initWithFrame:CGRectMake(20+i*100, 5, 80, 60)];
-            button.backgroundColor = [UIColor redColor];
             [button addTarget:self action:@selector(selectAction:) forControlEvents:UIControlEventTouchUpInside];
             button.tag = 1200 +i;
             [self.contentView addSubview:button];
