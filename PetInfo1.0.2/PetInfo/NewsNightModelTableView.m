@@ -152,22 +152,22 @@
             UITableViewCell *imageCell = [tableView dequeueReusableCellWithIdentifier:@"imageIndentifier"];
             if (imageCell == nil) {
                 imageCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:imageIndentifier];
-                self.csView = [[XLCycleScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 135)];
+                self.csView = [[XLCycleScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 185)];
                 self.csView.delegate = self;
                 self.csView.datasource = self;
                 [self.csView.pageControl setHidden:YES];
                 UIScrollView *view =[Uifactory createScrollView];
-                view.frame  = CGRectMake(0, 0, 320, 135+15);
+                view.frame  = CGRectMake(0, 0, 320, 185+15);
                 [view addSubview:_csView];
                 [_csView release];
                 
                 self.label = [Uifactory createLabel:ktext];
-                self.label.frame = CGRectMake(10, 135, 200, 15 );
+                self.label.frame = CGRectMake(10, 185, 200, 15 );
                 self.label.text = [_imageData[0] objectForKey:@"pictureTitle"];
                 self.label.font = [UIFont systemFontOfSize:12];
                 [view addSubview:self.label];
                 
-                self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(320 - 12*_imageData.count-5, 120+15, 12*_imageData.count, 15)];
+                self.pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(320 - 12*_imageData.count-5, 185, 12*_imageData.count, 15)];
                 _pageControl.backgroundColor = [UIColor clearColor];
                 if (WXHLOSVersion()>=6.0) {
                     self.pageControl.pageIndicatorTintColor = [UIColor grayColor];
@@ -218,7 +218,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (_type == 0) {
         if (_imageData.count >0&&indexPath.section==0) {
-            return 150;
+            return 200;
         }else{
             ColumnModel *model = self.data[indexPath.row];
             if (model.img1.length>2&&model.img2.length>2&&model.img3.length>2) {
@@ -242,7 +242,7 @@
     UIImageView *imgaeView =[[[UIImageView alloc]init]autorelease];
     NSURL  *url = [NSURL URLWithString:[_imageData[index] objectForKey:@"pictureUrl"] ];
     [imgaeView setImageWithURL:url];
-    imgaeView.frame =CGRectMake(0, 0, 320, 135);
+    imgaeView.frame =CGRectMake(0, 0, 320, 185);
     return imgaeView;
 }
 
@@ -258,6 +258,7 @@
 
 -(void)reloadData{
     [super reloadData];
+
 
 
 }
