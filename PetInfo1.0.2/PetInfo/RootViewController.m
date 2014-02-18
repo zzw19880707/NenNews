@@ -95,7 +95,7 @@
 {
     
     [super viewDidLoad];
-    
+    self.isLoading = NO;
     _sc = [[BaseScrollView alloc]initwithButtons:[self _initButton] WithFrame:CGRectMake(0, 0, 320, ScreenHeight)];
     _sc.eventDelegate = self;
     [self.view addSubview:_sc];
@@ -193,6 +193,10 @@
             tableView.imageData = [result objectForKey:@"picture"];
             [tableView reloadData];
             if (tableView.imageData.count >0) {
+                tableView.pageControl.currentPage = 0 ;
+                tableView.pageControl.frame=CGRectMake(320 - 12*tableView.imageData.count-5, 185, 12*tableView.imageData.count, 15);
+                tableView.pageControl.numberOfPages =tableView.imageData.count  ;
+                tableView.csView.currentPage = 0;
                 [tableView.csView reloadData];
             }
             [tableView doneLoadingTableViewData];
@@ -231,6 +235,10 @@
             tableView.imageData = [result objectForKey:@"picture"];
             [tableView reloadData];
             if (tableView.imageData.count >0) {
+                tableView.pageControl.currentPage = 0 ;
+                tableView.pageControl.frame=CGRectMake(320 - 12*tableView.imageData.count-5, 185, 12*tableView.imageData.count, 15);
+                tableView.pageControl.numberOfPages =tableView.imageData.count  ;
+                tableView.csView.currentPage = 0;
                 [tableView.csView reloadData];
             }
             [tableView doneLoadingTableViewData];
@@ -269,6 +277,10 @@
 }
 //下拉加载
 -(void)pullUp:(NewsNightModelTableView *)tableView{
+    if (_isLoading ) {
+        return;
+    }
+    
     if (![self getConnectionAlert]) {
         [tableView doneLoadingTableViewData];
 
@@ -287,6 +299,7 @@
         [params setValue:sinceID forKey:@"sinceId"];
     }
     [self getConnectionAlert];
+    self.isLoading = YES;
     [DataService requestWithURL:URL_getColumn_List andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
         NSArray *array =  [result objectForKey:@"data"];
         NSArray *imageArray = [result objectForKey:@"picture"];
@@ -309,10 +322,11 @@
             tableView.isMore = false;
         }
         [tableView reloadData];
-        
+        self.isLoading = NO;
     } andErrorBlock:^(NSError *error) {
         [tableView doneLoadingTableViewData];
-        
+        self.isLoading = NO;
+
     }];
     
     
