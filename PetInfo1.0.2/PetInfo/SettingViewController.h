@@ -8,10 +8,12 @@
 
 #import "BaseViewController.h"
 
-@interface SettingViewController : BaseViewController <UITableViewDataSource,UITableViewDelegate>{
+@interface SettingViewController : BaseViewController <UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>{
     NSArray *_data;
     NSMutableDictionary *_settingDic;
 }
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
+@property (retain ,  nonatomic) NSString *updateURL;
+
 
 @end

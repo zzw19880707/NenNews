@@ -13,8 +13,11 @@
 #import "PageCountsViewController.h"
 #import "DataCenter.h"
 #import "FileUrl.h"
-@interface SettingViewController ()
+#import "ASIFormDataRequest.h"
 
+@interface SettingViewController (){
+    UIAlertView *_alert;
+}
 @end
 
 @implementation SettingViewController
@@ -83,7 +86,7 @@
         return 3;
     }
     if (section ==3) {
-        return 2;
+        return 3;
     }
     return 1;
 }
@@ -203,18 +206,17 @@
          
             switch (row)
         {
-            case 0:
-                cell.textLabel.text = @"给我评分";
-                
-                [cell setAccessoryType: UITableViewCellAccessoryDisclosureIndicator];
-                break;
             case 1:
+                cell.textLabel.text = @"给我评分";
+                break;
+            case 0:
+                cell.textLabel.text = @"检查更新";
+                break;
+            case 2:
                 cell.textLabel.text = @"关于";
-                
                 [cell setAccessoryType: UITableViewCellAccessoryDisclosureIndicator];
                 break;
         }
-            
         default:
             break;
     }
@@ -229,7 +231,6 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0) {
         return 50;
-
     }
     return 44;
 }
@@ -258,15 +259,87 @@
     }
     if ([indexPath section] == 3)
     {
-        if (indexPath.row ==0) {
+        if (indexPath.row ==1) {
             //跳转到应用页面
-            NSString* urlStr1 = [NSString stringWithFormat:@"http://itunes.apple.com/cn/app/id%d",itunesappid];
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr1]];
+//            NSString* urlStr1 = [NSString stringWithFormat:@"http://itunes.apple.com/cn/app/id%d",itunesappid];
+//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr1]];
             
             //跳转到评价页面
 //            NSString *urlStr2 = [NSString stringWithFormat: @"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id;=%d", itunesappid ];
 //            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlStr2]];
-        }else if(indexPath.row==1){
+            
+//            if (WXHLOSVersion() >=7.0) {
+                NSString *str = [NSString stringWithFormat:
+                                 
+                                 @"itms-apps://itunes.apple.com/app/id%d",itunesappid];
+//                @"http://itunes.apple.com/us/app/%E4%B8%9C%E5%8C%97%E6%96%B0%E9%97%BB%E7%BD%91/id802739994?ls=1&mt=8"
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+//            }else{
+//                NSString *str = [NSString stringWithFormat:
+//                                 @"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%d",
+//                                 itunesappid ];
+//                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+//            }
+            
+        }else if (indexPath.row ==0){
+            
+            //弹出提示
+            
+            if (_alert ==nil) {
+                _alert = [[UIAlertView alloc]initWithTitle:@"正在检查更新"
+                                                   message:nil
+                                                  delegate:nil
+                                         cancelButtonTitle:nil
+                                         otherButtonTitles:nil];
+                _alert.tag = 100;
+                if (WXHLOSVersion()<7.0) {
+                    UIActivityIndicatorView *activeView = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+                    activeView.center = CGPointMake(_alert.bounds.size.width/2.0f, _alert.bounds.size.height-40.0f);
+                    [activeView startAnimating];
+                    [_alert addSubview:activeView];
+                    [activeView release];
+                }
+            }
+            [_alert show];
+//            访问网络
+            NSString *str = [NSString stringWithFormat:@"http://itunes.apple.com/lookup?id=%d",itunesappid];
+            ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:str]];
+            [request setTimeOutSeconds:30];
+            [request setRequestMethod:@"GET"];
+            [request setCompletionBlock:^{
+//                取消提示框
+                [_alert dismissWithClickedButtonIndex:0 animated:YES];
+                if (request.responseStatusCode == 200)
+                {
+                    NSDictionary *infoDict   = [[NSBundle mainBundle]infoDictionary];
+                    NSString *currentVersion = [infoDict objectForKey:@"CFBundleVersion"];
+                    NSDictionary *jsonData   = [NSJSONSerialization JSONObjectWithData:request.responseData  options:NSJSONReadingMutableContainers error:nil];
+                    NSArray      *infoArray  = [jsonData objectForKey:@"results"];
+                    
+                    if (infoArray.count >= 1)
+                    {
+                        NSDictionary *releaseInfo   = [infoArray objectAtIndex:0];
+                        NSString     *latestVersion = [releaseInfo objectForKey:@"version"];
+                        NSString     *releaseNotes  = [releaseInfo objectForKey:@"releaseNotes"];
+                        NSString     *title         = [NSString stringWithFormat:@"%@%@版本", @"东北新闻网", latestVersion];
+                        self.updateURL = [releaseInfo objectForKey:@"trackViewUrl"];
+                        if ([latestVersion compare:currentVersion] == NSOrderedDescending){
+                            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:releaseNotes delegate:self cancelButtonTitle:@"忽略" otherButtonTitles:@"去App Store下载", nil];
+                            [alertView show];
+                            [alertView release];
+                        }
+                        
+                    }
+                    
+                }
+                
+            }];
+            [request startSynchronous];
+
+
+
+        }
+        else if(indexPath.row==2){
             AboutViewController *aboutViewController = [[AboutViewController alloc] init];
             [self.navigationController pushViewController: aboutViewController animated: YES];
             [aboutViewController release];
@@ -310,13 +383,23 @@
     [super didReceiveMemoryWarning];
 }
 
+#pragma mark alertViewDelegage
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1)
+    {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_updateURL]];
+    }
+}
 - (void)dealloc {
     [_settingDic release];
     [_tableView release];
+    [_alert release];
     [super dealloc];
 }
 - (void)viewDidUnload {
     [self setTableView:nil];
+    _alert = nil;
     [super viewDidUnload];
 }
 @end
