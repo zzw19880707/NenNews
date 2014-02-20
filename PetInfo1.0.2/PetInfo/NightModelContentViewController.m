@@ -29,6 +29,7 @@
 @implementation NightModelContentViewController
 @synthesize backgroundView = _backgroundView;
 #define scr_width 10
+#define scr_heigh 100000
 @synthesize contentArray=_contentArray;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -213,7 +214,7 @@
                         textView.text = [NSString stringWithFormat:@"\t%@",contentstr];
                         textView.scrollEnabled = NO;
                         [textView setEditable:NO];
-                        textView.frame = CGRectMake(scr_width, _height, ScreenWidth-scr_width*2, 0);
+                        textView.frame = CGRectMake(scr_width, _height, ScreenWidth-scr_width*2, scr_heigh);
                         [textView sizeToFit];
                         [_backgroundView addSubview:textView];
                         _height+=textView.height;
@@ -227,7 +228,7 @@
                         textView.isStrong = YES;
                         textView.scrollEnabled = NO;
                         [textView setEditable:NO];
-                        textView.frame = CGRectMake(scr_width, _height, ScreenWidth-scr_width*2, 0);
+                        textView.frame = CGRectMake(scr_width, _height, ScreenWidth-scr_width*2, scr_heigh);
                         [textView sizeToFit];
                         [_backgroundView addSubview:textView];
                         _height+=textView.height;
@@ -251,7 +252,7 @@
                 textView.text = str;
                 textView.scrollEnabled = NO;
                 [textView setEditable:NO];
-                textView.frame = CGRectMake(scr_width, _height, ScreenWidth-scr_width*2, 0);
+                textView.frame = CGRectMake(scr_width, _height, ScreenWidth-scr_width*2, scr_heigh);
                 [textView sizeToFit];
                 [_backgroundView addSubview:textView];
                 _height+=textView.height;
