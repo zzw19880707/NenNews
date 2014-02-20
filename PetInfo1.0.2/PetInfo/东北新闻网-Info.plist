@@ -27,8 +27,12 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>NenNews</string>
+			</array>
 			<key>CFBundleURLName</key>
-			<string></string>
+			<string>com.tenyea.NenNews</string>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
@@ -37,6 +41,7 @@
 			<string></string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>QQ101019244</string>
 				<string>wx6b665e9bc0f77e41</string>
 			</array>
 		</dict>
