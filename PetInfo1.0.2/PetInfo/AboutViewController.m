@@ -18,7 +18,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = @"关于";
+        self.title = @"关    于";
     }
     return self;
 }
@@ -31,8 +31,12 @@
     NSError *error = nil;
     NSStringEncoding encoding;
     NSString *htmlString = [NSString stringWithContentsOfFile: aboutPath usedEncoding: &encoding error: &error];
-
-    [_webView loadHTMLString: htmlString baseURL: nil];
+//    添加版本号
+    NSArray *array = [htmlString componentsSeparatedByString:@"</BODY>"];
+    NSString *curversion = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
+    NSString *centerString = [NSString stringWithFormat:@"<center>Version %@</center>",curversion];
+    NSString *newhtmlString = [array componentsJoinedByString:centerString];
+    [_webView loadHTMLString: newhtmlString baseURL: nil];
     
 }
 
