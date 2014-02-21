@@ -10,6 +10,7 @@
 #import "ASIDownloadCache.h"
 #import "Reachability.h"
 #import "FileUrl.h"
+#import "NSString+URLEncoding.h"
 @implementation DataService
 
 +(ASIHTTPRequest *)nocacheWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params  completeBlock:(RequestFinishBlock) block andErrorBlock:(RequestErrorBlock) errorBlock{
@@ -28,6 +29,10 @@
         for (int i=0; i<params.count; i++) {
             NSString *key=[allKey objectAtIndex:i];
             id value=[params objectForKey:key];
+            if ([value isKindOfClass:[NSString class]]) {
+                NSString *str = (NSString *)value;
+                value = str.URLEncodedString;
+            }
             [paramsString appendFormat:@"%@=%@",key,value];
             if (i<params.count-1) {
                 [paramsString appendString:@"&"];
@@ -40,6 +45,7 @@
     }
     //设置请求url地址
     NSURL *url=[NSURL URLWithString:urlstring];
+
     //设置请求完成的block
     /*    [request setCompletionBlock: 会retain block
      NSData *data = request.responseData;  block  retain   request.
@@ -283,6 +289,10 @@
         for (int i=0; i<params.count; i++) {
             NSString *key=[allKey objectAtIndex:i];
             id value=[params objectForKey:key];
+            if ([value isKindOfClass:[NSString class]]) {
+                NSString *str = (NSString *)value;
+                value = str.URLEncodedString;
+            }
             [paramsString appendFormat:@"%@=%@",key,value];
             if (i<params.count-1) {
                 [paramsString appendString:@"&"];
@@ -296,6 +306,7 @@
     
     //设置请求url地址
     NSURL *url=[NSURL URLWithString:urlstring];
+
     ASIFormDataRequest *request=[ASIFormDataRequest requestWithURL:url];
     //设置超时时间
     [request setTimeOutSeconds:20];
