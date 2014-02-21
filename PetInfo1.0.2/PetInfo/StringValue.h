@@ -20,4 +20,8 @@
 #define INFO_DisCollectionSuccess @"取消收藏成功"
 #define INFO_DisCollectionError @"取消收藏失败"
 #define INFO_Searching @"查询中,请稍后"
+#define INFO_ISNEWVersion @"当前版本为最新版本!"
+
+#pragma mark 属性
+#define loaddata_date 60*20
 #endif

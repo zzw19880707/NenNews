@@ -41,8 +41,11 @@
 			<string></string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>QQ101019244</string>
+				<string>tencent101019244</string>
+				<string>QQ06056E6C</string>
 				<string>wx6b665e9bc0f77e41</string>
+				<string>wb801480021</string>
+				<string>wb1013662903</string>
 			</array>
 		</dict>
 	</array>
