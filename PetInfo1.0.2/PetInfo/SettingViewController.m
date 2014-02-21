@@ -307,6 +307,7 @@
             [request setTimeOutSeconds:30];
             [request setRequestMethod:@"GET"];
             [request setCompletionBlock:^{
+                BOOL  isnew = NO;
 //                取消提示框
                 [_alert dismissWithClickedButtonIndex:0 animated:YES];
                 if (request.responseStatusCode == 200)
@@ -327,12 +328,22 @@
                             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:releaseNotes delegate:self cancelButtonTitle:@"忽略" otherButtonTitles:@"去App Store下载", nil];
                             [alertView show];
                             [alertView release];
+                        }else{
+                            isnew = YES;
                         }
                         
+                    }else{
+                        isnew = YES;
                     }
                     
+                }else{
+                    isnew = YES;
+
                 }
                 
+                if (isnew) {
+                    alertContent(INFO_ISNEWVersion);
+                }
             }];
             [request startSynchronous];
 
