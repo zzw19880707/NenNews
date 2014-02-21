@@ -53,8 +53,15 @@
         newsTableView.eventDelegate = self;
         newsTableView.changeDelegate = self;
         newsTableView.type = 0;
-//        设置数据
-        [self getData:newsTableView cache:1];
+        NSString *key = [NSString stringWithFormat:@"columnid=%d",columnId];
+
+//        获取上次更新时间
+        NSDate *date = [[[NSUserDefaults standardUserDefaults] objectForKey:key] objectForKey:@"lastDate"];
+        newsTableView.lastDate = date;
+        if (date !=nil) {
+            //        设置数据
+            [self getData:newsTableView cache:1];
+        }
         [tableArrays addObject:newsTableView];
         
     }
@@ -86,28 +93,37 @@
 -(void)autoRefreshData:(NewsNightModelTableView *)tableView{
     [self getData:tableView cache:0];
 }
--(void)autoRefreshDatawithCache:(NewsNightModelTableView *)tableView{
-    [self getData:tableView cache:1];
-}
+
 #pragma mark
 #pragma mark UI
 - (void)viewDidLoad
 {
     
     [super viewDidLoad];
+//    初始化设置当前为未加载状态
     self.isLoading = NO;
+//    初始化滚动视图，冰添加
     _sc = [[BaseScrollView alloc]initwithButtons:[self _initButton] WithFrame:CGRectMake(0, 0, 320, ScreenHeight)];
     _sc.eventDelegate = self;
     [self.view addSubview:_sc];
-    
-    
+
+//    获取当前时间
+    NSDate *nowDate = [NSDate date];
+
+//    如果第一个栏目时间为空或者距离上次刷新大于10分钟 则自动刷新
     NewsNightModelTableView *table  = (NewsNightModelTableView *) VIEWWITHTAG( VIEWWITHTAG(_sc, 10001), 1300);
-//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//    [formatter setDateFormat:@"yyMMddHHmm"];
-//    _po([formatter stringFromDate:[NSDate date]]);
-//    int data =[[formatter stringFromDate:[NSDate date]] intValue];
-//    table.lastDate = data;
-    [self getData:table cache:1];
+//    获取上次时间+10分钟
+    NSDate *lastDate = [table.lastDate dateByAddingTimeInterval: loaddata_date];
+    if(lastDate ==nil){
+        [table autoRefreshData];
+        [self getData:table cache:0];
+    }else{
+        if (nowDate ==[lastDate laterDate:nowDate]) {
+            [table autoRefreshData];
+            [self getData:table cache:0];
+        }
+    }
+    
 }
 -(void)viewWillAppear:(BOOL)animated{
     
@@ -161,19 +177,11 @@
     [params setValue:number forKey:@"count"];
     int columnID=tableView.columnID;
     [params setValue:[NSNumber numberWithInt:columnID] forKey:@"columnID"];
-//    if (tableView.data.count>0) {
-//        ColumnModel *model = tableView.data[0];
-//        NSString *sinceID = model.newsId;
-//        [params setValue:sinceID forKey:@"maxId"];
-//    }
-    [params setValue:[[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"columnid=%d",tableView.columnID]] objectForKey:@"maxId"] forKey:@"maxId"];
+
 //    正常访问网络
     if (cache ==0) {
         [DataService requestWithURL:URL_getColumn_List andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:@"yyMMddHHmm"];
-            int date =[[formatter stringFromDate:[NSDate date]] intValue];
-            tableView.lastDate = date;
+            tableView.lastDate = [NSDate date];
             tableView.isMore = true;
             NSArray *array =  [result objectForKey:@"data"];
             if (array.count ==0) {
@@ -197,19 +205,17 @@
                 tableView.pageControl.frame=CGRectMake(320 - 12*tableView.imageData.count-5, 185, 12*tableView.imageData.count, 15);
                 tableView.pageControl.numberOfPages =tableView.imageData.count  ;
                 tableView.csView.currentPage = 0;
+                tableView.label.text = [[result objectForKey:@"picture"][0] objectForKey:@"pictureTitle"];
                 [tableView.csView reloadData];
             }
             [tableView doneLoadingTableViewData];
             
             NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-            ColumnModel *model = tableView.data[0];
-            NSString *sinceID = model.newsId;
-            
-            NSDictionary *columnDIC = @{@"maxId":sinceID,@"lastDate":[NSNumber numberWithInt:date]};
+            NSDictionary *columnDIC = @{@"lastDate":tableView.lastDate};
             
             [userDefault setValue:columnDIC forKey:[NSString stringWithFormat:@"columnid=%d",tableView.columnID]];
             [userDefault synchronize];
-            
+
         } andErrorBlock:^(NSError *error) {
             [tableView doneLoadingTableViewData];
         }];
@@ -229,8 +235,6 @@
                 model = [self addisselected:model];
                 [listData addObject:model];
             }
-            
-            //        [listData addObjectsFromArray:tableView.data];
             tableView.data =listData;
             tableView.imageData = [result objectForKey:@"picture"];
             [tableView reloadData];
@@ -238,14 +242,15 @@
                 tableView.pageControl.currentPage = 0 ;
                 tableView.pageControl.frame=CGRectMake(320 - 12*tableView.imageData.count-5, 185, 12*tableView.imageData.count, 15);
                 tableView.pageControl.numberOfPages =tableView.imageData.count  ;
+                tableView.label.text = [[result objectForKey:@"picture"][0] objectForKey:@"pictureTitle"];
                 tableView.csView.currentPage = 0;
                 [tableView.csView reloadData];
             }
             [tableView doneLoadingTableViewData];
 //            设置tableview的最后更新时间
             
-            int date = [[[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"columnid=%d",tableView.columnID]] objectForKey:@"lastDate"] intValue];
-            if (date==0) {
+            NSDate *date = [[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"columnid=%d",tableView.columnID]] objectForKey:@"lastDate"];
+            if (date ==nil) {
                 
             }else{
                 tableView.lastDate =date;
@@ -349,8 +354,6 @@
 #pragma mark columnchangeDelegate
 -(void)columnChanged:(NSArray *)array{
     _sc.buttonsNameArray = [self _initButton];
-//    NewsNightModelTableView *table  = (NewsNightModelTableView *) VIEWWITHTAG( VIEWWITHTAG(_sc, 10001), 1300);
-//    [self getData:table cache:1];
 }
 #pragma mark 内存管理
 - (void)didReceiveMemoryWarning
