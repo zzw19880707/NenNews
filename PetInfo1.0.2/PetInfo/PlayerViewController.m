@@ -26,7 +26,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    self shouldAutorotate
+    if (WXHLOSVersion()>=7.0) {
+        [self shouldAutorotate];
+    }
 }
 -(void)dealloc{
 //    _po(@"视频内容施放");
@@ -40,7 +42,7 @@
 
 //---------------6.0之后使用一下两个方法控制横屏、竖屏--------------------------
 - (BOOL)shouldAutorotate {
-    return NO;
+    return YES;
 }
 
 - (NSUInteger)supportedInterfaceOrientations {
