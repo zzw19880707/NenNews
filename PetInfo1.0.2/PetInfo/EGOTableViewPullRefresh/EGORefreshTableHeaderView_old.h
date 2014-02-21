@@ -46,7 +46,7 @@ typedef enum{
 	
 
 }
-
+@property (nonatomic,retain) UILabel *lastUpdatedLabel;
 @property(nonatomic,assign) id <EGORefreshTableHeaderDelegate> delegate;
 
 - (void)refreshLastUpdatedDate;
@@ -62,5 +62,5 @@ typedef enum{
 - (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView_old*)view;
 - (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView_old*)view;
 @optional
-- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView_old*)view;
+- (NSString*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView_old*)view;
 @end

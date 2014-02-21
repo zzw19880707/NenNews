@@ -188,34 +188,41 @@
 }
 //显示数据。根据时间来判断是否刷新
 -(void)showData {
+//    获取当前view
     NewsNightModelTableView *table= (NewsNightModelTableView *)VIEWWITHTAG(_contentBgView, 1300+_contentBgView.contentOffset.x /340);
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyMMddHHmm"];
-    _po([formatter stringFromDate:[NSDate date]]);
-    int data =[[formatter stringFromDate:[NSDate date]] intValue];
-    if (table.lastDate) {
-        int lastDate = table.lastDate;
-        if ((data - lastDate)>10) {
+    //    获取当前时间
+    NSDate *nowDate = [NSDate date];
+    //    获取上次时间+20分钟
+    NSDate *lastDate = [table.lastDate dateByAddingTimeInterval:loaddata_date];
+    if (table.lastDate ==nil) {
+        [table autoRefreshData];
+        [self.eventDelegate autoRefreshData:table];
+
+    }else{
+        if (nowDate ==[lastDate laterDate:nowDate]) {
             [table autoRefreshData];
             [self.eventDelegate autoRefreshData:table];
-            table.lastDate = data;
         }
-    }else{
-        [self.eventDelegate autoRefreshDatawithCache:table];
-//        table.lastDate = data;
-        
     }
+    
 }
 -(void)addcolumn{
     [self.eventDelegate addButtonAction];
 }
 
 #pragma mark ScrollDelegate
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    _beginX =_contentBgView.contentOffset.x;
+}
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     if (_contentBgView.contentSize.width/340<4) {
         if ([_contentsArray[0] isKindOfClass:[NewsNightModelTableView class]]) {
 
-        [self showData];
+            if (_beginX !=_contentBgView.contentOffset.x) {
+                [self showData];
+                
+            }
         }
         return ;
     }
@@ -257,8 +264,10 @@
         }
     }
     if ([_contentsArray[0] isKindOfClass:[NewsNightModelTableView class]]) {
+        if (_beginX !=_contentBgView.contentOffset.x) {
+            [self showData];
 
-    [self showData];
+        }
     }
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -272,14 +281,15 @@
     }
     
 }
-
+//滑动结束
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    
+
     if (scrollView.contentOffset.x ==0) {
         [self.eventDelegate setEnableGesture:YES];
         [self.eventDelegate showLeftMenu];
     }else if (scrollView.contentOffset.x==scrollView.contentSize.width -340) {
         [self.eventDelegate setEnableGesture:YES];
+//        最右标识。  最右时不滚动
         _isRight = YES;
         [self.eventDelegate showRightMenu];
     }else{

@@ -17,7 +17,7 @@
 -(void)showRightMenu;
 -(void)setEnableGesture:(BOOL)b;
 -(void)autoRefreshData:(NewsNightModelTableView *)tableView;
--(void)autoRefreshDatawithCache:(NewsNightModelTableView *)tableView;
+//-(void)autoRefreshDatawithCache:(NewsNightModelTableView *)tableView;
 //-(void)pushViewController:(BaseViewController *)baseViewController;
 @end
 @interface BaseScrollView : UIScrollView <UIScrollViewDelegate>{
@@ -25,6 +25,8 @@
     UIScrollView *_contentBgView;
     UIImageView *_sliderImageView;
     BOOL _isRight;
+//开始坐标
+    float _beginX;
 }
 //button宽70 ，frame（10+70*i,0,60,30）
 //content

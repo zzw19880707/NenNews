@@ -37,6 +37,8 @@
 @property (nonatomic,assign)BOOL isMore;//是否还有更多(下一页)
 @property (nonatomic,assign)BOOL HidenMore;//隐藏到底了
 @property (nonatomic,assign) id<UItableviewEventDelegate> eventDelegate;
+@property (nonatomic,strong) NSDate *lastDate;//上次更新时间
+
 - (void)doneLoadingTableViewData;
 
 //自动下拉刷新

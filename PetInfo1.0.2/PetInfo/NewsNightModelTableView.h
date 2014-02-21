@@ -23,7 +23,6 @@
 @property (nonatomic,assign) int type;//0:rootview  1:collectionview 2:pushview
 @property (nonatomic,retain) UIPageControl *pageControl;
 @property (nonatomic,assign) int columnID;
-@property (nonatomic,assign) int lastDate;
 @property (nonatomic,retain) NSArray *imageData;
 @property (nonatomic,retain) UILabel *label ;
 @property (nonatomic,retain) XLCycleScrollView *csView ;

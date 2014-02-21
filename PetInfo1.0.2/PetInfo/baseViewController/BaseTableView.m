@@ -8,6 +8,7 @@
 
 #import "BaseTableView.h"
 #import "Reachability.h"
+#import "DataCenter.h"
 @implementation BaseTableView
 
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style
@@ -189,10 +190,9 @@
     
     //偏移量
     float offset=scrollView.contentOffset.y;
-    float contentHeight=scrollView.contentSize.height;
-    NSLog(@"偏移量y:%f",offset);
-    NSLog(@"content高度%f",contentHeight);
-    
+//    float contentHeight=scrollView.contentSize.height;
+//    NSLog(@"偏移量y:%f",offset);
+//    NSLog(@"content高度%f",contentHeight);
     if (offset<0) {
         return;
     }
@@ -200,8 +200,6 @@
         
         return;
     }
-    
-
     //当offset偏移量滑到底部时，差值是scrollView的高度
 //    float sub=contentHeight-offset;
 //    if(sub -scrollView.height > 30){
@@ -212,7 +210,14 @@
         }
     }
 }
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    if (_lastDate!= nil) {
+        _refreshHeaderView.lastUpdatedLabel.text = [NSString stringWithFormat:@"上次刷新:%@",[DataCenter intervalSinceNow:[DataCenter dateTOString:_lastDate]] ];
+    }else{
+            _refreshHeaderView.lastUpdatedLabel.text = [NSString stringWithFormat:@"上次刷新:从未"];
+    }
 
+}
 
 #pragma mark -
 #pragma mark EGORefreshTableHeaderDelegate Methods
@@ -222,7 +227,6 @@
 	[self reloadTableViewDataSource];
     
     //停止加载，弹回下拉
-//	[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:3.0];
 	if ([self.eventDelegate respondsToSelector:@selector(pullDown:)]) {
         [self.eventDelegate pullDown:self];
 
@@ -236,11 +240,11 @@
 }
 
 //取得下拉刷新的时间
-- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView_old*)view{
-	
-	return [NSDate date]; 
-	
+- (NSString*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView_old*)view{
+    if (_lastDate!= nil) {
+        return [NSString stringWithFormat:@"%@",[DataCenter intervalSinceNow:[DataCenter dateTOString:_lastDate]] ];
+    }else{
+        return [NSString stringWithFormat:@"从未"];
+    }
 }
-
-
 @end

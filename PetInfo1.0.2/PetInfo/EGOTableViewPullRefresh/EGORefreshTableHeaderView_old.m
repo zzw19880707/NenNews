@@ -38,7 +38,7 @@
 @implementation EGORefreshTableHeaderView_old
 
 @synthesize delegate=_delegate;
-
+@synthesize lastUpdatedLabel = _lastUpdatedLabel;
 
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
@@ -46,19 +46,19 @@
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
 
-		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, frame.size.height - 30.0f, self.frame.size.width, 20.0f)];
-		label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		label.font = [UIFont systemFontOfSize:12.0f];
-		label.textColor = TEXT_COLOR;
+		_lastUpdatedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, frame.size.height - 30.0f, self.frame.size.width, 20.0f)];
+		_lastUpdatedLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		_lastUpdatedLabel.font = [UIFont systemFontOfSize:12.0f];
+		_lastUpdatedLabel.textColor = TEXT_COLOR;
 		//label.shadowColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
 		//label.shadowOffset = CGSizeMake(0.0f, 1.0f);
-		label.backgroundColor = [UIColor clearColor];
-		label.textAlignment = UITextAlignmentCenter;
-		[self addSubview:label];
-		_lastUpdatedLabel=label;
-		[label release];
+		_lastUpdatedLabel.backgroundColor = [UIColor clearColor];
+		_lastUpdatedLabel.textAlignment = UITextAlignmentCenter;
+		[self addSubview:_lastUpdatedLabel];
+//		_lastUpdatedLabel=_lastUpdatedLabel;
+//		[label release];
 		
-		label = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, frame.size.height - 48.0f, self.frame.size.width, 20.0f)];
+		UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, frame.size.height - 48.0f, self.frame.size.width, 20.0f)];
 		label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		label.font = [UIFont boldSystemFontOfSize:13.0f];
 		label.textColor = TEXT_COLOR;
@@ -105,24 +105,19 @@
 - (void)refreshLastUpdatedDate {
 	
 	if ([_delegate respondsToSelector:@selector(egoRefreshTableHeaderDataSourceLastUpdated:)]) {
-		
-		NSDate *date = [_delegate egoRefreshTableHeaderDataSourceLastUpdated:self];
-		
-		NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-		[formatter setAMSymbol:@"AM"];
-		[formatter setPMSymbol:@"PM"];
-		[formatter setDateFormat:@"MM/dd/yyyy HH:mm"];
-		_lastUpdatedLabel.text = [NSString stringWithFormat:@"上次刷新: %@", [formatter stringFromDate:date]];
-		[[NSUserDefaults standardUserDefaults] setObject:_lastUpdatedLabel.text forKey:@"EGORefreshTableView_LastRefresh"];
-		[[NSUserDefaults standardUserDefaults] synchronize];
-		[formatter release];
-		
+        NSString *dateString = [_delegate egoRefreshTableHeaderDataSourceLastUpdated:self];
+        if(dateString!=nil){
+            _lastUpdatedLabel.text = [NSString stringWithFormat:@"上次刷新: %@", dateString];
+
+        }else{
+            _lastUpdatedLabel.text = [NSString stringWithFormat:@"上次刷新: 从未"];
+
+        }
+            
 	} else {
-		
 		_lastUpdatedLabel.text = nil;
 		
 	}
-
 }
 
 - (void)setState:(EGOPullReadRefreshState)aState{
