@@ -27,6 +27,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.isLoading = NO;
+
     NewsNightModelTableView *table = [[NewsNightModelTableView alloc]initWithData:nil type:2];
     table.refreshHeader= YES;
     table.eventDelegate = self;
@@ -124,6 +126,10 @@
 }
 //下拉加载
 -(void)pullUp:(NewsNightModelTableView *)tableView{
+    if (_isLoading ) {
+        return;
+    }
+    
     if (![self getConnectionAlert]) {
         [tableView doneLoadingTableViewData];
 
@@ -147,6 +153,8 @@
         [params setValue:[NSNumber numberWithInt:sinceID] forKey:@"sinceId"];
     }
     [self getConnectionAlert];
+    self.isLoading = YES;
+
     [DataService requestWithURL:URL_getPush_List andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
         NSArray *todayarray =  [result objectForKey:@"today"];
         NSArray *yesterdayarray =  [result objectForKey:@"yesterday"];
@@ -177,10 +185,16 @@
         
 
         [tableView doneLoadingTableViewData];
-
+        if (listData.count < (count+1)*10) {
+            tableView.isMore = false;
+        }
         [tableView reloadData];
+        self.isLoading = NO;
+
     } andErrorBlock:^(NSError *error) {
         [tableView doneLoadingTableViewData];
+        self.isLoading = NO;
+
     }];
 
 }

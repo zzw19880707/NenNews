@@ -70,7 +70,7 @@
     [super viewDidLoad];
 //    初始化界面
     [self _initButton];
-    
+    self.isLoading = NO;
     _sc = [[BaseScrollView alloc]initwithButtons:[self _initButton] WithFrame:CGRectMake(0, 0, 320, ScreenHeight)];
     _sc.eventDelegate = self;
     [self.view addSubview:_sc];
@@ -96,9 +96,7 @@
     //    正常访问网络
     if (cache ==0) {
         [DataService requestWithURL:URL_getsubscribe_List andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
-//            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//            [formatter setDateFormat:@"yyMMddHHmm"];
-//            int date =[[formatter stringFromDate:[NSDate date]] intValue];
+            tableView.lastDate = [NSDate date];
             tableView.isMore = true;
             NSArray *array =  [result objectForKey:@"videos"];
             if (array.count ==0) {
@@ -158,6 +156,10 @@
 
 //下拉加载
 -(void)pullUp:(NewsNightModelTableView *)tableView{
+    if (_isLoading ) {
+        return;
+    }
+    
     if (![self getConnectionAlert]) {
         [tableView doneLoadingTableViewData];
         return;
@@ -175,6 +177,8 @@
         [params setValue:sinceID forKey:@"sinceId"];
     }
     [self getConnectionAlert];
+    self.isLoading = YES;
+
     [DataService requestWithURL:URL_getsubscribe_List andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
         NSArray *array =  [result objectForKey:@"videos"];
         NSMutableArray *listData = [[NSMutableArray alloc]init];
@@ -193,10 +197,12 @@
             tableView.isMore = false;
         }
         [tableView reloadData];
-        
+        self.isLoading = NO;
+
     } andErrorBlock:^(NSError *error) {
         [tableView doneLoadingTableViewData];
-        
+        self.isLoading = NO;
+
     }];
     
     
@@ -268,14 +274,12 @@
 -(void)autoRefreshData:(VedioNightModelView *)tableView{
     [self getData:tableView cache:0];
 }
--(void)autoRefreshDatawithCache:(VedioNightModelView *)tableView{
-    [self getData:tableView cache:1];
-}
+//-(void)autoRefreshDatawithCache:(VedioNightModelView *)tableView{
+//    [self getData:tableView cache:1];
+//}
 #pragma mark columnchangeDelegate
 -(void)columnChanged:(NSArray *)array{
     _sc.buttonsNameArray = [self _initButton];
-//    VedioNightModelView *table  = (VedioNightModelView *) VIEWWITHTAG( VIEWWITHTAG(_sc, 10001), 1300);
-//    [self getData:table cache:1];
 }
 
 - (void)didReceiveMemoryWarning

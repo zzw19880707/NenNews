@@ -14,5 +14,6 @@
 @interface SubscribeViewController : BaseViewController <UItableviewEventDelegate,VedioNightModelViewDelegate,UIScrollViewEventDelegate,ColumnChangedDelegate>{
     BaseScrollView *_sc;
 }
+@property (nonatomic ,assign) BOOL isLoading;
 
 @end

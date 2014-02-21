@@ -9,5 +9,6 @@
 #import "BaseViewController.h"
 #import "NewsNightModelTableView.h"
 @interface PushNewsViewController : BaseViewController <UItableviewEventDelegate>
+@property (nonatomic ,assign) BOOL isLoading;
 
 @end
