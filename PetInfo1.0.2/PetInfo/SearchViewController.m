@@ -55,7 +55,7 @@
     self.resultTableView.dataSource = self;
     self.resultTableView.delaysContentTouches = NO;
     //    _resultTableView.backgroundColor = [UIColor redColor];
-    _resultTableView.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
+    _resultTableView.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight-20-44);
     [self.view addSubview:self.resultTableView];
     
     
