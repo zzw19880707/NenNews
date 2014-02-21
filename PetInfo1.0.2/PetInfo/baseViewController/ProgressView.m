@@ -81,41 +81,54 @@
     [_queue reset];
 //    NSArray *array = @[@"http://192.168.1.145:8080/nen/getNewscontent?titleId=011759708",@"http://192.168.1.145:8080/nen/getNewscontent?titleId=011759707"];
     
-    ASIHTTPRequest *columnrequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:@"http://192.168.1.145:8080/nen/getColumnList?count=20&columnID=2"]];
-    [columnrequest setCompletionBlock:^{
-        NSData *data = columnrequest.responseData;
-        id result = nil ;
+    //栏目数组
+    NSMutableArray *nameArrays = [[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:show_column]];
+    int count = [[NSUserDefaults standardUserDefaults]integerForKey:kpageCount];
+    for (int i = 0 ; i < nameArrays.count ; i++) {
+        NSDictionary *dic = nameArrays[i];
+        NSString *url =  [NSString stringWithFormat:@"%@getColumnList?count=%d&columnID=%@",BASE_URL,(count+1)*10,[dic objectForKey:@"columnId"]];
+        _po(url);
+        ASIHTTPRequest *columnrequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
+        [columnrequest setCompletionBlock:^{
+//            更新最后更新时间
+            NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+            NSDictionary *columnDIC = @{@"lastDate":[NSDate date]};
+            [userDefault setValue:columnDIC forKey:[NSString stringWithFormat:@"columnid=%@",[dic objectForKey:@"columnId"]]];
+            [userDefault synchronize];
+//获取数据源
+            NSData *data = columnrequest.responseData;
+            id result = nil ;
             result =[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-
-        _po(result);
-        NSArray *array = [result objectForKey:@"data"];
-        for (NSDictionary *dic in array) {
-            ColumnModel *model = [[ColumnModel alloc]initWithDataDic:dic ];
-            NSString *str = [NSString stringWithFormat:@"http://192.168.1.145:8080/nen/getNewscontent?titleId=%@",model.newsId];
-            _path = str;
-            _request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:_path]];
-            ASIDownloadCache *cache = [[ASIDownloadCache alloc]init];//创建缓存对象
-            NSString *cachePath = [FileUrl getCacheFileURL]; //设置缓存目录
-            DLOG(@"cachepath:%@",cachePath);
-            [cache setStoragePath:cachePath];
-            cache.defaultCachePolicy =ASIUseDefaultCachePolicy; //设置缓存策略
-            _request.cacheStoragePolicy =ASICachePermanentlyCacheStoragePolicy;
-            _request.downloadCache = cache;
-            [_queue addOperation:_request];
+            NSArray *array = [result objectForKey:@"data"];
+            for (NSDictionary *dic in array) {
+                ColumnModel *model = [[ColumnModel alloc]initWithDataDic:dic ];
+                NSString *str = [NSString stringWithFormat:@"%@getNewscontent?titleId=%@",BASE_URL,model.newsId];
+                _path = str;
+                _request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:_path]];
+                ASIDownloadCache *cache = [[ASIDownloadCache alloc]init];//创建缓存对象
+                NSString *cachePath = [FileUrl getCacheFileURL]; //设置缓存目录
+                DLOG(@"cachepath:%@",cachePath);
+                [cache setStoragePath:cachePath];
+                cache.defaultCachePolicy =ASIUseDefaultCachePolicy; //设置缓存策略
+                _request.cacheStoragePolicy =ASICachePermanentlyCacheStoragePolicy;
+                _request.downloadCache = cache;
+                [_queue addOperation:_request];
+                
+            }
+            _queue.downloadProgressDelegate = progressView;
+            // 设置queue完成后需要实现的UI方法，根据头文件里面定义，这个UI方法需要一个ASIHTTPRequest 的参数
+            _queue.requestDidFinishSelector = @selector(queueDidFinish:);
+            [_queue setRequestDidFailSelector:@selector(queueError:)];
+            // 如果要实现SEL的方法则根据头文件定义需要把delegate定为self
+            _queue.delegate = self;
             
-        }
-        _queue.downloadProgressDelegate = progressView;
-        // 设置queue完成后需要实现的UI方法，根据头文件里面定义，这个UI方法需要一个ASIHTTPRequest 的参数
-        _queue.requestDidFinishSelector = @selector(queueDidFinish:);
-        [_queue setRequestDidFailSelector:@selector(queueError:)];
-        // 如果要实现SEL的方法则根据头文件定义需要把delegate定为self
-        _queue.delegate = self;
-        
-        //    [_request startAsynchronous];
-        [_queue go];
-
-    }];
-    [columnrequest startSynchronous];
+            //    [_request startAsynchronous];
+            [_queue go];
+            
+        }];
+        [columnrequest startSynchronous];
+    }
+    
     
 }
 
