@@ -274,6 +274,7 @@
     
 }
 -(void)_updataDB{
+    [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:.1];
 
 }
 #pragma mark UI
@@ -295,9 +296,9 @@
             [_userDefaults synchronize];
             [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:.1];
         }
-//        else{//更新内容
+        else{//更新内容
             [self _updataDB];
-//        }
+        }
         
     }else{
         [self _initBackgroundView];
