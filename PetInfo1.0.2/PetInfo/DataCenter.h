@@ -24,4 +24,9 @@
 //获取显示/隐藏的栏目
 +(NSArray *)getShowColumn:(int)show andSubscribe:(BOOL)issubscribe;
 
+//比如说有当前文章的发表时间，那么theDate就是这个时间，然后这个方法返回的字符串就是你需要的时间，几分钟前，或者几小时前，具体的需求再重新修改就可以了
++ (NSString*)intervalSinceNow: (NSString*) theDate;
+//nsstring 与nsdate 互转
++(NSString *)dateTOString :(NSDate *)date ;
++(NSDate *)StringTODate :(NSString *)strDate;
 @end

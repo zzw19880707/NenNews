@@ -102,9 +102,68 @@ static DataCenter *sigleton = nil;
 }
 
 
++(NSString *)dateTOString :(NSDate *)date {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString *strDate = [dateFormatter stringFromDate:date];
+    [dateFormatter release];
+    return strDate;
+}
++(NSDate *)StringTODate :(NSString *)strDate{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate *date = [dateFormatter dateFromString:strDate];
+    [dateFormatter release];
+    return date;
+}
++ (NSString*)intervalSinceNow: (NSString*) theDate
+{
+    NSDateFormatter*date=[[NSDateFormatter alloc] init];
+    [date setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate*d=[date dateFromString:theDate];
+    NSTimeInterval late=[d timeIntervalSince1970]*1;
+    NSDate* dat = [NSDate dateWithTimeIntervalSinceNow:0];
+    NSTimeInterval now=[dat timeIntervalSince1970]*1;
+    NSString*timeString=@"";
+    NSTimeInterval cha=now-late;
+    //发表在一小时之内
+    if(cha/3600<1) {
+        if(cha/60<1) {
+            timeString = @"刚刚";
+        }
+        else
+        {
+            timeString = [NSString stringWithFormat:@"%f", cha/60];
+            timeString = [timeString substringToIndex:timeString.length-7];
+            timeString=[NSString stringWithFormat:@"%@分钟前", timeString];
 
-
-
+        }
+        
+    }
+    //在一小时以上24小以内
+    else if(cha/3600>1&&cha/86400<1) {
+        timeString = [NSString stringWithFormat:@"%f", cha/3600];
+        timeString = [timeString substringToIndex:timeString.length-7];
+        timeString=[NSString stringWithFormat:@"%@小时前", timeString];
+    }
+    //发表在24以上10天以内
+    else if(cha/86400>1&&cha/864000<1)
+    {
+        timeString = [NSString stringWithFormat:@"%f", cha/86400];
+        timeString = [timeString substringToIndex:timeString.length-7];
+        timeString=[NSString stringWithFormat:@"%@天前", timeString];
+    }
+    //发表时间大于10天
+    else
+    {
+        //        timeString = [NSString stringWithFormat:@"%d-%"]
+        NSArray*array = [theDate componentsSeparatedByString:@" "];
+        //        return [array objectAtIndex:0];
+        timeString = [array objectAtIndex:0];
+        timeString = [timeString substringWithRange:NSMakeRange(5, [timeString length]-5)];
+    }
+    return timeString;
+}
 
 
 
