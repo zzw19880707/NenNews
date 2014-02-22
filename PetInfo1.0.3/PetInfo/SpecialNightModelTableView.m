@@ -87,6 +87,9 @@
             if (indexPath.row == 0 &&![[_ImgData objectForKey:@"newsimg"] isEqualToString:@""]) {
                 UIImageView *imageView = (UIImageView *)VIEWWITHTAG(cell.contentView, 10000);
                 NSString *size = [_ImgData objectForKey:@"newsimgsize"];
+                if ([size isEqualToString:@""]) {
+                    size = @"320x80";
+                }
                 imageView.frame = CGRectMake(0, 0, 320, [[size componentsSeparatedByString:@"x"][1] floatValue]);
                 [imageView setHidden:NO];
                 [imageView setImageWithURL:[NSURL URLWithString:[_ImgData objectForKey:@"newsimg"]] placeholderImage:LogoImage];
@@ -143,6 +146,9 @@
         if (indexPath.row == 0 ) {
             if (_ImgData.count >0) {
                 NSString *size = [_ImgData objectForKey:@"newsimgsize"];
+                if ([size isEqualToString:@""]) {
+                    return 80;
+                }
                 return [[size componentsSeparatedByString:@"x"][1] floatValue];
             }else{
                 CGSize size = [_abstract sizeWithFont:[UIFont systemFontOfSize:Label_font] constrainedToSize:CGSizeMake(ScreenWidth, 1000)];
