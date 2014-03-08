@@ -100,9 +100,9 @@
     if (_type == 1)
     {
         static NSString *pushIndentifier = @"PushIndentifier";
-        UITableViewCell *Cell = [tableView dequeueReusableCellWithIdentifier:pushIndentifier];
+        BaseNightModelCell *Cell = [tableView dequeueReusableCellWithIdentifier:pushIndentifier];
         if (Cell == nil) {
-            Cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:pushIndentifier];
+            Cell = [[BaseNightModelCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:pushIndentifier];
         }
         ColumnModel *model = self.data[indexPath.row];
         Cell.textLabel.text =  model.title;
@@ -241,7 +241,19 @@
 {
     UIImageView *imgaeView =[[[UIImageView alloc]init]autorelease];
     NSURL  *url = [NSURL URLWithString:[_imageData[index] objectForKey:@"pictureUrl"] ];
-    [imgaeView setImageWithURL:url];
+    if([[DataCenter  getConnectionAvailable] isEqualToString:@"none"]){
+        NSString *filename = [[[_imageData[index] objectForKey:@"pictureUrl"] componentsSeparatedByString:@"/"] lastObject];
+        NSString *name = [filename componentsSeparatedByString:@"."][0];
+        NSString *path = [[FileUrl getCacheImageURL] stringByAppendingPathComponent:name];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            [imgaeView setImage:[[UIImage alloc]initWithData:[NSData dataWithContentsOfFile:path]]];
+        }else{
+            [imgaeView setImageWithURL:url placeholderImage:LogoImage_280x210];
+        }
+    }else{
+        [imgaeView setImageWithURL:url placeholderImage:LogoImage_280x210];
+    }
+    
     imgaeView.frame =CGRectMake(0, 0, 320, 185);
     return imgaeView;
 }
@@ -258,8 +270,6 @@
 
 -(void)reloadData{
     [super reloadData];
-
-
-
 }
+
 @end
