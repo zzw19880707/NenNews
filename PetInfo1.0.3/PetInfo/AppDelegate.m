@@ -87,11 +87,40 @@
                            appSecret:@"655df8b512f94a6f961b448da5ce119d"
                    renrenClientClass:[RennClient class]];
 }
+-(void)pushmodel{
+    NSDictionary *dic = [[NSUserDefaults standardUserDefaults] objectForKey: kServletPush_Model];
+    ColumnModel *model = [[ColumnModel alloc]init];
+    model.newsId = [dic objectForKey:@"newsId"];
+    model.title = [dic objectForKey:@"title"];
+    model.newsAbstract = [dic objectForKey:@"newsAbstract"];
+    model.type = [dic objectForKey:@"type"];
+    model.img = [dic objectForKey:@"img"];
+    model.isselected = NO;
+    [[NSNotificationCenter defaultCenter]postNotificationName:kPushNewsNotification object: model];
+}
 #pragma mark 入口
 //程序入口
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [self shareSDK];
+    if (launchOptions !=nil) {
+        NSDictionary *userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+        NSString *alertString = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+        NSString *newsId = [userInfo objectForKey:@"newsId"];
+        if (newsId) {
+            NSDictionary *dic = @{@"newsId":newsId,
+                                  @"title": alertString,
+                                  @"newsAbstract":[userInfo objectForKey:@"newsAbstract"],
+                                  @"type":[userInfo objectForKey:@"type"],
+                                  @"img":[userInfo objectForKey:@"img"]==nil?@"":[userInfo objectForKey:@"img"]
+                                  };
+            NSUserDefaults *userdefaults = [NSUserDefaults standardUserDefaults];
+            [userdefaults setObject:dic forKey: kServletPush_Model ];
+            [userdefaults synchronize];
+            [self performSelector:@selector(pushmodel) withObject:nil afterDelay:6];
+        }
+
+    }
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.backgroundColor = [UIColor whiteColor];
     //初始化MainViewController
@@ -126,24 +155,27 @@
 //注册token
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
     [BPush registerDeviceToken: deviceToken];
-    [BPush bindChannel];
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:BPushappid] ==nil||[[[NSUserDefaults standardUserDefaults]objectForKey:BPushappid]isEqualToString:@""]) {
+        //绑定
+        [BPush bindChannel];
+    }
     _po(deviceToken);
 }
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
 //    NSLog(@"Receive Notify: %@", [userInfo JSONString]);
-    NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+    NSString *alertString = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
     if (application.applicationState == UIApplicationStateActive) {
         NSString *newsId = [userInfo objectForKey:@"newsId"];
         if (newsId) {
             // Nothing to do if applicationState is Inactive, the iOS already displayed an alert view.
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"推送新闻:"
-                                                                message:[NSString stringWithFormat:@"%@", alert]
+                                                                message:[NSString stringWithFormat:@"%@", alertString]
                                                                delegate:self
                                                       cancelButtonTitle:@"好的"
                                                       otherButtonTitles:@"查看",nil];
             ColumnModel *model = [[ColumnModel alloc]init];
             model.newsId = newsId;
-            model.title = alert;
+            model.title = alertString;
             model.newsAbstract = [userInfo objectForKey:@"newsAbstract"];
             model.type = [userInfo objectForKey:@"type"];
             model.img = [userInfo objectForKey:@"img"];
@@ -153,14 +185,28 @@
         }else{
             // Nothing to do if applicationState is Inactive, the iOS already displayed an alert view.
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"推送新闻:"
-                                                                message:[NSString stringWithFormat:@"%@", alert]
+                                                                message:[NSString stringWithFormat:@"%@", alertString]
                                                                delegate:nil
                                                       cancelButtonTitle:@"OK"
                                                       otherButtonTitles:nil];
             [alertView show];
 
         }
-}
+    }else if (application.applicationState == UIApplicationStateInactive){//进入激活状态  默认查看新闻
+        NSString *newsId = [userInfo objectForKey:@"newsId"];
+        if (newsId) {
+            ColumnModel *model = [[ColumnModel alloc]init];
+            model.newsId = newsId;
+            model.title = alertString;
+            model.newsAbstract = [userInfo objectForKey:@"newsAbstract"];
+            model.type = [userInfo objectForKey:@"type"];
+            model.img = [userInfo objectForKey:@"img"];
+            model.isselected = NO;
+            _pushModel = model;
+            [[NSNotificationCenter defaultCenter]postNotificationName:kPushNewsNotification object:_pushModel];
+        }
+
+    }
     [application setApplicationIconBadgeNumber:0];
     [BPush handleNotification:userInfo];
 
@@ -178,18 +224,12 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     
-//    self.viewController.appidText.text = self.appId;
-//    self.viewController.useridText.text = self.userId;
-//    self.viewController.channelidText.text = self.channelId;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     //设置角标为0
     [application setApplicationIconBadgeNumber:0];
-//    self.viewController.appidText.text = [BPush getAppId];
-//    self.viewController.useridText.text = [BPush getUserId];
-//    self.viewController.channelidText.text = [BPush getChannelId];
     
 }
 
