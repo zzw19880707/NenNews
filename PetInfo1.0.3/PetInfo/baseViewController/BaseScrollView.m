@@ -186,6 +186,7 @@
 
     
 }
+
 //显示数据。根据时间来判断是否刷新
 -(void)showData {
 //    获取当前view
@@ -194,16 +195,19 @@
     NSDate *nowDate = [NSDate date];
     //    获取上次时间+20分钟
     NSDate *lastDate = [table.lastDate dateByAddingTimeInterval:loaddata_date];
-    if (table.lastDate ==nil) {
-        [table autoRefreshData];
-        [self.eventDelegate autoRefreshData:table];
-
-    }else{
-        if (nowDate ==[lastDate laterDate:nowDate]) {
+    if ([DataCenter isConnectionAvailable]) {
+        if (table.lastDate ==nil) {
             [table autoRefreshData];
             [self.eventDelegate autoRefreshData:table];
+            
+        }else{
+            if (nowDate ==[lastDate laterDate:nowDate]) {
+                [table autoRefreshData];
+                [self.eventDelegate autoRefreshData:table];
+            }
         }
     }
+    
     
 }
 -(void)addcolumn{
