@@ -82,10 +82,16 @@
 -(void)shareSDK{
     //    NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"" ofType:@""];
     
+    id<ISSCAttachment> image = nil;
+    if (_ImageUrl==nil||[_ImageUrl isEqualToString:@""]) {
+        image = [ShareSDK imageWithPath:[[NSBundle mainBundle] pathForResource:@"29" ofType:@"png"]];
+    }else{
+        image = [ShareSDK imageWithUrl:_ImageUrl];
+    }
     //构造分享内容
     id<ISSContent> publishContent = [ShareSDK content: _newsAbstract==nil ? _titleLabel:_newsAbstract
                                        defaultContent:@"东北新闻网"
-                                                image:[ShareSDK imageWithUrl:_ImageUrl]
+                                                image:image
                                                 title:_titleLabel
                                                   url:_url
                                           description:_titleLabel
