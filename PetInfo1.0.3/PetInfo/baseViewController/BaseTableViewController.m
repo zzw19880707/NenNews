@@ -9,7 +9,6 @@
 #import "BaseTableViewController.h"
 #import "MBProgressHUD.h"
 #import "BaseNavViewController.h"
-#import "Reachability.h"
 @interface BaseTableViewController ()
 
 @end
@@ -33,50 +32,12 @@
 }
 
 #pragma mark - loading tips 加载提示
-//判断当前是否有网络
--(BOOL) isConnectionAvailable{
-    BOOL isExistenceNetwork = YES;
-    Reachability *reach = [Reachability reachabilityWithHostName:BASE_URL];
-    switch ([reach currentReachabilityStatus]) {
-        case NotReachable:
-            isExistenceNetwork = NO;
-            //NSLog(@"notReachable");
-            break;
-        case ReachableViaWiFi:
-            isExistenceNetwork = YES;
-            //NSLog(@"WIFI");
-            break;
-        case ReachableViaWWAN:
-            isExistenceNetwork = YES;
-            //NSLog(@"3G");
-            break;
-    }
-    return isExistenceNetwork;
-}
-//判断当前是否有网络
--(NSString *) getConnectionAvailable{
-    NSString *isExistenceNetwork = @"none";
-    Reachability *reach = [Reachability reachabilityWithHostName:BASE_URL];
-    switch ([reach currentReachabilityStatus]) {
-        case NotReachable:
-            isExistenceNetwork = @"none";
-            //NSLog(@"notReachable");
-            break;
-        case ReachableViaWiFi:
-            isExistenceNetwork = @"wifi";
-            //NSLog(@"WIFI");
-            break;
-        case ReachableViaWWAN:
-            isExistenceNetwork = @"3g";
-            //NSLog(@"3G");
-            break;
-    }
-    return isExistenceNetwork;
-}
+
+
 
 //判断当前网络是否存在。存在则正常访问，不存在则提示当前网络不存在
 -(BOOL)getConnectionAlert{
-    if ([self isConnectionAvailable]) {
+    if ([DataCenter isConnectionAvailable]) {
         return YES;
     }else{
         [self showHUD:INFO_NetNoReachable isDim:YES];
@@ -88,7 +49,7 @@
 - (BOOL )showHUD:(NSString *)title isDim:(BOOL)isDim {
     self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
-    if ([self isConnectionAvailable]) {
+    if ([DataCenter isConnectionAvailable]) {
         self.hud.labelText = title;
         self.hud.dimBackground = isDim;
         return YES;
@@ -177,7 +138,7 @@
 
     self.view.frame = CGRectMake(0, 0,ScreenWidth ,ScreenHeight);
     //设置当前网络环境
-    self.network = [self getConnectionAvailable];
+    self.network = [DataCenter getConnectionAvailable];
     //设置navegation背景颜色
     self.navigationController.navigationBar.tintColor = NenNewsgroundColor;
 //	[self.view setBackgroundColor:CLEARCOLOR];

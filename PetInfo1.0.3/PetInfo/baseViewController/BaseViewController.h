@@ -32,8 +32,7 @@
 -(void)alertLoginView;
 //定位方法
 -(void)Location;
-//判断当前网络情况
--(NSString *) getConnectionAvailable;
+
 //判断当前网络是否存在。存在则正常访问，不存在则提示当前网络不存在
 -(BOOL)getConnectionAlert;
 //根据model push新闻

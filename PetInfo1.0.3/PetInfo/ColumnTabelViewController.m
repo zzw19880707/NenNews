@@ -8,7 +8,6 @@
 
 #import "ColumnTabelViewController.h"
 #import "FileUrl.h"
-#import "DataCenter.h"
 #import "FMDB/src/FMDatabase.h"
 #import "ColumnModel.h"
 @interface ColumnTabelViewController ()

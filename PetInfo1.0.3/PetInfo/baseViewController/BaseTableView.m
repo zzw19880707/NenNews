@@ -7,8 +7,6 @@
 //
 
 #import "BaseTableView.h"
-#import "Reachability.h"
-#import "DataCenter.h"
 @implementation BaseTableView
 
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style
@@ -158,31 +156,12 @@
     }
     
 }
-//判断当前是否有网络
--(BOOL) isConnectionAvailable{
-    BOOL isExistenceNetwork = YES;
-    Reachability *reach = [Reachability reachabilityWithHostName:BASE_URL];
-    switch ([reach currentReachabilityStatus]) {
-        case NotReachable:
-            isExistenceNetwork = NO;
-            //NSLog(@"notReachable");
-            break;
-        case ReachableViaWiFi:
-            isExistenceNetwork = YES;
-            //NSLog(@"WIFI");
-            break;
-        case ReachableViaWWAN:
-            isExistenceNetwork = YES;
-            //NSLog(@"3G");
-            break;
-    }
-    return isExistenceNetwork;
-}
+
 
 //拖拽时停止调用
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
 
-    if (![self isConnectionAvailable]) {
+    if (![DataCenter isConnectionAvailable]) {
         return;
     }
 
@@ -193,7 +172,12 @@
 //    float contentHeight=scrollView.contentSize.height;
 //    NSLog(@"偏移量y:%f",offset);
 //    NSLog(@"content高度%f",contentHeight);
-    if (offset<0) {
+//    if (offset>-60&&offset<0) {
+//        [self doneLoadingTableViewData];
+//        return;
+//    }
+    if (!_refreshHeader) {
+        [self doneLoadingTableViewData];
         return;
     }
     if (!self.isMore) {
@@ -207,6 +191,9 @@
         if([self.eventDelegate respondsToSelector:@selector(pullUp:)]){
             [self.eventDelegate pullUp:self];
             [self _startLoadMore];
+        }else{
+            [self doneLoadingTableViewData];
+
         }
     }
 }
@@ -214,7 +201,7 @@
     if (_lastDate!= nil) {
         _refreshHeaderView.lastUpdatedLabel.text = [NSString stringWithFormat:@"上次刷新:%@",[DataCenter intervalSinceNow:[DataCenter dateTOString:_lastDate]] ];
     }else{
-            _refreshHeaderView.lastUpdatedLabel.text = [NSString stringWithFormat:@"上次刷新:从未"];
+        _refreshHeaderView.lastUpdatedLabel.text = [NSString stringWithFormat:@"上次刷新:从未"];
     }
 
 }
@@ -230,6 +217,8 @@
 	if ([self.eventDelegate respondsToSelector:@selector(pullDown:)]) {
         [self.eventDelegate pullDown:self];
 
+    }else{
+        [self doneLoadingTableViewData];
     }
     
 }

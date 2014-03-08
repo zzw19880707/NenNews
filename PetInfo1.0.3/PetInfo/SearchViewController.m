@@ -9,7 +9,6 @@
 #import "SearchViewController.h"
 #import "FileUrl.h"
 #import "NightModelContentViewController.h"
-#import "DataCenter.h"
 #import "ColumnModel.h"
 @interface SearchViewController (){
     UIView *_searchBGView;

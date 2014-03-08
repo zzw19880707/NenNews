@@ -29,4 +29,9 @@
 //nsstring 与nsdate 互转
 +(NSString *)dateTOString :(NSDate *)date ;
 +(NSDate *)StringTODate :(NSString *)strDate;
+
+//判断当前网络环境
++(NSString *) getConnectionAvailable;
+//判断当前是否有网络
++(BOOL) isConnectionAvailable;
 @end

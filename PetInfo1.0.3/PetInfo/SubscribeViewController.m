@@ -217,7 +217,7 @@
 #pragma mark VedioNightModelViewDelegate
 -(void)selectedAction:(VedioAndImageModel *)model{
     if (model.videoUrl) {
-        NSString *ktype =[self getConnectionAvailable];
+        NSString *ktype =[DataCenter getConnectionAvailable];
         _model = model;
         if ([ktype isEqualToString:@"none"]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
