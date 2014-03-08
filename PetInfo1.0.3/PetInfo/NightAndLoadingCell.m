@@ -13,6 +13,7 @@
 #import "ThemeManager.h"
 #import "FMDatabase.h"
 #import "FileUrl.h"
+
 @implementation NightAndLoadingCell
 
 
@@ -50,7 +51,7 @@
     if (_showImage) {
         int brose = [[ThemeManager shareInstance]getBroseModel];
         if (brose == 0) {//智能模式
-            if ([[super getConnectionAvailable] isEqualToString:@"wifi"]) {
+            if ([[DataCenter  getConnectionAvailable] isEqualToString:@"wifi"]) {
                 [self addImage];
             }else{
                 [self hiddenImage];
@@ -156,9 +157,41 @@
         
         _imageTitleLabel.text = _model.title;
 
-        [_imageView1 setImageWithURL:[NSURL URLWithString:_model.img1] placeholderImage:LogoImage];
-        [_imageView2 setImageWithURL:[NSURL URLWithString:_model.img2] placeholderImage:LogoImage];
-        [_imageView3 setImageWithURL:[NSURL URLWithString:_model.img3] placeholderImage:LogoImage];
+        if([[DataCenter getConnectionAvailable] isEqualToString:@"none"]){
+            NSString *filename1 = [[_model.img1 componentsSeparatedByString:@"/"] lastObject];
+            NSString *filename2 = [[_model.img2 componentsSeparatedByString:@"/"] lastObject];
+            NSString *filename3 = [[_model.img3 componentsSeparatedByString:@"/"] lastObject];
+
+            NSString *name1 = [filename1 componentsSeparatedByString:@"."][0];
+            NSString *name2 = [filename2 componentsSeparatedByString:@"."][0];
+            NSString *name3 = [filename3 componentsSeparatedByString:@"."][0];
+
+            NSString *path1 = [[FileUrl getCacheImageURL] stringByAppendingPathComponent:name1];
+            NSString *path2 = [[FileUrl getCacheImageURL] stringByAppendingPathComponent:name2];
+            NSString *path3 = [[FileUrl getCacheImageURL] stringByAppendingPathComponent:name3];
+
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path1]) {
+                [_imageView1 setImage:[[UIImage alloc]initWithData:[NSData dataWithContentsOfFile:path1]]];
+            }else{
+                [_imageView1 setImageWithURL:[NSURL URLWithString:_model.img1] placeholderImage:LogoImage];
+            }
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path2]) {
+                [_imageView2 setImage:[[UIImage alloc]initWithData:[NSData dataWithContentsOfFile:path2]]];
+            }else{
+                [_imageView1 setImageWithURL:[NSURL URLWithString:_model.img1] placeholderImage:LogoImage];
+            }
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path3]) {
+                [_imageView3 setImage:[[UIImage alloc]initWithData:[NSData dataWithContentsOfFile:path3]]];
+            }else{
+                [_imageView3 setImageWithURL:[NSURL URLWithString:_model.img3] placeholderImage:LogoImage];
+            }
+
+        }else{
+            [_imageView1 setImageWithURL:[NSURL URLWithString:_model.img1] placeholderImage:LogoImage];
+            [_imageView2 setImageWithURL:[NSURL URLWithString:_model.img2] placeholderImage:LogoImage];
+            [_imageView3 setImageWithURL:[NSURL URLWithString:_model.img3] placeholderImage:LogoImage];
+        }
+
         
         //    //右上标(0:无 1：独家 2：原创 3：推荐)
         if ([_model.typeUp intValue] ==0 ) {
@@ -194,7 +227,20 @@
                 [self hiddenImage];
             }else{
                 [self addImage];
-                [_imageView setImageWithURL:[NSURL URLWithString:_model.img] placeholderImage:LogoImage];
+                if([[DataCenter getConnectionAvailable] isEqualToString:@"none"]){
+                    NSString *filename = [[_model.img componentsSeparatedByString:@"/"] lastObject];
+                    NSString *name = [filename componentsSeparatedByString:@"."][0];
+                    NSString *path = [[FileUrl getCacheImageURL] stringByAppendingPathComponent:name];
+                    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                        [_imageView setImage:[[UIImage alloc]initWithData:[NSData dataWithContentsOfFile:path]]];
+                    }else{
+                        [_imageView setImageWithURL:[NSURL URLWithString:_model.img] placeholderImage:LogoImage];
+                    }
+                }else{
+                    [_imageView setImageWithURL:[NSURL URLWithString:_model.img] placeholderImage:LogoImage];
+
+                }
+                
             }
         }
         //    标题
