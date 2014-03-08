@@ -9,8 +9,8 @@
 #import "MJPhoto.h"
 #import "MJPhotoLoadingView.h"
 #import "UIImageView+WebCache.h"
+#import "FileUrl.h"
 #import <QuartzCore/QuartzCore.h>
-
 @interface MJPhotoView ()
 {
     BOOL _doubleTap;
@@ -84,12 +84,30 @@
         if (![_photo.url.absoluteString hasSuffix:@"gif"]) {
             __unsafe_unretained MJPhotoView *photoView = self;
             __unsafe_unretained MJPhoto *photo = _photo;
-            [_imageView setImageWithURL:_photo.url placeholderImage:_photo.placeholder options:SDWebImageRetryFailed|SDWebImageLowPriority completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
-                photo.image = image;
-                
-                // 调整frame参数
-                [photoView adjustFrame];
-            }];
+            
+            if([[DataCenter getConnectionAvailable] isEqualToString:@"none"]){
+                NSString *filename = [[_photo.url.absoluteString componentsSeparatedByString:@"/"] lastObject];
+                NSString *name = [filename componentsSeparatedByString:@"."][0];
+                NSString *path = [[FileUrl getCacheImageURL] stringByAppendingPathComponent:name];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                    [_imageView setImage:[[UIImage alloc]initWithData:[NSData dataWithContentsOfFile:path]]];
+                }else{
+                    [_imageView setImageWithURL:_photo.url placeholderImage:_photo.placeholder options:SDWebImageRetryFailed|SDWebImageLowPriority completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+                        photo.image = image;
+                        
+                        // 调整frame参数
+                        [photoView adjustFrame];
+                    }];
+                }
+            }else{
+                [_imageView setImageWithURL:_photo.url placeholderImage:_photo.placeholder options:SDWebImageRetryFailed|SDWebImageLowPriority completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+                    photo.image = image;
+                    
+                    // 调整frame参数
+                    [photoView adjustFrame];
+                }];
+            }
+            
         }
     } else {
         [self photoStartLoad];
@@ -113,13 +131,33 @@
         
         __unsafe_unretained MJPhotoView *photoView = self;
         __unsafe_unretained MJPhotoLoadingView *loading = _photoLoadingView;
-        [_imageView setImageWithURL:_photo.url placeholderImage:_photo.srcImageView.image options:SDWebImageRetryFailed|SDWebImageLowPriority progress:^(NSUInteger receivedSize, long long expectedSize) {
-            if (receivedSize > kMinProgress) {
-                loading.progress = (float)receivedSize/expectedSize;
+        [[SDWebImageManager sharedManager] cancelAll];
+        if([[DataCenter getConnectionAvailable] isEqualToString:@"none"]){
+            NSString *filename = [[_photo.url.absoluteString componentsSeparatedByString:@"/"] lastObject];
+            NSString *name = [filename componentsSeparatedByString:@"."][0];
+            NSString *path = [[FileUrl getCacheImageURL] stringByAppendingPathComponent:name];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                [_imageView setImage:[[UIImage alloc]initWithData:[NSData dataWithContentsOfFile:path]]];
+                [photoView photoDidFinishLoadWithImage:_imageView.image];
+            }else{
+                [_imageView setImageWithURL:_photo.url placeholderImage:_photo.srcImageView.image options:SDWebImageRetryFailed|SDWebImageLowPriority progress:^(NSUInteger receivedSize, long long expectedSize) {
+                    if (receivedSize > kMinProgress&&expectedSize>0) {
+                        loading.progress = (float)receivedSize/expectedSize;
+                    }
+                } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+                    [photoView photoDidFinishLoadWithImage:image];
+                }];
             }
-        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
-            [photoView photoDidFinishLoadWithImage:image];
-        }];
+        }else{
+            [_imageView setImageWithURL:_photo.url placeholderImage:_photo.srcImageView.image options:SDWebImageRetryFailed|SDWebImageLowPriority progress:^(NSUInteger receivedSize, long long expectedSize) {
+                if (receivedSize > kMinProgress&&expectedSize>0) {
+                    loading.progress = (float)receivedSize/expectedSize;
+                }
+            } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+                [photoView photoDidFinishLoadWithImage:image];
+            }];
+        }
+        
     }
 }
 

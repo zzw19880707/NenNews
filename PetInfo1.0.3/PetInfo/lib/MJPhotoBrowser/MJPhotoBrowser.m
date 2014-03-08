@@ -76,6 +76,7 @@
 
 #pragma mark 返回按钮事件
 -(void)backAction{
+    [[SDWebImageManager sharedManager]cancelAll];
     [[NSNotificationCenter defaultCenter]postNotificationName:kImageReturnNofication object:nil];
 }
 - (void)show

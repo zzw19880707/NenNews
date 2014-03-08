@@ -14,6 +14,7 @@
 {
     UILabel *_failureLabel;
     MJPhotoProgressView *_progressView;
+    UIImageView *_failureImageView;
 }
 
 @end
@@ -40,13 +41,19 @@
         _failureLabel.backgroundColor = [UIColor clearColor];
         _failureLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     }
+    if (_failureImageView == nil) {
+        _failureImageView =[[UIImageView alloc]initWithImage:LogoImage];
+        _failureImageView.frame = CGRectMake((320-80)/2, (480-60)/2, 80, 60);
+    }
+
+    [self addSubview:_failureImageView];
     [self addSubview:_failureLabel];
 }
 
 - (void)showLoading
 {
     [_failureLabel removeFromSuperview];
-    
+    [_failureImageView removeFromSuperview];
     if (_progressView == nil) {
         _progressView = [[MJPhotoProgressView alloc] init];
         _progressView.bounds = CGRectMake( 0, 0, 60, 60);
