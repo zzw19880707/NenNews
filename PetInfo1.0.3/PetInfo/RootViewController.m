@@ -9,10 +9,10 @@
 #import "RootViewController.h"
 #import "Uifactory.h"
 #import "FileUrl.h"
-#import "DataCenter.h"
 #import "WebViewController.h"
 #import "NightModelContentViewController.h"
 #import "ThemeManager.h"
+#import "SpecialNightViewController.h"
 @interface RootViewController (){
     BOOL _enable;
 }
@@ -91,7 +91,10 @@
     [self.appDelegate.menuCtrl setEnableGesture:b];
 }
 -(void)autoRefreshData:(NewsNightModelTableView *)tableView{
-    [self getData:tableView cache:0];
+    if ([self getConnectionAlert]) {
+        [self getData:tableView cache:0];
+    }else{
+    }
 }
 
 #pragma mark
@@ -148,12 +151,21 @@
         WebViewController *webView = [[WebViewController alloc]initWithUrl:url];
         [self.navigationController pushViewController:webView animated:YES];
     }else{
-        NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
-        nightModel.newsId = [imageData[index] objectForKey:@"newsId"] ;
-        nightModel.type = [[imageData[index] objectForKey:@"type"] intValue];
-        nightModel.newsAbstract = [imageData[index] objectForKey:@"newsAbstract"] ;
-        nightModel.ImageUrl =[imageData[index] objectForKey:@"img"];
-        [self.navigationController pushViewController:nightModel animated:YES];
+//        专题新闻
+        if ([[imageData[index] objectForKey:@"type"] intValue]==1) {
+            SpecialNightViewController *special = [[SpecialNightViewController alloc]init];
+            special.newsId = [NSString stringWithFormat:@"%@",[imageData[index] objectForKey:@"newsId"]];
+            [self.navigationController pushViewController:special animated:YES];
+        }
+        else{
+            NightModelContentViewController *nightModel = [[NightModelContentViewController alloc]init];
+            nightModel.newsId = [imageData[index] objectForKey:@"newsId"] ;
+            nightModel.type = [[imageData[index] objectForKey:@"type"] intValue];
+            nightModel.newsAbstract = [imageData[index] objectForKey:@"newsAbstract"] ;
+            nightModel.ImageUrl =[imageData[index] objectForKey:@"pictureUrl"];
+            [self.navigationController pushViewController:nightModel animated:YES];
+        }
+        
     }
 }
 
