@@ -104,6 +104,7 @@
     nightModel.type = [model.type intValue];
     nightModel.newsId = [NSString stringWithFormat:@"%@",model.newsId];
     nightModel.ImageUrl = model.img;
+    nightModel.titleLabel = model.title;
     [self.viewController.navigationController pushViewController:nightModel animated:YES];
     
 }
