@@ -18,6 +18,8 @@
 #import "ThemeManager.h"
 #import "MBProgressHUD.h"
 #import "NightModelTextView.h"
+#import <Comment/Comment.h>
+#import "FileUrl.h"
 @interface NightModelContentViewController (){
     UIImageView *_imageView;
     BOOL _isImageLoad;
@@ -43,6 +45,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    
 
     [self showHUD:INFO_RequestNetWork isDim:YES];
     self.view.backgroundColor = [[ThemeManager shareInstance] getBackgroundColor];
@@ -133,7 +137,7 @@
 
 -(void) initTitle {
     self.backgroundView = [Uifactory createScrollView] ;
-    self.backgroundView.frame = CGRectMake(0,0, ScreenWidth, ScreenHeight);
+    self.backgroundView.frame = CGRectMake(0,0, ScreenWidth, ScreenHeight-44);
     _height = 0.0;
     //    标题
     UILabel *titleLabel = [Uifactory createLabel:ktextViewStrong];
@@ -147,6 +151,7 @@
     titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     [titleLabel sizeToFit];
     [self.backgroundView addSubview:titleLabel];
+
     _height +=titleLabel.height +10;
     
     //    来源
@@ -164,7 +169,28 @@
     createtime.adjustsFontSizeToFitWidth = YES;
     [self.backgroundView addSubview:createtime];
     _height+=25;
+    [self.view addSubview:_backgroundView];
+    SSCCommentToolbar *toolbar = [Comment commentToolbarWithContentId:self.newsId title:self.titleLabel frame:CGRectMake(0.0,ScreenHeight -44-20-44, 320, 44)];
+    [self.view addSubview:toolbar];
+    [toolbar setBackEvent:^{
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
 
+    toolbar.viewDesc.navigationBarBackgroundColor = [UIColor redColor];
+//    调整按钮位置
+    NSArray *array = [toolbar subviews];
+    for (UIView *view in array) {
+        if ([view isMemberOfClass:[UIImageView class]]) {
+        }else if([view isMemberOfClass:[UIButton class]]){
+        }else{
+            if (view.left ==188.0f) {
+                view.left = 276.0f;
+            }else if(view.left ==232.0f){
+            }else{
+                view.left = 188.0f;
+            }
+        }
+    }
 }
 //普通新闻
 -(void)_initView{
@@ -179,7 +205,18 @@
             NSDictionary *dic = @{@"pictureUrl": content,@"pictureContent":@""};
             [_imageArray addObject:dic];
             UIImageView *imageView = [[UIImageView alloc]init];
-            [imageView setImageWithURL:[NSURL URLWithString:content]  placeholderImage:LogoImage_280x210];
+            if([[DataCenter getConnectionAvailable] isEqualToString:@"none"]){
+                NSString *filename = [[content componentsSeparatedByString:@"/"] lastObject];
+                NSString *name = [filename componentsSeparatedByString:@"."][0];
+                NSString *path = [[FileUrl getCacheImageURL] stringByAppendingPathComponent:name];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                    [imageView setImage:[[UIImage alloc]initWithData:[NSData dataWithContentsOfFile:path]]];
+                }else{
+                    [imageView setImageWithURL:[NSURL URLWithString:content]  placeholderImage:LogoImage_280x210];
+                }
+            }else{
+                [imageView setImageWithURL:[NSURL URLWithString:content]  placeholderImage:LogoImage_280x210];
+            }
             imageView.frame = CGRectMake((ScreenWidth - 280)/2,_height, 280, 210);
             imageView.tag = 1300+ i/2;
             imageView.userInteractionEnabled =  YES;
@@ -296,8 +333,7 @@
 
     _backgroundView.contentSize = CGSizeMake(ScreenWidth, _height+40);
 
-    [self.view addSubview:_backgroundView];
-    
+
 }
 
 
@@ -322,7 +358,18 @@
         NSDictionary *dic = _imageArray[0];
         _imageView = [[UIImageView alloc]init];
         _imageView.frame = CGRectMake(20, _height, 280, 210);
-        [_imageView setImageWithURL:[dic objectForKey:@"pictureUrl"] placeholderImage:LogoImage_280x210];
+        if([[DataCenter getConnectionAvailable] isEqualToString:@"none"]){
+            NSString *filename = [[[dic objectForKey:@"pictureUrl"] componentsSeparatedByString:@"/"] lastObject];
+            NSString *name = [filename componentsSeparatedByString:@"."][0];
+            NSString *path = [[FileUrl getCacheImageURL] stringByAppendingPathComponent:name];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                [_imageView setImage:[[UIImage alloc]initWithData:[NSData dataWithContentsOfFile:path]]];
+            }else{
+                [_imageView setImageWithURL:[dic objectForKey:@"pictureUrl"] placeholderImage:LogoImage_280x210];
+            }
+        }else{
+            [_imageView setImageWithURL:[dic objectForKey:@"pictureUrl"] placeholderImage:LogoImage_280x210];
+        }
         _imageView.userInteractionEnabled = YES;
         // 内容模式
         _imageView.clipsToBounds = YES;
@@ -356,7 +403,7 @@
 //        [titleLabel release];
         _height +=titleLable.height+10;
 
-        self.backgroundView.contentSize = CGSizeMake(ScreenWidth, _height+40);
+        self.backgroundView.contentSize = CGSizeMake(ScreenWidth, _height);
         _Contenttype = 1;
         [self.view addSubview:self.backgroundView];
     }else {
@@ -392,7 +439,16 @@
 //        self.view.subviews[i]; // 来源于哪个UIImageView
         
         photo.title = self.titleLabel;
-        photo.content = [_imageArray[i] objectForKey:@"pictureContent"];
+        
+        
+        NSString *photoContent = [_imageArray[i] objectForKey:@"pictureContent"];
+        //过滤两端的空格换行
+        NSCharacterSet *whitespaces = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+        NSPredicate *noEmptyStrings = [NSPredicate predicateWithFormat:@"SELF != ''"];
+        NSArray *parts = [photoContent componentsSeparatedByCharactersInSet:whitespaces];
+        NSArray *filteredArray = [parts filteredArrayUsingPredicate:noEmptyStrings];
+        photoContent = [filteredArray componentsJoinedByString:@"\n\t"];
+        photo.content = photoContent;
         [photos addObject:photo];
     }
     
@@ -426,7 +482,18 @@
         [imageView setImage:LogoImage_280x210];
 
     }else{
-        [imageView setImageWithURL:[NSURL URLWithString:imageURL] placeholderImage:LogoImage_280x210];
+        if([[DataCenter getConnectionAvailable] isEqualToString:@"none"]){
+            NSString *filename = [[imageURL componentsSeparatedByString:@"/"] lastObject];
+            NSString *name = [filename componentsSeparatedByString:@"."][0];
+            NSString *path = [[FileUrl getCacheImageURL] stringByAppendingPathComponent:name];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                [imageView setImage:[[UIImage alloc]initWithData:[NSData dataWithContentsOfFile:path]]];
+            }else{
+                [imageView setImageWithURL:[NSURL URLWithString:imageURL] placeholderImage:LogoImage_280x210];
+            }
+        }else{
+            [imageView setImageWithURL:[NSURL URLWithString:imageURL] placeholderImage:LogoImage_280x210];
+        }
     }
     imageView.frame = CGRectMake(0, 0, 280, 210);
     imageView.alpha = .8;
@@ -518,7 +585,7 @@
     [self.navigationController pushViewController:nightModel animated:YES];
 }
 -(void)playAction :(UIButton *)button {
-    NSString *ktype =[self getConnectionAvailable];
+    NSString *ktype =[DataCenter getConnectionAvailable];
     if ([ktype isEqualToString:@"none"]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
                                                         message:INFO_NetNoReachable
