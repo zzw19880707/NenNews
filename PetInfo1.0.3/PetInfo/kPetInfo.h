@@ -35,6 +35,8 @@
 #define kBrownModelChangeNofication @"kBrownModelChangeNofication"
 
 #pragma mark UserDefaults
+//推送的内容信息
+#define kServletPush_Model @"kServletPush_Model"
 //判断是否是夜间模式
 #define kisNightModel @"isNightModel"
 //判断是否是第一次登陆

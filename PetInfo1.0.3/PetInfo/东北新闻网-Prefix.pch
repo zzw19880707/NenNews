@@ -33,6 +33,8 @@
 #import "DataService.h"
 //导入本地信息描述
 #import "StringValue.h"
+//导入数据控制中心
+#import "DataCenter.h"
 //home页按钮
 typedef enum kHomeTableViewCellType{
     //提纲页面

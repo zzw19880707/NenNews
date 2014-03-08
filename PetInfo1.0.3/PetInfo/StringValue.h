@@ -21,6 +21,10 @@
 #define INFO_DisCollectionError @"取消收藏失败"
 #define INFO_Searching @"查询中,请稍后"
 #define INFO_ISNEWVersion @"当前版本为最新版本!"
+#define INFO_ERROR_OFF_DOWNLOAD @"下载出错了!"
+#define INFO_ERROR_OFF_NETWORK @"网络连接失败!"
+
+
 
 #pragma mark 属性
 #define loaddata_date 60*20

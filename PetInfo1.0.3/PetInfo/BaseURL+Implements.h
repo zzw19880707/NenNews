@@ -26,7 +26,8 @@
 #define URL_AO @"Ao"
 //获取订阅信息
 #define URL_getsubscribe_List @"takePart"
-
+//离线下载
+#define URL_OffNews_List @"OffNewsList"
 //传入查询内容 返回查询结果。 post请求
 #define URL_Search @"SearchNews"
 
