@@ -16,6 +16,7 @@
 //可选事件
 @optional
 -(void)finishDownload;
+-(void)errorDownload:(NSString *)error;
 
 @end
 
@@ -23,6 +24,9 @@
     ADVPercentProgressBar *_progressView;
     ASIHTTPRequest *_request;
     ASINetworkQueue *_queue;
+    
+//    进度
+    float _progress;
 }
 @property(nonatomic,retain)Reachability *reachability;
 @property(nonatomic,retain) NSString *path;

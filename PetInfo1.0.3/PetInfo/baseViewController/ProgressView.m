@@ -9,11 +9,13 @@
 #import "ProgressView.h"
 #import "ASIHTTPRequest.h"
 #import "Reachability.h"
-#import "DataCenter.h"
 #import "FileUrl.h"
 #import "ADVPercentProgressBar.h"
 #import "ASIDownloadCache.h"
 #import "ColumnModel.h"
+
+
+#import "UIImageView+WebCache.h"
 @implementation ProgressView
 
 -(id)init{
@@ -38,20 +40,15 @@
 -(id)initWithPath:(NSString *)path{
     self = [self init];
     if (self!=nil) {
-//        self.reachability = [Reachability reachabilityForInternetConnection];
-//        //开始监听网络
-//        [self.reachability startNotifier];
-//        
-//        NetworkStatus status = self.reachability.currentReachabilityStatus;
-//        [self checkNetWork:status];
-//        self.path = path;
-//        self.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
+
     }
     return self;
 }
 -(void)drawRect:(CGRect)rect{
     [super drawRect:rect];
     [UIApplication sharedApplication].statusBarHidden=YES;
+//    清楚缓存
+    [[DataCenter sharedCenter]cleanCache];
     //---------------------ASI下载--------------------
     UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
     _progressView =
@@ -79,74 +76,184 @@
     
     // 使得每一次下载都是重新来过的
     [_queue reset];
-//    NSArray *array = @[@"http://192.168.1.145:8080/nen/getNewscontent?titleId=011759708",@"http://192.168.1.145:8080/nen/getNewscontent?titleId=011759707"];
-    
     //栏目数组
     NSMutableArray *nameArrays = [[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:show_column]];
     int count = [[NSUserDefaults standardUserDefaults]integerForKey:kpageCount];
-    for (int i = 0 ; i < nameArrays.count ; i++) {
-        NSDictionary *dic = nameArrays[i];
-        NSString *url =  [NSString stringWithFormat:@"%@getColumnList?count=%d&columnID=%@",BASE_URL,(count+1)*10,[dic objectForKey:@"columnId"]];
-        _po(url);
-        ASIHTTPRequest *columnrequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
-        [columnrequest setCompletionBlock:^{
-//            更新最后更新时间
-            NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-            NSDictionary *columnDIC = @{@"lastDate":[NSDate date]};
-            [userDefault setValue:columnDIC forKey:[NSString stringWithFormat:@"columnid=%@",[dic objectForKey:@"columnId"]]];
-            [userDefault synchronize];
-//获取数据源
-            NSData *data = columnrequest.responseData;
-            id result = nil ;
-            result =[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-            NSArray *array = [result objectForKey:@"data"];
+    NSMutableArray *names = [[NSMutableArray alloc]init];
+    for (NSDictionary *modelDic  in nameArrays) {
+        [names addObject: [modelDic objectForKey:@"columnId"]];
+        [modelDic release];
+    }
+    NSString *partIds = [names componentsJoinedByString:@","];
+    NSMutableDictionary *parms = [[NSMutableDictionary alloc]init];
+    [parms setValue:partIds forKey:@"partIds"];
+    [parms setValue:[NSNumber numberWithInt:(count+1)*10] forKey:@"count"];
+    [DataService requestWithURL:URL_OffNews_List andparams:parms andhttpMethod:@"GET" completeBlock:^(id result) {
+        NSMutableArray *ImageArray = [[NSMutableArray alloc]init];
+        //所有栏目
+        NSArray *columnArray = [result objectForKey:@"alldata"];
+        for (int i = 0 ; i < columnArray.count; i++) {
+            NSDictionary *dic_model = columnArray [i];
+            NSString *columnId = [dic_model objectForKey:@"columnId"];
+            NSString *url_column = [NSString stringWithFormat:@"%@%@?count=%d&columnID=%@",BASE_URL,URL_getColumn_List,(count+1)*10,columnId];
+//栏目重新访问
+            
+            _request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url_column]];
+            ASIDownloadCache *cache = [[ASIDownloadCache alloc]init];//创建缓存对象
+            NSString *cachePath = [FileUrl getCacheFileURL]; //设置缓存目录
+            [cache setStoragePath:cachePath];
+            cache.defaultCachePolicy =ASIAskServerIfModifiedWhenStaleCachePolicy; //设置缓存策略
+            _request.cacheStoragePolicy =ASICachePermanentlyCacheStoragePolicy;
+            _request.downloadCache = cache;
+            [_request setTimeOutSeconds:60*10];
+            [_queue addOperation:_request];
+            
+//            data 数据
+            NSArray *array = [dic_model objectForKey:@"data"];
             for (NSDictionary *dic in array) {
+//                获取主图图片
                 ColumnModel *model = [[ColumnModel alloc]initWithDataDic:dic ];
-                NSString *str = [NSString stringWithFormat:@"%@getNewscontent?titleId=%@",BASE_URL,model.newsId];
+                if (![model.img isEqualToString:@""]) {
+                    NSString *url = model.img;
+                    [ImageArray addObject:url];
+                    [url release];
+                }
+                if (![model.img1 isEqualToString:@""]) {
+                    NSString *url = model.img1;
+                    [ImageArray addObject:url];
+                    [url release];
+
+                }
+                if (![model.img2 isEqualToString:@""]) {
+                    NSString *url = model.img2;
+                    [ImageArray addObject:url];
+                    [url release];
+                }
+                if (![model.img3 isEqualToString:@""]) {
+                    NSString *url = model.img3;
+                    [ImageArray addObject:url];
+                    [url release];
+                }
+                NSString *str = nil;
+                if ([model.type intValue ]== 1) {//专题新闻
+                    str = [NSString stringWithFormat:@"%@%@?subjectId=%@",BASE_URL,URL_getThematic_List,model.newsId];
+                }else if([model.type intValue ]== 2){//图片新闻
+                    str = [NSString stringWithFormat:@"%@%@?titleId=%@",BASE_URL,URL_getImages_List,model.newsId];
+                }else {//普通新闻和专题新闻
+                    str = [NSString stringWithFormat:@"%@%@?titleId=%@",BASE_URL,URL_getNews_content,model.newsId];
+
+                }
                 _path = str;
                 _request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:_path]];
                 ASIDownloadCache *cache = [[ASIDownloadCache alloc]init];//创建缓存对象
                 NSString *cachePath = [FileUrl getCacheFileURL]; //设置缓存目录
-                DLOG(@"cachepath:%@",cachePath);
                 [cache setStoragePath:cachePath];
                 cache.defaultCachePolicy =ASIUseDefaultCachePolicy; //设置缓存策略
                 _request.cacheStoragePolicy =ASICachePermanentlyCacheStoragePolicy;
                 _request.downloadCache = cache;
+                [_request setTimeOutSeconds:60*10];
                 [_queue addOperation:_request];
                 
             }
-            _queue.downloadProgressDelegate = progressView;
-            // 设置queue完成后需要实现的UI方法，根据头文件里面定义，这个UI方法需要一个ASIHTTPRequest 的参数
-            _queue.requestDidFinishSelector = @selector(queueDidFinish:);
-            [_queue setRequestDidFailSelector:@selector(queueError:)];
-            // 如果要实现SEL的方法则根据头文件定义需要把delegate定为self
-            _queue.delegate = self;
+//            pic轮播图    
+            NSArray *picArray = [dic_model objectForKey:@"picture"];
+            for (NSDictionary *dic in picArray) {
+                NSString *imgurl = [dic objectForKey:@"pictureUrl"];
+                if (![imgurl isEqualToString:@""]) {
+                    [ImageArray addObject:imgurl];
+                    [imgurl release];
+                }
+
+                NSString *str = nil;
+                NSString *newsId = [dic objectForKey:@"newsId"];
+                if ([ [dic objectForKey:@"type"] intValue ]== 1) {//专题新闻
+                    str = [NSString stringWithFormat:@"%@%@?subjectId=%@",BASE_URL,URL_getThematic_List,newsId];
+                }else{
+                    if (newsId) {
+                        str = [NSString stringWithFormat:@"%@%@?titleId=%@",BASE_URL,URL_getNews_content,newsId];
+                    }
+                }
+                if (str) {
+                    _path = str;
+                    _request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:_path]];
+                    ASIDownloadCache *cache = [[ASIDownloadCache alloc]init];//创建缓存对象
+                    NSString *cachePath = [FileUrl getCacheFileURL]; //设置缓存目录
+                    [cache setStoragePath:cachePath];
+                    cache.defaultCachePolicy =ASIUseDefaultCachePolicy; //设置缓存策略
+                    _request.cacheStoragePolicy =ASICachePermanentlyCacheStoragePolicy;
+                    _request.downloadCache = cache;
+                    [_request setTimeOutSeconds:60*10];
+                    [_queue addOperation:_request];
+                }
+                
+            }
+
             
-            //    [_request startAsynchronous];
-            [_queue go];
-            
-        }];
-        [columnrequest startSynchronous];
-    }
-    
-    
+        }
+//        所有图片
+        NSArray *allPicArray = [result objectForKey:@"allpicture"];
+        [ImageArray addObjectsFromArray: allPicArray];
+        
+        NSSet *set  = [NSSet setWithArray: ImageArray];
+        for (NSString *url  in [set allObjects]) {
+            if ([url isEqualToString:@"0"]) {
+                continue;
+            }
+            _request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
+            [_request setTimeOutSeconds:60*10];
+            [_queue addOperation:_request];
+
+        }
+        _queue.downloadProgressDelegate = progressView;
+        // 设置queue完成后需要实现的UI方法，根据头文件里面定义，这个UI方法需要一个ASIHTTPRequest 的参数
+        _queue.requestDidFinishSelector = @selector(queueDidFinish:);
+        [_queue setRequestDidFailSelector:@selector(queueError:)];
+        // 如果要实现SEL的方法则根据头文件定义需要把delegate定为self
+        _queue.delegate = self;
+        [_queue go];
+        
+        
+    } andErrorBlock:^(NSError *error) {
+        
+    }];
 }
 
 - (void)queueDidFinish:(ASIHTTPRequest *)request
 
 {
-    [self.eventDelegate finishDownload];
+    
+    NSData *responseData = [request responseData];
+    NSURL *url =  request.url;
+    if (url.query) {
+//        非图片
+    }else {
+//        图片
+        NSString *Url = [FileUrl getCacheImageURL];
+        NSString * relativeString = [url relativeString];
+        NSString * name = [[relativeString componentsSeparatedByString:@"/"] lastObject];
+        NSString *firstname = [name componentsSeparatedByString:@"."][0];
+        NSString *path = [Url stringByAppendingPathComponent: firstname];
+        [responseData writeToFile:path atomically:NO];
+    }
+    int pro = _progress*100;
+    if (pro ==100) {
+        [self.eventDelegate finishDownload];
+    }
     
 }
 - (void)queueError:(ASIHTTPRequest *)request
 
 {
+    _po(request.url);
     _po([[request error] localizedDescription]);
-    [self.eventDelegate finishDownload];
+    [_request clearDelegatesAndCancel];
+    [_queue cancelAllOperations];
+    [self.eventDelegate errorDownload:INFO_ERROR_OFF_DOWNLOAD];
 }
 #pragma mark Action
 -(void)cencelAction{
     [_request clearDelegatesAndCancel];
+    [_queue cancelAllOperations];
     [self.eventDelegate finishDownload];
 }
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -154,16 +261,10 @@
                         change:(NSDictionary *)change context:(void *)context {
 //    NSLog(@"%@",change);
     NSNumber *value = [change objectForKey:@"new"];
-    float progress = [value floatValue];
-    NSLog(@"%.1f%%",progress*100);
-    
-    [_progressView setProgress:[_progressView minProgressValue] +
-     ([_progressView maxProgressValue] -
-      [_progressView minProgressValue]) * progress
-     ];
-
-    
-    int pro = progress*100;
+    _progress = [value floatValue];
+//    NSLog(@"%.1f%%",_progress*100);
+    [_progressView setProgress:_progress*100];
+    int pro = _progress*100;
     if (pro ==100) {
         [self.eventDelegate finishDownload];
     }
@@ -181,6 +282,9 @@
 - (void)checkNetWork:(NetworkStatus)status {
     if (status == kNotReachable) {
         NSLog(@"没有网络");
+        [_request clearDelegatesAndCancel];
+        [_queue cancelAllOperations];
+        [self.eventDelegate errorDownload:INFO_ERROR_OFF_NETWORK];
     }
     else if(status == kReachableViaWWAN) {
         NSLog(@"3G/2G");
