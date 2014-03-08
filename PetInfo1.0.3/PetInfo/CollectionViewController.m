@@ -34,6 +34,8 @@
     self.tableView.eventDelegate = self;
     self.tableView.frame = CGRectMake(0 , 0, ScreenWidth , ScreenHeight );
     [self.view addSubview:self.tableView];
+    self.tableView.refreshHeader = NO;
+
 }
 -(void)viewWillAppear:(BOOL)animated{
     self.tableView.data = [self getData:@""];
