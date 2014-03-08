@@ -19,6 +19,10 @@
 +(NSString *)getCacheFileURL {
     return  [[self getCacheFile] stringByAppendingPathComponent:@"com.nen.news.data/"];
 }
+//返回cache图片路径
++(NSString *)getCacheImageURL {
+    return  [[self getCacheFile] stringByAppendingPathComponent:@"com.nen.news.img/"];
+}
 //返回document文件路径
 + (NSString *)getDocumentsFile {
     NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);

@@ -14,6 +14,8 @@
 +(NSString *)getCacheFileURL;
 //返回cache文件路径
 +(NSString *)getCacheFile ;
+//返回cache图片路径
++(NSString *)getCacheImageURL ;
 //返回document文件路径
 + (NSString *)getDocumentsFile;
 //返回数据库文件名
