@@ -792,6 +792,12 @@
     [self finishDownloadVIew];
     [self setStateBarHidden:NO];
 }
+-(void)errorDownload:(NSString *)error{
+    [self finishDownloadVIew];
+    [self setStateBarHidden:NO];
+    alertContent(error);
+}
+
 -(void)setStateBarHidden :(BOOL) statusBarHidden{
     if (WXHLOSVersion()>=7.0) {
         [self setStatusBarStyle:UIStatusBarStyleLightContent];
