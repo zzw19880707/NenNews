@@ -52,6 +52,7 @@
             _SpecialTableView.abstract = newsabstract;
             _SpecialTableView.ImgData = newsDic;
             _SpecialTableView.data = newsDataArray;
+            _SpecialTableView.lastDate = [NSDate date];
             [_SpecialTableView reloadData];
             [self performSelector:@selector(hideHUD) withObject:nil afterDelay:.5];
         }
@@ -63,7 +64,31 @@
 #pragma mark  UItableviewEventDelegate
 //下拉
 -(void)pullDown:(BaseTableView *)tableView{
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+    [params setValue:self.newsId forKey:@"subjectId"];
     
+    [DataService requestWithURL:URL_getThematic_List andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
+        if ((NSNull *)result == [NSNull null]) {
+            [self hideHUD];
+            [self showHUD:INFO_ERROR isDim:YES];
+            [self performSelector:@selector(hideHUD) withObject:nil afterDelay:1];
+            return ;
+        }else{//加载正常
+            NSDictionary *newsDic = [result objectForKey:@"news"];
+            NSString *newsabstract = [result objectForKey:@"news_abstract"];
+            NSArray *newsDataArray = [result objectForKey:@"news_data"];
+            _SpecialTableView.abstract = newsabstract;
+            _SpecialTableView.ImgData = newsDic;
+            _SpecialTableView.data = newsDataArray;
+            _SpecialTableView.lastDate = [NSDate date];
+            [_SpecialTableView reloadData];
+            [tableView doneLoadingTableViewData];
+            [self performSelector:@selector(hideHUD) withObject:nil afterDelay:.5];
+        }
+        
+    } andErrorBlock:^(NSError *error) {
+        [self performSelector:@selector(hideHUD) withObject:nil afterDelay:.5];
+    }];
 }
 -(void)tableView:(SpecialNightModelTableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section==0) {
@@ -120,6 +145,8 @@
         nightModel.type = [model.type intValue];
         nightModel.newsId = [NSString stringWithFormat:@"%@",model.newsId];
         nightModel.ImageUrl = model.img;
+        nightModel.titleLabel = model.title;
+
         [self.navigationController pushViewController:nightModel animated:YES];
   
 }
