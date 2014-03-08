@@ -7,7 +7,6 @@
 //
 
 #import "MainViewController.h"
-#import "Reachability.h"
 #import "SDWebImage/UIImageView+WebCache.h"
 #import "BaseNavViewController.h"
 #import "DDMenuController.h"
@@ -16,7 +15,7 @@
 #import "ThemeManager.h"
 #import "FileUrl.h"
 #import "FMDB/src/FMDatabase.h"
-#import "DataCenter.h"
+#import "OpenUDID.h"
 #define firstimage @"http://a.hiphotos.baidu.com/image/w%3D2048/sign=9f5289ba0b55b3199cf9857577918326/4d086e061d950a7b32998b7f0bd162d9f3d3c9d9.jpg"
 @interface MainViewController ()
 
@@ -85,7 +84,7 @@
         [_userDefaults synchronize];
     }else{
 //        当前无网络
-        if ([[self getConnectionAvailable] isEqualToString:@"none"]) {
+        if ([[DataCenter getConnectionAvailable] isEqualToString:@"none"]) {
             url = [_userDefaults stringForKey:main_adImage_url];
             [topImageView setImageWithURL:[NSURL URLWithString:url]];
             [_backgroundView addSubview:topImageView];
@@ -93,6 +92,7 @@
         }else{//有网络，访问ao接口 获取图片地址
             NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
             [params setValue:[NSNumber numberWithInteger:[_userDefaults integerForKey:column_version] ] forKey:@"columnversions"];
+            [params setValue:[OpenUDID value] forKey:@"OpenUDID"];
             [DataService requestWithURL:URL_AO andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
                 NSString *newVersion = [result objectForKey:@"columnversions"];
                 NSString  *Aourl = [result objectForKey:@"pictureUrl"];
@@ -244,6 +244,11 @@
     [dbs close];
 }
 -(void)_initplist{
+    
+    //    创建图片缓存文件夹
+    NSFileManager *manager=  [NSFileManager defaultManager];
+    NSString *createFile = [FileUrl getCacheImageURL];
+    [manager createDirectoryAtPath:createFile withIntermediateDirectories:YES attributes:nil error:nil];
     NSString *plistPath1 = [FileUrl getDocumentsFile];
     //写入初始化数据文件
     NSDictionary *dica = [[NSDictionary alloc]init];
@@ -274,6 +279,11 @@
     
 }
 -(void)_updataDB{
+//    创建图片缓存文件夹
+    NSFileManager *manager=  [NSFileManager defaultManager];
+    NSString *createFile = [FileUrl getCacheImageURL];
+    [manager createDirectoryAtPath:createFile withIntermediateDirectories:YES attributes:nil error:nil];
+
     [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:.1];
 
 }
