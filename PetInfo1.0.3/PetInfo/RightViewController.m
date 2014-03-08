@@ -46,10 +46,10 @@
         label.text = @"白  天";
     }
     
-    UILabel *offLabel = (UILabel *)VIEWWITHTAG(self.view, 1024);
-    UIButton *offButton = (UIButton *)VIEWWITHTAG(self.view, 1004);
-    [offLabel setHidden:YES];
-    [offButton setHidden:YES];
+//    UILabel *offLabel = (UILabel *)VIEWWITHTAG(self.view, 1024);
+//    UIButton *offButton = (UIButton *)VIEWWITHTAG(self.view, 1004);
+//    [offLabel setHidden:YES];
+//    [offButton setHidden:YES];
     
     
     //隐藏登陆
@@ -63,7 +63,7 @@
 
 }
 -(void)getWeather {
-    if ([[self getConnectionAvailable] isEqualToString:@"none"]) {
+    if ([[DataCenter getConnectionAvailable] isEqualToString:@"none"]) {
         
     }else{
         DataService *service = [[DataService alloc]init];
