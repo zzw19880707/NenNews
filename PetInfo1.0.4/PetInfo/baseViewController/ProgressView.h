@@ -1,0 +1,35 @@
+//
+//  ProgressView.h
+//  东北新闻网
+//
+//  Created by tenyea on 13-12-24.
+//  Copyright (c) 2013年 佐筱猪. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ASIHTTPRequest.h"
+#import "ADVPercentProgressBar.h"
+#import "ASINetworkQueue.h"
+
+@class Reachability;
+@protocol ProgressDelegate <NSObject>
+//可选事件
+@optional
+-(void)finishDownload;
+-(void)errorDownload:(NSString *)error;
+
+@end
+
+@interface ProgressView : UIView{
+    ADVPercentProgressBar *_progressView;
+    ASIHTTPRequest *_request;
+    ASINetworkQueue *_queue;
+    
+//    进度
+    float _progress;
+}
+@property(nonatomic,retain)Reachability *reachability;
+@property(nonatomic,retain) NSString *path;
+@property(nonatomic,assign) id<ProgressDelegate> eventDelegate;
+-(id)initWithPath:(NSString *)path;
+@end
