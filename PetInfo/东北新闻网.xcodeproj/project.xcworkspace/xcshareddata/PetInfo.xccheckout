@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>9E65E51E-AB04-434F-AEAD-FE7F53C989FE</string>
+	<key>IDESourceControlProjectName</key>
+	<string>PetInfo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>2CC9C4C8-C270-4FF9-B18C-CF06C37F480E</key>
+		<string>https://github.com/zzw19880707/NenNews.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>PetInfo/PetInfo.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>2CC9C4C8-C270-4FF9-B18C-CF06C37F480E</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/zzw19880707/NenNews.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>2CC9C4C8-C270-4FF9-B18C-CF06C37F480E</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2CC9C4C8-C270-4FF9-B18C-CF06C37F480E</string>
+			<key>IDESourceControlWCCName</key>
+			<string>NenNews</string>
+		</dict>
+	</array>
+</dict>
+</plist>
