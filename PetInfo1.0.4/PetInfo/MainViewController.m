@@ -132,7 +132,8 @@
                         NSString *takePart = [dic objectForKey:@"takePart"];
                         NSString *isPic = [dic objectForKey:@"isPic"];
                         //                        插入的默认不显示
-                        if (![db executeUpdate:[NSString stringWithFormat:@"insert into columnList VALUES (%@,'%@',%@,%d,%@,%@);",partId,appPartName,isPic,0,hidden,takePart]]) {
+                        if (![db executeUpdate:[NSString stringWithFormat:@"insert into columnList VALUES (%@,'%@',%@,%d,%@,%@);",partId,appPartName,isPic,1,hidden,takePart]])
+                        {
 //                            查询该栏目 如果未修改前，isshow=1、hidden=0，新的hidden=1，则在队尾加入
                             FMResultSet *fmrs = [db executeQuery:[NSString stringWithFormat:@"select isshow,hidden from columnList where column = %@",partId]];
                             if(fmrs.next){
@@ -180,6 +181,15 @@
                                 }
                                 [_userDefaults synchronize];
                             }
+                        }
+                        else//新增栏目默认显示
+                        {
+                            NSMutableArray *columnArray =  [_userDefaults objectForKey:show_column];
+                            NSDictionary *dic = @{@"columnId": partId,@"name":appPartName,@"showimage":isPic};
+                            [columnArray  addObject:dic];
+                            [_userDefaults setValue:columnArray forKey:show_column];
+                            [_userDefaults synchronize];
+
                         }
                     }
                     [db close];
