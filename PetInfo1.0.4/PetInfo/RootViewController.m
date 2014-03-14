@@ -215,6 +215,11 @@
             if (tableView.imageData.count >0) {
                 tableView.pageControl.currentPage = 0 ;
                 tableView.pageControl.frame=CGRectMake(320 - 12*tableView.imageData.count-5, 185, 12*tableView.imageData.count, 15);
+                if (tableView.imageData.count ==1) {
+                    tableView.pageControl.hidden = YES;
+                }else{
+                    tableView.pageControl.hidden = NO;
+                }
                 tableView.pageControl.numberOfPages =tableView.imageData.count  ;
                 tableView.csView.currentPage = 0;
                 tableView.label.text = [[result objectForKey:@"picture"][0] objectForKey:@"pictureTitle"];

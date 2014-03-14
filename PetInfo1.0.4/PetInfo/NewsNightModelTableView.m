@@ -173,6 +173,11 @@
                     self.pageControl.pageIndicatorTintColor = [UIColor grayColor];
                     self.pageControl.currentPageIndicatorTintColor = NenNewsgroundColor;
                 }
+                if (_imageData.count == 1) {
+                    self.pageControl.hidden = YES;
+                }else{
+                    self.pageControl.hidden = NO;
+                }
                 self.pageControl.userInteractionEnabled = NO;
                 self.pageControl.numberOfPages =_imageData.count  ;
                 self.pageControl.currentPage= 0;
