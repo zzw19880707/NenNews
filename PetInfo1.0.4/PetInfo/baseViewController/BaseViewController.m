@@ -15,6 +15,7 @@
 #import "ColumnModel.h"
 #import "ThemeManager.h"
 #import "SpecialNightViewController.h"
+#import "WebViewController.h"
 @interface BaseViewController ()
 
 @end
@@ -42,6 +43,13 @@
     return self;
 }
 -(void)pushNewswithColumn:(ColumnModel *)model {
+//    当url不为空时，则弹出网页显示
+    if (model.ADURL!=nil) {
+        WebViewController *webView = [[WebViewController alloc]initWithUrl:model.ADURL];
+        [self.navigationController pushViewController:webView animated:YES];
+
+        return ;
+    }
     NSArray *viewControllers = self.navigationController.viewControllers;
 
     if (viewControllers.count > 1) {

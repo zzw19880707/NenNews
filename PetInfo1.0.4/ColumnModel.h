@@ -21,5 +21,6 @@
 @property (nonatomic,copy) NSString *img2;//图片新闻
 @property (nonatomic,copy) NSString *img3;//图片新闻
 
+@property (nonatomic,copy) NSString *ADURL;//广告地址
 @property (nonatomic,assign) BOOL isselected;
 @end
