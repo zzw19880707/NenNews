@@ -9,7 +9,8 @@
 #import "BaseViewController.h"
 #import "BaseScrollView.h"
 #import "ColumnTabelViewController.h"
-@interface RootViewController : BaseViewController <UIScrollViewEventDelegate,UIScrollViewDelegate,ColumnChangedDelegate,UItableviewEventDelegate,NewsNigthTabelViewDelegate>{
+#import "VedioNightModelView.h"
+@interface RootViewController : BaseViewController <UIScrollViewEventDelegate,UIScrollViewDelegate,ColumnChangedDelegate,UItableviewEventDelegate,NewsNigthTabelViewDelegate,VedioNightModelViewDelegate>{
     BaseScrollView *_sc;
 }
 @property (nonatomic ,assign) BOOL isLoading;

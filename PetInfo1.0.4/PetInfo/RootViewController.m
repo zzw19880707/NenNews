@@ -47,22 +47,37 @@
         button.tag = 1000+ i;
         [buttonArrays addObject:button];
         
-        
-        NewsNightModelTableView *newsTableView = [[NewsNightModelTableView alloc]initwithColumnID:columnId];
-        newsTableView.frame = CGRectMake(340 *i, 0, ScreenWidth, ScreenHeight -44-20);
-        newsTableView.eventDelegate = self;
-        newsTableView.changeDelegate = self;
-        newsTableView.type = 0;
-        NSString *key = [NSString stringWithFormat:@"columnid=%d",columnId];
+        int columnType = [[nameArrays[i] objectForKey:@"columnType"] intValue];
+        if (columnType == 0 ) {
+            NewsNightModelTableView *newsTableView = [[NewsNightModelTableView alloc]initwithColumnID:columnId];
+            newsTableView.frame = CGRectMake(340 *i, 0, ScreenWidth, ScreenHeight -44-20);
+            newsTableView.eventDelegate = self;
+            newsTableView.changeDelegate = self;
+            newsTableView.type = 0;
+            NSString *key = [NSString stringWithFormat:@"columnid=%d",columnId];
+            
+            //        获取上次更新时间
+            NSDate *date = [[[NSUserDefaults standardUserDefaults] objectForKey:key] objectForKey:@"lastDate"];
+            newsTableView.lastDate = date;
+            if (date !=nil) {
+                //        设置数据
+                [self getData:newsTableView cache:1];
+            }
+            [tableArrays addObject:newsTableView];
 
-//        获取上次更新时间
-        NSDate *date = [[[NSUserDefaults standardUserDefaults] objectForKey:key] objectForKey:@"lastDate"];
-        newsTableView.lastDate = date;
-        if (date !=nil) {
-            //        设置数据
-            [self getData:newsTableView cache:1];
+        }else if(columnType == 2){
+            VedioNightModelView *vedio = [[VedioNightModelView alloc]initwithsourceType:1];//普通新闻
+            vedio.tag = 1300 +i;
+            vedio.eventDelegate = self;
+            vedio.frame = CGRectMake(340 *i, 0, ScreenWidth, ScreenHeight -44-20);
+            vedio.columnID = columnId;
+            vedio.VedioDelegate = self;
+            vedio.type = columnType;//视频
+            vedio.separatorStyle = UITableViewCellSeparatorStyleNone;
+            [self getDatabyVedioandImage:vedio cache:1];
+            [tableArrays addObject:vedio];
+            [vedio release];
         }
-        [tableArrays addObject:newsTableView];
         
     }
     //    用于存放按钮和tableview
@@ -70,12 +85,10 @@
     return arrays;
 }
 
-
 #pragma mark UIScrollViewEventDelegate
 -(void)addButtonAction{
     ColumnTabelViewController *columnVC = [[ColumnTabelViewController alloc]initWithType:0];
     columnVC.eventDelegate = self;
-    _po(self.navigationController);
     [self.navigationController pushViewController:columnVC animated:YES];
 }
 -(void)showRightMenu{
@@ -90,9 +103,13 @@
     _enable = b;
     [self.appDelegate.menuCtrl setEnableGesture:b];
 }
--(void)autoRefreshData:(NewsNightModelTableView *)tableView{
+-(void)autoRefreshData:(BaseTableView *)tableView{
     if ([self getConnectionAlert]) {
-        [self getData:tableView cache:0];
+        if ([tableView isKindOfClass:[NewsNightModelTableView class]]) {
+            [self getData:(NewsNightModelTableView *)tableView cache:0];
+        }else if([tableView isKindOfClass:[VedioNightModelView class]]){
+            [self getDatabyVedioandImage:(VedioNightModelView *)tableView cache:0];
+        }
     }else{
     }
 }
@@ -287,18 +304,80 @@
     
 }
 
+-(void)getDatabyVedioandImage:(VedioNightModelView *)tableView cache:(int)cache{
+    [self getConnectionAlert];
+    //    参数
+    NSMutableDictionary *params  = [[NSMutableDictionary alloc]init];
+    int count = [[NSUserDefaults standardUserDefaults]integerForKey:kpageCount];
+    NSNumber *number = [NSNumber numberWithInt:((count+1)*10)];
+    [params setValue:number forKey:@"count"];
+    int columnID=tableView.columnID;
+    [params setValue:[NSNumber numberWithInt:columnID] forKey:@"columnID"];
+    //    正常访问网络
+    if (cache ==0) {
+        [DataService requestWithURL:URL_getColumn_List andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
+            tableView.lastDate = [NSDate date];
+            tableView.isMore = true;
+            NSArray *array =  [result objectForKey:@"data"];
+            if (array.count ==0) {
+                [tableView doneLoadingTableViewData];
+                return ;
+            }
+            NSMutableArray *listData = [[NSMutableArray alloc]init];
+            
+            for (NSDictionary *dic  in array) {
+                ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
+                [listData addObject:model];
+                [model release];
+            }
+            tableView.data =listData;
+            [tableView reloadData];
+            
+            [tableView doneLoadingTableViewData];
+            
+        } andErrorBlock:^(NSError *error) {
+            [tableView doneLoadingTableViewData];
+        }];
+    }else{
+        //        只读本地
+        [DataService nocacheWithURL:URL_getColumn_List andparams:params completeBlock:^(id result) {
+            tableView.isMore = true;
+            NSArray *array =  [result objectForKey:@"data"];
+            if (array.count ==0) {
+                [tableView doneLoadingTableViewData];
+                return ;
+            }
+            NSMutableArray *listData = [[NSMutableArray alloc]init];
+            for (NSDictionary *dic  in array) {
+                ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
+                [listData addObject:model];
+                [model release];
+            }
+            tableView.data =listData;
+            [tableView doneLoadingTableViewData];
+            [tableView reloadData];
+            
+        } andErrorBlock:^(NSError *error) {
+            [tableView doneLoadingTableViewData];
+        }];
+    }
+}
 //上拉刷新
--(void)pullDown:(NewsNightModelTableView *)tableView{
+-(void)pullDown:(BaseTableView *)tableView{
     if (![self getConnectionAlert]) {
         [tableView doneLoadingTableViewData];
 
         return;
     }
-    [self getData:tableView cache:0];
+    if ([tableView isKindOfClass:[NewsNightModelTableView class]]) {
+        [self getData:(NewsNightModelTableView *)tableView cache:0];
+    }else if([tableView isKindOfClass:[VedioNightModelView class]]){
+        [self getDatabyVedioandImage:(VedioNightModelView *)tableView cache:0];
+    }
     
 }
 //下拉加载
--(void)pullUp:(NewsNightModelTableView *)tableView{
+-(void)pullUp:(BaseTableView *)tableView{
     if (_isLoading ) {
         return;
     }
@@ -308,6 +387,17 @@
 
         return;
     }
+    
+    
+    if ([tableView isKindOfClass:[NewsNightModelTableView class]]) {
+        [self getPullUpDate:(NewsNightModelTableView *)tableView];
+    }else if([tableView isKindOfClass:[VedioNightModelView class]]){
+        [self getPullUpVedioAndImage:(VedioNightModelView *)tableView ];
+    }
+
+}
+//普通栏目
+-(void)getPullUpDate :(NewsNightModelTableView *)tableView{
     //    参数
     NSMutableDictionary *params  = [[NSMutableDictionary alloc]init];
     int count = [[NSUserDefaults standardUserDefaults]integerForKey:kpageCount];
@@ -326,7 +416,7 @@
         NSArray *array =  [result objectForKey:@"data"];
         NSArray *imageArray = [result objectForKey:@"picture"];
         NSMutableArray *listData = [[NSMutableArray alloc]init];
-
+        
         for (NSDictionary *dic  in array) {
             ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
             model = [self addisselected:model];
@@ -348,11 +438,51 @@
     } andErrorBlock:^(NSError *error) {
         [tableView doneLoadingTableViewData];
         self.isLoading = NO;
-
+        
     }];
+
+}
+//图集栏目
+-(void)getPullUpVedioAndImage:(VedioNightModelView *)tableView{
+    //    参数
+    NSMutableDictionary *params  = [[NSMutableDictionary alloc]init];
+    int count = [[NSUserDefaults standardUserDefaults]integerForKey:kpageCount];
+    NSNumber *number = [NSNumber numberWithInt:((count+1)*10)];
+    [params setValue:number forKey:@"count"];
+    int columnID=tableView.columnID;
+    [params setValue:[NSNumber numberWithInt:columnID] forKey:@"columnID"];
+    if (tableView.data.count>0) {
+        ColumnModel *model = [tableView.data lastObject];
+        NSString *sinceID = model.newsId;
+        [params setValue:sinceID forKey:@"sinceId"];
+    }
+    [self getConnectionAlert];
+    self.isLoading = YES;
     
-    
-    
+    [DataService requestWithURL:URL_getColumn_List andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
+        NSArray *array =  [result objectForKey:@"data"];
+        NSMutableArray *listData = [[NSMutableArray alloc]init];
+        
+        for (NSDictionary *dic  in array) {
+            ColumnModel * model = [[ColumnModel alloc]initWithDataDic:dic];
+            [listData addObject:model];
+        }
+        [tableView doneLoadingTableViewData];
+        NSMutableArray *arr = [NSMutableArray arrayWithArray:tableView.data];
+        [arr addObjectsFromArray:listData];
+        tableView.data  = arr;
+        
+        if (listData.count < (count+1)*10) {
+            tableView.isMore = false;
+        }
+        [tableView reloadData];
+        self.isLoading = NO;
+        
+    } andErrorBlock:^(NSError *error) {
+        [tableView doneLoadingTableViewData];
+        self.isLoading = NO;
+        
+    }];
 }
 -(void)tableView:(NewsNightModelTableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (tableView.imageData.count >0&&indexPath.section==0) {
@@ -365,7 +495,10 @@
     
 }
 
-
+#pragma mark VedioNightModelViewDelegate
+-(void)selectedColumnAction:(ColumnModel *)model{
+    [self pushNewswithColumn:model];
+}
 
 
 #pragma mark columnchangeDelegate
