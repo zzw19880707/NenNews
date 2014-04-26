@@ -282,6 +282,9 @@
         }else if ([_model.type intValue]==3){//视频
             [_typeLabel setHidden:NO];
             _typeLabel.text = @"视频";
+        }else if ([_model.type intValue]==4){//推广
+            [_typeLabel setHidden:NO];
+            _typeLabel.text = @"推广";
         }
         //    //右上标(0:无 1：独家 2：原创 3：推荐)
         if ([_model.typeUp intValue] ==0 ) {

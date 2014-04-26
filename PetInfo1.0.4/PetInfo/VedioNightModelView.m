@@ -10,6 +10,7 @@
 #import "VedioAndImageModel.h"
 #import "ThemeManager.h"
 #import "VedioNightCell.h"
+#import "ColumnModel.h"
 @implementation VedioNightModelView
 //@synthesize data = _data;
 -(id)init{
@@ -27,6 +28,13 @@
     self = [self init];
     if (self) {
         self.data = data;
+    }
+    return self;
+}
+-(id)initwithsourceType:(int )sourceType{
+    self = [self init];
+    if (self) {
+        self.sourceType = sourceType;
     }
     return self;
 }
@@ -73,7 +81,7 @@
 
                 break;
         }
-        cell = [[VedioNightCell alloc]initwithType:_type andData:array andIndex:indexPath.row];
+        cell = [[VedioNightCell alloc]initwithType:_type andData:array andIndex:indexPath.row andSourceType:_sourceType];
         cell.eventDelegate =  self;
     }
     
@@ -82,8 +90,18 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     int index = indexPath.row*3;
-    VedioAndImageModel *model = self.data[index];
-    if (model.videoTitle) {
+    NSString *title ;
+    
+    if (_sourceType == 0) {
+        VedioAndImageModel *model = self.data[index];
+        title = model.videoTitle;
+    }else if(_sourceType ==1 ){
+        ColumnModel *model = self.data [index];
+        title = model.title;
+    }else{
+        return 70;
+    }
+    if (title) {
         return 95;
     }else{
         return 70;
@@ -93,7 +111,13 @@
 #pragma mark VedioandImageDelegate
 -(void)selectedAction:(int)i andIndex:(int)index{
     int count = index*3 +i;
-    VedioAndImageModel *model = self.data[count];
-    [self.VedioDelegate selectedAction:model];
+    if (_sourceType ==0 ) {
+        VedioAndImageModel *model = self.data[count];
+        [self.VedioDelegate selectedAction:model];
+    }else if(_sourceType ==1 ){
+        ColumnModel *model = self.data[count];
+        [self.VedioDelegate selectedColumnAction:model];
+    }
+    
 }
 @end

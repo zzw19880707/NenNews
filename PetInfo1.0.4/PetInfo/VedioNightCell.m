@@ -10,14 +10,16 @@
 #import "UIButton+WebCache.h"
 #import "Uifactory.h"
 #import "VedioAndImageModel.h"
+#import "ColumnModel.h"
 @implementation VedioNightCell
 
--(id)initwithType :(int) type andData :(NSArray *)data andIndex :(int )index{
+-(id)initwithType :(int) type andData :(NSArray *)data andIndex :(int )index andSourceType:(int )sourceType{ //1:综合新闻 0:订阅
     self = [super init];
     if (self) {
         self.type = type;
         self.data = data;
         self.index = index;
+        self.sourceType = sourceType;
         for (int i = 0 ; i <3; i++) {
             UIButton *button =  [[UIButton alloc]initWithFrame:CGRectMake(20+i*100, 5, 80, 60)];
             [button addTarget:self action:@selector(selectAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -28,7 +30,7 @@
             if (type==3) {
                 text = @"视频";
             }else if (type ==2){
-                text = @"图片";
+                text = @"图集";
             } else{
                 text = @"";
             }
@@ -56,6 +58,12 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
+
+}
+
+-(id)initwithType :(int) type andData :(NSArray *)data andIndex :(int )index{
+    self = [self initwithType:type andData:data andIndex:index andSourceType:0];
+    return self;
 }
 -(void)selectAction:(UIButton *)button{
     [self.eventDelegate selectedAction:(button.tag-1200) andIndex :_index];
@@ -68,11 +76,20 @@
         if (i < count) {
             UIButton *button = (UIButton *)VIEWWITHTAG(self.contentView, 1200+i );
             button.hidden = NO;
-            VedioAndImageModel *model = _data[i];
-            [button setImageWithURL:[NSURL URLWithString:model.videoPic] forState:UIControlStateNormal placeholderImage:LogoImage];
-            UILabel *label = (UILabel *)VIEWWITHTAG(self.contentView, 100+i);
-            label.hidden = NO;
-            label.text = model.videoTitle;
+            if (_sourceType == 0) {//订阅
+                VedioAndImageModel *model = _data[i];
+                [button setImageWithURL:[NSURL URLWithString:model.videoPic] forState:UIControlStateNormal placeholderImage:LogoImage];
+                UILabel *label = (UILabel *)VIEWWITHTAG(self.contentView, 100+i);
+                label.hidden = NO;
+                label.text = model.videoTitle;
+            }else if (_sourceType == 1){
+                ColumnModel *model = _data[i];
+                [button setImageWithURL:[NSURL URLWithString:model.img1] forState:UIControlStateNormal placeholderImage:LogoImage];
+                UILabel *label = (UILabel *)VIEWWITHTAG(self.contentView, 100+i);
+                label.hidden = NO;
+                label.text = model.title;
+
+            }
             
         }else{
             UIButton *button = (UIButton *)VIEWWITHTAG(self.contentView, 1200+i);
