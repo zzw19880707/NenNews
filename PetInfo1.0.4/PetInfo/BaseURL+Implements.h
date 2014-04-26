@@ -9,8 +9,8 @@
 #ifndef PetInfo_BaseURL_Implements_h
 #define PetInfo_BaseURL_Implements_h
 //#define BASE_URL @"http://192.168.1.126:8080/nen/"
-#define BASE_URL @"http://192.168.1.145:8090/nen/"
-//#define BASE_URL @"http://app.nen.com.cn/"
+//#define BASE_URL @"http://192.168.1.145:8090/nen/"
+#define BASE_URL @"http://app.nen.com.cn/"
 
 //获取普通新闻内容及视频新闻
 #define URL_getNews_content @"getNewscontent"
