@@ -44,8 +44,8 @@
 }
 -(void)pushNewswithColumn:(ColumnModel *)model {
 //    当url不为空时，则弹出网页显示
-    if (model.ADURL!=nil) {
-        WebViewController *webView = [[WebViewController alloc]initWithUrl:model.ADURL];
+    if (![model.AdUrl isEqualToString:@""]) {
+        WebViewController *webView = [[WebViewController alloc]initWithUrl:model.AdUrl];
         [self.navigationController pushViewController:webView animated:YES];
 
         return ;
