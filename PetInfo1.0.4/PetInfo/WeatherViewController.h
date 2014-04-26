@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 @interface WeatherViewController : BaseViewController <ASIRequest>
 {
-    NSDictionary *_dataDic;
+    NSArray *_dataDic;
 }
 @property (retain, nonatomic) IBOutlet UIImageView *backgroundView;
 @property (retain, nonatomic) IBOutlet UILabel *city;

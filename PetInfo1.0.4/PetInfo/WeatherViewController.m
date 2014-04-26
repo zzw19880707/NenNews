@@ -9,6 +9,7 @@
 #import "WeatherViewController.h"
 #import "CityCodeViewController.h"
 #import "FileUrl.h"
+#import "NSString+URLEncoding.h"
 @interface WeatherViewController (){
     NSTimer *_timer;
 }
@@ -66,29 +67,26 @@
 }
 
 -(void)loadData{
-    NSString *locationcityid = [[NSUserDefaults standardUserDefaults]objectForKey:kLocationCityCode];
-    
+    NSString *locationcityName = [[NSUserDefaults standardUserDefaults]objectForKey:kLocationCityName];
+
     NSString *path = [[FileUrl getDocumentsFile]stringByAppendingPathComponent:kWeatherData_file_name];
-    _dataDic = [[NSDictionary alloc]initWithContentsOfFile:path];
+    _dataDic = [[NSArray alloc]initWithContentsOfFile:path];
     if (_dataDic==nil||_dataDic.count ==0) {
-    }else{
-        [self _loadWeatherData];
-        NSString *lastDate = [_dataDic objectForKey:@"date_y"];
-        NSString *cityid = [_dataDic objectForKey:@"cityid"];
-        //    NSDateformat
-        NSDateFormatter *dataformatter = [[NSDateFormatter alloc]init];
-        [dataformatter setDateFormat:@"yyyy年MM月dd日"];
-        NSString *currentDateStr = [dataformatter stringFromDate:[NSDate date]];
-        if ([lastDate isEqualToString:currentDateStr]) {
-            if ([cityid isEqualToString:locationcityid]) {
-                return;
-            }
+        NSArray *views = [self.view subviews];
+        for (UIView *view in views) {
+            [view setHidden:YES];
         }
+    }else{
+        NSArray *views = [self.view subviews];
+        for (UIView *view in views) {
+            [view setHidden:NO];
+        }
+        [self _loadWeatherData];
     }
     if ([self getConnectionAlert]) {
         DataService *service = [[DataService alloc]init];
         service.eventDelegate = self;
-        NSString *url = [Weather_URL stringByAppendingString:[NSString stringWithFormat:@"%@%@",locationcityid,@".html"]];
+        NSString *url = [Weather_URL stringByAppendingString:[NSString stringWithFormat:@"%@%@",locationcityName.URLEncodedString,Weather_Parms]];
         [service requestWithURL:url andparams:nil isJoint:NO andhttpMethod:@"GET"];
     }
 }
@@ -96,24 +94,60 @@
 //填充数据
 //
 -(void)_loadWeatherData{
-    NSArray *weekArray = @[@"星期一",@"星期二",@"星期三",@"星期四",@"星期五",@"星期六",@"星期日"];
-    NSString *todayweek = [_dataDic objectForKey:@"week"];;
-    self.today.text =todayweek;
-    int index = 0;
-    for (int i = 0 ; i<weekArray.count; i++) {
-        if ([todayweek isEqualToString:weekArray[i]]) {
-            index = i;
-            break;
-        }
-    }
-    self.city.text = [_dataDic objectForKey:@"city"];
-    NSString *todayTemp = [_dataDic objectForKey:@"temp1"];
-    NSArray *tempArray = [todayTemp componentsSeparatedByString:@"~"];
-    self.todayLowtTmperature.text = tempArray[0];
-    self.todayHighTemperature.text = tempArray[1];
-    NSString *weather = [_dataDic objectForKey:@"weather1"];
-    self.todayWeather.text = weather;
+//    第一天
+    NSDictionary *todayDic =_dataDic[0];
+    NSString *todayWeek = [todayDic objectForKey:@"date"];
+    self.today.text = [todayWeek componentsSeparatedByString:@"("][0];
+    NSString *todayTem = [todayDic objectForKey:@"temperature"];
+    NSArray *todayTemArray  = [todayTem componentsSeparatedByString:@"~"];
+    self.todayLowtTmperature.text = todayTemArray[0];
+    self.todayHighTemperature.text = todayTemArray[1];
+    self.todayWeather.text = [todayDic objectForKey:@"weather"];
+    self.todayWind.text = [todayDic objectForKey:@"wind"];
+    NSString *todayImageName = [todayDic objectForKey:@"dayPictureUrl"];
+    NSString *todayImgName = [[[todayImageName componentsSeparatedByString:@"/"] lastObject] componentsSeparatedByString:@"."][0];
+    self.todayImageFirst.image  = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png",todayImgName]];
+    
+
+    
+//    //第二天
+    
+    NSDictionary *secondDic = _dataDic[1];
+    NSString *secondWeek = [secondDic objectForKey:@"date"];
+    self.secondDay.text = secondWeek;
+    NSString *secondTem = [secondDic objectForKey:@"temperature"];
+    self.secondTemperature.text = secondTem;
+    self.secondWeather.text = [secondDic objectForKey:@"weather"];
+    self.secondWind.text = [secondDic objectForKey:@"wind"];
+    NSString *secondImageName = [secondDic objectForKey:@"dayPictureUrl"];
+    NSString *secondImgName = [[[secondImageName componentsSeparatedByString:@"/"] lastObject] componentsSeparatedByString:@"."][0];
+    self.self.secondImageSecond.image  = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png",secondImgName]];
+
+//    //第三天
+    NSDictionary *thirdDic = _dataDic[2];
+    NSString *thirdWeek = [thirdDic objectForKey:@"date"];
+    self.thirdDay.text = thirdWeek;
+    NSString *thirdTem = [thirdDic objectForKey:@"temperature"];
+    self.thirdTemperature.text = thirdTem;
+    self.thirdWeather.text = [thirdDic objectForKey:@"weather"];
+    self.thirdWind.text = [thirdDic objectForKey:@"wind"];
+    NSString *thirdImageName = [thirdDic objectForKey:@"dayPictureUrl"];
+    NSString *thirdImgName = [[[thirdImageName componentsSeparatedByString:@"/"] lastObject] componentsSeparatedByString:@"."][0];
+    self.self.thirdImageSecond.image  = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png",thirdImgName]];
+//    //第四天
+    NSDictionary *fourthDic = _dataDic[3];
+    NSString *fourthWeek = [fourthDic objectForKey:@"date"];
+    self.fourthDay.text = fourthWeek;
+    NSString *fourthTem = [fourthDic objectForKey:@"temperature"];
+    self.fourthTemperature.text = fourthTem;
+    self.fourthWeather.text = [fourthDic objectForKey:@"weather"];
+    self.fourthWind.text = [fourthDic objectForKey:@"wind"];
+    NSString *fourthImageName = [fourthDic objectForKey:@"dayPictureUrl"];
+    NSString *fourthImgName = [[[fourthImageName componentsSeparatedByString:@"/"] lastObject] componentsSeparatedByString:@"."][0];
+    self.self.fourthImageSecond.image  = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png",fourthImgName]];
+    //  背景图片
     UIImageView *background = [[UIImageView alloc]init];
+    NSString *weather = [todayDic objectForKey:@"weather"];
     if ([weather isEqualToString:@"晴"]) {
         background.image = [UIImage imageNamed:@"weather_background_sunny.png"];
     }else if ([weather isEqualToString:@"雪"]){
@@ -133,71 +167,31 @@
     }
     self.backgroundView.image = background.image;
     [background release];
-    self.todayWind.text = [_dataDic objectForKey:@"fl1"];
-    self.todayImageFirst.image =[UIImage imageNamed:[NSString stringWithFormat:@"b%@.png",[_dataDic objectForKey:@"img1"]]];
     
-    if ([[_dataDic objectForKey:@"img2"] isEqualToString:@"99"]) {
-        self.todayImageSecond.image =[UIImage imageNamed:[NSString stringWithFormat:@"b%@.png",[_dataDic objectForKey:@"img1"]]];
-    }else{
-        self.todayImageSecond.image =[UIImage imageNamed:[NSString stringWithFormat:@"b%@.png",[_dataDic objectForKey:@"img2"]]];
-
-    }
-    //第二天
-    if (index==7) {
-        index =0;
-    }
-    self.secondDay.text = weekArray[index++];
-    self.secondTemperature.text = [_dataDic objectForKey:@"temp2"];
-    self.secondWeather.text = [_dataDic objectForKey:@"weather2"];
-    self.secondWind.text = [_dataDic objectForKey:@"fl2"];
-    self.secondImageview.image = [UIImage imageNamed:[NSString stringWithFormat:@"b%@.png",[_dataDic objectForKey:@"img3"]]];
-    if ([[_dataDic objectForKey:@"img4"] isEqualToString:@"99"]) {
-        self.secondImageSecond.image = [UIImage imageNamed:[NSString stringWithFormat:@"b%@.png",[_dataDic objectForKey:@"img3"]]];
-    }else{
-        self.secondImageSecond.image =[UIImage imageNamed:[NSString stringWithFormat:@"b%@.png",[_dataDic objectForKey:@"img4"]]];
-        
-    }
-    //第三天
-    if (index==7) {
-        index =0;
-    }
-    self.thirdDay.text = weekArray[index++];
-    self.thirdTemperature.text = [_dataDic objectForKey:@"temp3"];
-    self.thirdWeather.text = [_dataDic objectForKey:@"weather3"];
-    self.thirdWind.text = [_dataDic objectForKey:@"fl3"];
-    self.thirdImageview.image = [UIImage imageNamed:[NSString stringWithFormat:@"b%@.png",[_dataDic objectForKey:@"img5"]]];
-    if ([[_dataDic objectForKey:@"img6"] isEqualToString:@"99"]) {
-        self.thirdImageSecond.image = [UIImage imageNamed:[NSString stringWithFormat:@"b%@.png",[_dataDic objectForKey:@"img5"]]];
-    }else{
-        self.thirdImageSecond.image =[UIImage imageNamed:[NSString stringWithFormat:@"b%@.png",[_dataDic objectForKey:@"img6"]]];
-    }
-    //第四天
-    if (index==7) {
-        index =0;
-    }
-    self.fourthDay.text = weekArray[index++];
-    self.fourthTemperature.text = [_dataDic objectForKey:@"temp4"];
-    self.fourthWeather.text = [_dataDic objectForKey:@"weather4"];
-    self.fourthWind.text = [_dataDic objectForKey:@"fl4"];
-    self.fourthImageview.image = [UIImage imageNamed:[NSString stringWithFormat:@"b%@.png",[_dataDic objectForKey:@"img7"]]];
-    if ([[_dataDic objectForKey:@"img8"] isEqualToString:@"99"]) {
-        self.fourthImageSecond.image = [UIImage imageNamed:[NSString stringWithFormat:@"b%@.png",[_dataDic objectForKey:@"img7"]]];
-    }else{
-        self.fourthImageSecond.image =[UIImage imageNamed:[NSString stringWithFormat:@"b%@.png",[_dataDic objectForKey:@"img8"]]];
-    }
     
 }
 #pragma mark ASIRequest
 -(void)requestFailed:(ASIHTTPRequest *)request{
-
+    [self showHUD:INFO_ERROR isDim:YES];
+    [self performSelector:@selector(hideHUD) withObject:nil afterDelay:3];
 }
 -(void)requestFinished:(id)result{
-    NSDictionary *dic = [result objectForKey:@"weatherinfo"];
-    _dataDic = dic;
-    NSString *path = [[FileUrl getDocumentsFile]stringByAppendingPathComponent:kWeatherData_file_name];
+    NSString *status = [result objectForKey:@"status"];
+    if ( [status isEqualToString:@"success"]) {
+        NSArray *array = [result objectForKey:@"results"] ;
+        NSArray *date =  [array[0] objectForKey:@"weather_data"];
+        self.city.text = [array[0] objectForKey:@"currentCity"];
 
-    [_dataDic writeToFile:path atomically:YES];
-    [self _loadWeatherData];
+        _dataDic = date;
+        NSString *path = [[FileUrl getDocumentsFile]stringByAppendingPathComponent:kWeatherData_file_name];
+
+        [_dataDic writeToFile:path atomically:YES];
+        [self _loadWeatherData];
+    }else{
+        [self showHUD:INFO_ERROR isDim:YES];
+        [self performSelector:@selector(hideHUD) withObject:nil afterDelay:3];
+    }
+    
 }
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];

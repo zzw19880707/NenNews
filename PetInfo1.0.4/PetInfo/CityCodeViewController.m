@@ -119,8 +119,10 @@
     NSArray *array =[dic objectForKey:@"市"];
     
     NSString *code = [array[indexPath.row] objectForKey:@"编码"];
+    NSString *name = [array[indexPath.row] objectForKey:@"市名"];
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     [user setObject:code forKey:kLocationCityCode];
+    [user setObject:name forKey:kLocationCityName];
     [user synchronize];
     [self.navigationController popViewControllerAnimated:YES];
 }
