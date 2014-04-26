@@ -78,18 +78,15 @@
 //     self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 -(void)viewWillDisappear:(BOOL)animated{
-    if (_type == 0) {
-        NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-        [user setValue:_showNameArray forKey:show_column];
-        [self.eventDelegate columnChanged:_showNameArray];
-        [user synchronize];
-    }else{
-        NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-        [user setValue:_showNameArray forKey:subscribe_column];
-        [self.eventDelegate columnChanged:_showNameArray];
-        [user synchronize];
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
 
+    if (_type == 0) {
+        [user setValue:_showNameArray forKey:show_column];
+    }else{
+        [user setValue:_showNameArray forKey:subscribe_column];
     }
+    [self.eventDelegate columnChanged:_showNameArray];
+    [user synchronize];
     [super viewWillDisappear:animated];
 }
 
