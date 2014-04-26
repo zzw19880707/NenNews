@@ -9,8 +9,8 @@
 #ifndef PetInfo_BaseURL_Implements_h
 #define PetInfo_BaseURL_Implements_h
 //#define BASE_URL @"http://192.168.1.126:8080/nen/"
-//#define BASE_URL @"http://192.168.1.145:8080/nen/"
-#define BASE_URL @"http://app.nen.com.cn/"
+#define BASE_URL @"http://192.168.1.145:8090/nen/"
+//#define BASE_URL @"http://app.nen.com.cn/"
 
 //获取普通新闻内容及视频新闻
 #define URL_getNews_content @"getNewscontent"
@@ -32,6 +32,7 @@
 #define URL_Search @"SearchNews"
 
 #pragma mark 天气预报
-#define Weather_URL @"http://m.weather.com.cn/data/"
+#define Weather_URL @"http://api.map.baidu.com/telematics/v3/weather?location="
+#define Weather_Parms @"&output=json&ak=eSooGxlMfh26UVV8iIHiWjMa"
 #define Weather_simple_URL @"http://www.weather.com.cn/data/cityinfo/"
 #endif

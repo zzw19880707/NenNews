@@ -63,6 +63,7 @@
 #define kdownloadContentSize @"kdownloadContentSize"
 //用户当前位置编码,用于天气预报
 #define kLocationCityCode @"kLocationCityCode"
+#define kLocationCityName @"kLocationCityName"
 //显示新手知道图
 #define kDescriptionImage @"kDescriptionImage"
 
