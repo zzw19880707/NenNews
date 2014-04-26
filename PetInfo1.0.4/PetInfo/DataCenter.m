@@ -86,9 +86,8 @@ static DataCenter *sigleton = nil;
         NSLog(@"Could not open db.");
         return nil;
     }
-    NSLog(@"%@",[NSString stringWithFormat:@"select * from columnList where isshow = %d and takepart = %d",show,(issubscribe?1:0)]);
     //                    更新userdefaults中的显示栏目
-    FMResultSet *rs = [db executeQuery:[NSString stringWithFormat:@"select * from columnList where isshow = %d and takepart = %d",show,(issubscribe?1:0)]];
+    FMResultSet *rs = [db executeQuery:[NSString stringWithFormat:@"select * from columnList where hidden = 1 and isshow = %d and takepart = %d",show,(issubscribe?1:0)]];
     NSMutableArray *showcolumn = [[NSMutableArray alloc]init];
     while (rs.next) {
         NSString *appPartName = [rs stringForColumn:@"columnName"];
