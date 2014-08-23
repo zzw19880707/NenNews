@@ -13,5 +13,8 @@
 @interface RootViewController : BaseViewController <UIScrollViewEventDelegate,UIScrollViewDelegate,ColumnChangedDelegate,UItableviewEventDelegate,NewsNigthTabelViewDelegate,VedioNightModelViewDelegate>{
     BaseScrollView *_sc;
 }
+
+
+-(void)columnChanged;
 @property (nonatomic ,assign) BOOL isLoading;
 @end

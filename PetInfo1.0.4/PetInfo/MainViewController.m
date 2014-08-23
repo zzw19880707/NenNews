@@ -73,9 +73,7 @@
     backImageView.frame = CGRectMake(0, ScreenHeight-100, ScreenWidth, 88);
     [_backgroundView addSubview:backImageView];
     [backImageView release];
-    //广告图片
-    UIImageView *topImageView = [[[UIImageView alloc]init] autorelease];
-    topImageView.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight-100);
+    
     NSString *url = [[NSString alloc]init];
     [self.view  addSubview: _backgroundView];
     if (![_userDefaults boolForKey:kbundleVersion]) {
@@ -85,143 +83,162 @@
     }else{
 //        当前无网络
         if ([[DataCenter getConnectionAvailable] isEqualToString:@"none"]) {
+            //广告图片
+            UIImageView *topImageView = [[[UIImageView alloc]init] autorelease];
+            topImageView.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight-100);
             url = [_userDefaults stringForKey:main_adImage_url];
             [topImageView setImageWithURL:[NSURL URLWithString:url]];
             [_backgroundView addSubview:topImageView];
             [self.view  addSubview: _backgroundView];
         }else{//有网络，访问ao接口 获取图片地址
-            NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-            [params setValue:[NSNumber numberWithInteger:[_userDefaults integerForKey:column_version] ] forKey:@"columnversions"];
-            [params setValue:[OpenUDID value] forKey:@"OpenUDID"];
-            [DataService requestWithURL:URL_AO andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
-                NSString *newVersion = [result objectForKey:@"columnversions"];
-                NSString  *Aourl = [result objectForKey:@"pictureUrl"];
-                if (Aourl==nil||[Aourl isEqualToString:@""]) {
-                    NSString *Aourl = [_userDefaults stringForKey:main_adImage_url];
-                    [topImageView setImageWithURL:[NSURL URLWithString:Aourl]];
-                    if (self.view.subviews.count>0) {
-                        [_backgroundView addSubview:topImageView];
-                    }
-                }else{
-                    //                        设置图片
-                    [topImageView setImageWithURL:[NSURL URLWithString:Aourl]];
-                    [_userDefaults setValue:Aourl forKey:main_adImage_url];
-                    [_userDefaults synchronize];
-                    if (self.view.subviews.count>0) {
-                        [_backgroundView addSubview:topImageView];
-                    }
-
-                }
-                int oldVersion =[_userDefaults integerForKey:column_version];
-                //                当前版本不一致
-
-                if (oldVersion<[newVersion intValue]) {
-                    NSArray *array = [result objectForKey:@"column"];
-                    FMDatabase *db = [FileUrl getDB];
-                    if (![db open]) {
-                        NSLog(@"Could not open db.");
-                        return ;
-                    }
-                    //                    更新栏目
-                    for (int index = 0 ;index <array.count ;index++ )
-                    {
-                        NSDictionary *dic = array[index] ;
-                        NSString *partId = [dic objectForKey:@"partId"];
-                        NSString *appPartName = [dic objectForKey:@"appPartName"];
-                        NSString *hidden = [dic objectForKey:@"hidden"];
-                        NSString *takePart = [dic objectForKey:@"takePart"];
-                        NSString *isPic = [dic objectForKey:@"isPic"];
-                        NSString *columnType = [dic objectForKey:@"columnType"];
-                        //                        插入的默认不显示
-                        if (![db executeUpdate:[NSString stringWithFormat:@"insert into columnList VALUES (%@,'%@',%@,%d,%@,%@,%@);",partId,appPartName,isPic,1,hidden,takePart,columnType]])
-                        {
-//                            查询该栏目 如果未修改前，isshow=1、hidden=0，新的hidden=1，则在队尾加入
-                            FMResultSet *fmrs = [db executeQuery:[NSString stringWithFormat:@"select isshow,hidden from columnList where column = %@",partId]];
-                            if(fmrs.next){
-                                if ([fmrs intForColumn:@"isshow"]==1) {//default中存在，需要更新
-                                    //更新的 需要更新当前userdefaults中显示的数据
-                                    NSMutableArray *columnArray ;
-                                    //                                非订阅
-                                    if ([takePart intValue] ==0) {
-                                        columnArray  = [[[NSMutableArray alloc]initWithArray: [_userDefaults objectForKey:show_column ]] autorelease];
-                                    }else{
-                                        columnArray  = [[[NSMutableArray alloc]initWithArray: [_userDefaults objectForKey:subscribe_column ]] autorelease];
-                                    }
-                                    NSLog(@"=============%d",columnArray.count);
-                                    //如果满足条件（以前隐藏，现在非隐藏栏目） 在队尾增加一个栏目。防止栏目丢失
-                                    if([fmrs intForColumn:@"hidden"]==0&&[hidden intValue]==1){
-                                        NSDictionary *dic1 = @{@"columnId": partId,@"name":appPartName,@"showimage":isPic,@"columnType":columnType};
-                                        [columnArray addObject:dic1];
-                                    }else{
-                                        //获取default中数据
-                                        for (int i = 0 ; i<columnArray.count; i++) {
-                                            
-                                            NSDictionary *columnDic = columnArray[i];
-                                            NSString *columnID =[columnDic objectForKey:@"columnId"];
-                                            if (![[NSString stringWithFormat:@"%@",columnID] isEqualToString:[NSString stringWithFormat:@"%@",partId]]) {
-                                                continue;
-                                            }
-                                            
-                                            [columnArray removeObject:columnDic];
-                                            if ([hidden intValue]==0) {
-                                            }else{
-                                                NSDictionary *dic1 = @{@"columnId": partId,@"name":appPartName,@"showimage":isPic,@"columnType":columnType};
-                                                [columnArray insertObject:dic1 atIndex:i];
-                                            }
-                                            break;
-                                        }
-
-                                    }
-                                    
-                                    //                                非订阅
-                                    if ([takePart intValue] ==0) {
-                                        [_userDefaults setValue:columnArray forKey:show_column];
-                                    }else{
-                                        [_userDefaults setValue:columnArray forKey:subscribe_column];
-                                    }
-                                    [_userDefaults synchronize];
-                                }else{//default中不显示的  直接更新数据库
-                                }
-                                NSString *sql = [NSString stringWithFormat:@" update columnList set columnName = '%@',isImage = '%@',hidden='%@',takepart = '%@',columnType = '%@' where column ='%@';",appPartName,isPic,hidden,takePart,columnType,partId];
-                                [db executeUpdate:sql];
-                                
-                                
-                                
-                                
-                            }
-                        }
-                        else//新增栏目默认显示
-                        {
-                            if ([takePart intValue] ==0 ) {
-                                NSMutableArray *columnArray  = [[[NSMutableArray alloc]initWithArray: [_userDefaults objectForKey:show_column ]] autorelease];
-                                NSDictionary *dic = @{@"columnId": partId,@"name":appPartName,@"showimage":isPic,@"columnType":columnType};
-                                [columnArray  addObject:dic];
-                                [_userDefaults setValue:columnArray forKey:show_column];
-                                [_userDefaults synchronize];
-                            }else {
-                                NSMutableArray *columnArray  = [[[NSMutableArray alloc]initWithArray: [_userDefaults objectForKey:subscribe_column ]] autorelease];
-                                NSDictionary *dic = @{@"columnId": partId,@"name":appPartName};
-                                [columnArray  addObject:dic];
-                                [_userDefaults setValue:columnArray forKey:subscribe_column];
-                                [_userDefaults synchronize];
-                            }
-                        }
-                    }
-                    [db close];
-//                    跟新版本
-                    [_userDefaults setInteger:[newVersion integerValue] forKey:column_version];
-                    [_userDefaults synchronize];
-                    
-                    
-                }
-            } andErrorBlock:^(NSError *error) {
-                
-            }];
+            [self getColumn:YES];
+            
         }
     }
     
 }
+-(void)getColumnBackground{
+    [self getColumn:NO];
+}
 
+-(void)getColumn: (BOOL)isShowImageView {
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+    [params setValue:[NSNumber numberWithInteger:[_userDefaults integerForKey:column_version] ] forKey:@"columnversions"];
+    [params setValue:[OpenUDID value] forKey:@"OpenUDID"];
+    [DataService requestWithURL:URL_AO andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
+        NSString *newVersion = [result objectForKey:@"columnversions"];
+        NSString  *Aourl = [result objectForKey:@"pictureUrl"];
+        if (isShowImageView) {
+            //广告图片
+            UIImageView *topImageView = [[[UIImageView alloc]init] autorelease];
+            topImageView.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight-100);
+            
+            if (Aourl==nil||[Aourl isEqualToString:@""]) {
+                NSString *Aourl = [_userDefaults stringForKey:main_adImage_url];
+                [topImageView setImageWithURL:[NSURL URLWithString:Aourl]];
+                if (self.view.subviews.count>0) {
+                    [_backgroundView addSubview:topImageView];
+                }
+            }else{
+                //                        设置图片
+                [topImageView setImageWithURL:[NSURL URLWithString:Aourl]];
+                [_userDefaults setValue:Aourl forKey:main_adImage_url];
+                [_userDefaults synchronize];
+                if (self.view.subviews.count>0) {
+                    [_backgroundView addSubview:topImageView];
+                }
+                
+            }
+        }
+        
+        int oldVersion =[_userDefaults integerForKey:column_version];
+        //                当前版本不一致
+        
+        if (oldVersion<[newVersion intValue]) {
+            NSArray *array = [result objectForKey:@"column"];
+            FMDatabase *db = [FileUrl getDB];
+            if (![db open]) {
+                NSLog(@"Could not open db.");
+                return ;
+            }
+            //                    更新栏目
+            for (int index = 0 ;index <array.count ;index++ )
+            {
+                NSDictionary *dic = array[index] ;
+                NSString *partId = [dic objectForKey:@"partId"];
+                NSString *appPartName = [dic objectForKey:@"appPartName"];
+                NSString *hidden = [dic objectForKey:@"hidden"];
+                NSString *takePart = [dic objectForKey:@"takePart"];
+                NSString *isPic = [dic objectForKey:@"isPic"];
+                NSString *columnType = [dic objectForKey:@"columnType"];
+                //                        插入的默认不显示
+                if (![db executeUpdate:[NSString stringWithFormat:@"insert into columnList VALUES (%@,'%@',%@,%d,%@,%@,%@);",partId,appPartName,isPic,1,hidden,takePart,columnType]])
+                {
+                    //                            查询该栏目 如果未修改前，isshow=1、hidden=0，新的hidden=1，则在队尾加入
+                    FMResultSet *fmrs = [db executeQuery:[NSString stringWithFormat:@"select isshow,hidden from columnList where column = %@",partId]];
+                    if(fmrs.next){
+                        if ([fmrs intForColumn:@"isshow"]==1) {//default中存在，需要更新
+                            //更新的 需要更新当前userdefaults中显示的数据
+                            NSMutableArray *columnArray ;
+                            //                                非订阅
+                            if ([takePart intValue] ==0) {
+                                columnArray  = [[[NSMutableArray alloc]initWithArray: [_userDefaults objectForKey:show_column ]] autorelease];
+                            }else{
+                                columnArray  = [[[NSMutableArray alloc]initWithArray: [_userDefaults objectForKey:subscribe_column ]] autorelease];
+                            }
+                            NSLog(@"=============%d",columnArray.count);
+                            //如果满足条件（以前隐藏，现在非隐藏栏目） 在队尾增加一个栏目。防止栏目丢失
+                            if([fmrs intForColumn:@"hidden"]==0&&[hidden intValue]==1){
+                                NSDictionary *dic1 = @{@"columnId": partId,@"name":appPartName,@"showimage":isPic,@"columnType":columnType};
+                                [columnArray addObject:dic1];
+                            }else{
+                                //获取default中数据
+                                for (int i = 0 ; i<columnArray.count; i++) {
+                                    
+                                    NSDictionary *columnDic = columnArray[i];
+                                    NSString *columnID =[columnDic objectForKey:@"columnId"];
+                                    if (![[NSString stringWithFormat:@"%@",columnID] isEqualToString:[NSString stringWithFormat:@"%@",partId]]) {
+                                        continue;
+                                    }
+                                    
+                                    [columnArray removeObject:columnDic];
+                                    if ([hidden intValue]==0) {
+                                    }else{
+                                        NSDictionary *dic1 = @{@"columnId": partId,@"name":appPartName,@"showimage":isPic,@"columnType":columnType};
+                                        [columnArray insertObject:dic1 atIndex:i];
+                                    }
+                                    break;
+                                }
+                                
+                            }
+                            
+                            //                                非订阅
+                            if ([takePart intValue] ==0) {
+                                [_userDefaults setValue:columnArray forKey:show_column];
+                            }else{
+                                [_userDefaults setValue:columnArray forKey:subscribe_column];
+                            }
+                            [_userDefaults synchronize];
+                        }else{//default中不显示的  直接更新数据库
+                        }
+                        NSString *sql = [NSString stringWithFormat:@" update columnList set columnName = '%@',isImage = '%@',hidden='%@',takepart = '%@',columnType = '%@' where column ='%@';",appPartName,isPic,hidden,takePart,columnType,partId];
+                        [db executeUpdate:sql];
+                        
+                        
+                        
+                        
+                    }
+                }
+                else//新增栏目默认显示
+                {
+                    if ([takePart intValue] ==0 ) {
+                        NSMutableArray *columnArray  = [[[NSMutableArray alloc]initWithArray: [_userDefaults objectForKey:show_column ]] autorelease];
+                        NSDictionary *dic = @{@"columnId": partId,@"name":appPartName,@"showimage":isPic,@"columnType":columnType};
+                        [columnArray  addObject:dic];
+                        [_userDefaults setValue:columnArray forKey:show_column];
+                        [_userDefaults synchronize];
+                    }else {
+                        NSMutableArray *columnArray  = [[[NSMutableArray alloc]initWithArray: [_userDefaults objectForKey:subscribe_column ]] autorelease];
+                        NSDictionary *dic = @{@"columnId": partId,@"name":appPartName};
+                        [columnArray  addObject:dic];
+                        [_userDefaults setValue:columnArray forKey:subscribe_column];
+                        [_userDefaults synchronize];
+                    }
+                    [_root columnChanged];
+
+                }
+            }
+            [db close];
+            //                    跟新版本
+            [_userDefaults setInteger:[newVersion integerValue] forKey:column_version];
+            [_userDefaults synchronize];
+            
+        }
+    } andErrorBlock:^(NSError *error) {
+        
+    }];
+}
 -(void)_initDB{
     //初始化数据库
     FMDatabase *db = [FileUrl getDB];
@@ -365,6 +382,8 @@
         [ThemeManager shareInstance].nigthModelName =@"night";
     }
     [[ThemeManager shareInstance] setPush];
+    [NSTimer scheduledTimerWithTimeInterval:120 target:self selector:@selector(getColumnBackground) userInfo:nil repeats:YES];
+
 }
 //移除登陆广告大图
 -(void)_removeBackground{

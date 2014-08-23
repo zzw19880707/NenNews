@@ -505,6 +505,9 @@
 -(void)columnChanged:(NSArray *)array{
     _sc.buttonsNameArray = [self _initButton];
 }
+-(void)columnChanged{
+    [self columnChanged:nil];
+}
 #pragma mark 内存管理
 - (void)didReceiveMemoryWarning
 {
