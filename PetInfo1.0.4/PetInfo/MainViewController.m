@@ -249,9 +249,10 @@
 //    栏目表
 //    栏目id   栏目名称  是否有主图(0隐藏1显示)  是否显示(0隐藏1显示)  后台隐藏(0隐藏1显示)  订阅（takepart） 栏目类型 （默认为0：综合新闻 2 图集 3视频）
     [db executeUpdate:@"CREATE TABLE columnList (column INTEGER PRIMARY KEY, columnName TEXT, isImage INTEGER, isshow INTEGER,hidden INTEGER,takepart INTEGER,columnType INTEGER DEFAULT 0)"];
-    NSArray *columnsName = @[@"辽媒头条",@"国内",@"国际",@"文娱",@"视频"];
+    NSArray *columnsName = @[@"辽媒头条",@"新闻",@"正能量",@"时评",@"文体",@"图片"];
+    NSArray *columnsshowId = @[@1,@19,@12,@11,@4,@20];
     for (int i = 0 ; i <columnsName.count; i++) {
-        [db executeUpdate:[NSString stringWithFormat:@"insert into columnList VALUES (%d,'%@',%d,%d,%d,%d,%d);",i+1,columnsName[i],1,1,1,0,0]];
+        [db executeUpdate:[NSString stringWithFormat:@"insert into columnList VALUES (%d,'%@',%d,%d,%d,%d,%d);",[columnsshowId[i] intValue],columnsName[i],(i==3?0:1),1,1,0,0]];
     }
     [_userDefaults setInteger:0 forKey:column_version];
     [_userDefaults synchronize];
@@ -309,11 +310,12 @@
     [_userDefaults setBool:YES forKey:kisNightModel];
     [_userDefaults setInteger:1 forKey:kpageCount];
     //初始化菜单 写到userdefaults里
-    NSArray *columnsshowName = @[@"辽媒头条",@"国内",@"国际",@"文娱",@"视频"];
+    NSArray *columnsshowName = @[@"辽媒头条",@"新闻",@"正能量",@"时评",@"文体",@"图片"];
+    NSArray *columnsshowId = @[@1,@19,@12,@11,@4,@20];
     NSMutableArray *showarray = [[NSMutableArray alloc]init];
     for(int i= 1 ; i<columnsshowName.count+1 ;i ++){
         
-        NSDictionary *dic = [[NSDictionary dictionaryWithObjects:@[columnsshowName[i-1],[NSNumber numberWithInt:i],[NSNumber numberWithInt:1],[NSNumber numberWithInt:0]] forKeys:@[@"name",@"columnId",@"showimage",@"columnType"]] autorelease];
+        NSDictionary *dic = [[NSDictionary dictionaryWithObjects:@[columnsshowName[i-1],columnsshowId[i-1],[NSNumber numberWithInt:(i==3?0:1)],[NSNumber numberWithInt:0]] forKeys:@[@"name",@"columnId",@"showimage",@"columnType"]] autorelease];
         [showarray addObject:dic];
     }
     [_userDefaults setObject:showarray forKey:show_column];

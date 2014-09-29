@@ -3,32 +3,39 @@
     {
       "orientation" : "portrait",
       "idiom" : "iphone",
-      "filename" : "Default-568h@2x.png",
+      "extent" : "full-screen",
       "minimum-system-version" : "7.0",
-      "subtype" : "retina4",
+      "filename" : "iOS 模拟器屏幕快照“2014年8月22日 下午5.08.08”.png",
       "scale" : "2x"
     },
     {
+      "extent" : "full-screen",
       "idiom" : "iphone",
-      "scale" : "1x",
-      "orientation" : "portrait"
-    },
-    {
-      "idiom" : "iphone",
-      "scale" : "2x",
-      "orientation" : "portrait"
-    },
-    {
-      "orientation" : "portrait",
-      "idiom" : "iphone",
-      "filename" : "Default-568h@2x.png",
       "subtype" : "retina4",
+      "filename" : "iOS 模拟器屏幕快照“2014年8月22日 下午5.05.32”-1.png",
+      "minimum-system-version" : "7.0",
+      "orientation" : "portrait",
       "scale" : "2x"
     },
     {
       "orientation" : "portrait",
       "idiom" : "iphone",
-      "minimum-system-version" : "7.0",
+      "extent" : "full-screen",
+      "scale" : "1x"
+    },
+    {
+      "orientation" : "portrait",
+      "idiom" : "iphone",
+      "extent" : "full-screen",
+      "filename" : "iOS 模拟器屏幕快照“2014年8月22日 下午5.08.08”-1.png",
+      "scale" : "2x"
+    },
+    {
+      "orientation" : "portrait",
+      "idiom" : "iphone",
+      "extent" : "full-screen",
+      "filename" : "iOS 模拟器屏幕快照“2014年8月22日 下午5.05.32”.png",
+      "subtype" : "retina4",
       "scale" : "2x"
     }
   ],

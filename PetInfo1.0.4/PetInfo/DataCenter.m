@@ -9,6 +9,7 @@
 #import "DataCenter.h"
 #import "FileUrl.h"
 #import "Reachability.h"
+
 static DataCenter *sigleton = nil;
 @implementation DataCenter
 
@@ -171,7 +172,7 @@ static DataCenter *sigleton = nil;
 //判断当前是否有网络
 +(NSString *) getConnectionAvailable{
     NSString *isExistenceNetwork = @"none";
-    Reachability *reach = [Reachability reachabilityWithHostName:BASE_URL];
+    Reachability *reach = [Reachability reachabilityWithHostName:Host];
     switch ([reach currentReachabilityStatus]) {
         case NotReachable:
             isExistenceNetwork = @"none";
@@ -192,7 +193,7 @@ static DataCenter *sigleton = nil;
 //判断当前是否有网络
 +(BOOL) isConnectionAvailable{
     BOOL isExistenceNetwork = YES;
-    Reachability *reach = [Reachability reachabilityWithHostName:BASE_URL];
+    Reachability *reach = [Reachability reachabilityWithHostName:Host];
     switch ([reach currentReachabilityStatus]) {
         case NotReachable:
             isExistenceNetwork = NO;

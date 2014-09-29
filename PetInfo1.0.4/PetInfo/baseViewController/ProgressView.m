@@ -190,26 +190,31 @@
 
             
         }
-//        所有图片
-        NSArray *allPicArray = [result objectForKey:@"allpicture"];
-        [ImageArray addObjectsFromArray: allPicArray];
-        
-        NSSet *set  = [NSSet setWithArray: ImageArray];
-        for (NSString *url  in [set allObjects]) {
-            if ([url isEqualToString:@"0"]) {
-                continue;
-            }
-            _request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
-            [_request setTimeOutSeconds:60*10];
-            [_queue addOperation:_request];
+        _po(@"*******************");
+        DLOG(@"*******************,%d",[_queue requestsCount]);
 
-        }
+//        所有图片
+//        NSArray *allPicArray = [result objectForKey:@"allpicture"];
+//        [ImageArray addObjectsFromArray: allPicArray];
+//        
+//        NSSet *set  = [NSSet setWithArray: ImageArray];
+//        for (NSString *url  in [set allObjects]) {
+//            if ([url isEqualToString:@"0"]) {
+//                continue;
+//            }
+//            _request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
+//            [_request setTimeOutSeconds:60*10];
+//            [_queue addOperation:_request];
+//
+//        }
         _queue.downloadProgressDelegate = progressView;
         // 设置queue完成后需要实现的UI方法，根据头文件里面定义，这个UI方法需要一个ASIHTTPRequest 的参数
         _queue.requestDidFinishSelector = @selector(queueDidFinish:);
         [_queue setRequestDidFailSelector:@selector(queueError:)];
         // 如果要实现SEL的方法则根据头文件定义需要把delegate定为self
         _queue.delegate = self;
+        DLOG(@"*******************,%d",[_queue requestsCount]);
+
         [_queue go];
         
         
